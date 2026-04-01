@@ -1,0 +1,138 @@
+{
+  "@@locale": "ru",
+  "appTitle": "Slim30",
+  "splashBrand": "Slim30",
+  "onboardingSkip": "Пропустить",
+  "onboardingContinue": "Продолжить",
+  "onboardingPage1Title": "Стань легче за 30 дней",
+  "onboardingPage1Description": "Похудение не должно быть сложным. Делай ежедневные мини-задания и трать совсем немного времени — и большие перемены не заставят себя ждать.",
+  "onboardingPage2Title": "Умный план специально для тебя",
+  "onboardingPage2Description": "ИИ анализирует твои цели, возраст и уровень подготовки, затем составляет персональный план тренировок и образа жизни под твои потребности. Не нужно думать, что делать — просто следуй плану.",
+  "onboardingStart": "Начать",
+  "onboardingPage3Title": "Каждый день на шаг ближе к цели",
+  "onboardingPage3Description": "Сжигай жир, ускоряй обмен веществ и оставайся мотивированным с короткими, но эффективными тренировками. Через 30 дней ты увидишь разницу в зеркале.",
+  "loginTitle": "Добро пожаловать в Slim30",
+  "loginSubtitle": "Рады видеть тебя. Войди в аккаунт, чтобы продолжить с того места, где остановился.",
+  "loginApple": "Войти через Apple",
+  "loginGoogle": "Войти через Google",
+  "loginGuest": "Продолжить как гость",
+  "loginLegal": "Регистрируясь в Slim30, вы соглашаетесь с нашими Условиями использования. Чтобы узнать, как мы обрабатываем ваши данные, ознакомьтесь с Политикой конфиденциальности и Политикой использования файлов cookie.",
+  "questionSkip": "Пропустить",
+  "questionBack": "Назад",
+  "questionNext": "Далее",
+  "questionGenderTitle": "Укажите ваш пол",
+  "questionAgeTitle": "Сколько вам лет?",
+  "questionGenderFemale": "Женский",
+  "questionGenderMale": "Мужской",
+  "questionGenderUnspecified": "Не хочу указывать",
+  "questionHeightTitle": "Какой у вас рост?",
+  "questionWeightTitle": "Какой у вас текущий вес?",
+  "questionTargetWeightTitle": "Какой у вас целевой вес?",
+  "motivationTitle": "Это не просто вес. Это решение.",
+  "motivationSubtitle": "Решение, принятое сегодня, отразится в зеркале завтрашнего дня.",
+  "motivationCaption": "Будь дисциплинирован, доверяй процессу. 🤗",
+  "questionWorkoutTitle": "Предпочитаемый тип тренировки",
+  "questionWorkoutCardio": "Кардио",
+  "questionWorkoutPilates": "Pilates",
+  "questionWorkoutRunning": "Бег",
+  "questionWorkoutStretching": "Растяжка и мобильность",
+  "questionWorkoutHiit": "HIIT",
+  "questionWorkoutWeight": "Силовые тренировки",
+  "questionActivityTitle": "Каков ваш уровень активности?",
+  "questionActivitySedentary": "Малоподвижный",
+  "questionActivityLight": "Немного Активный",
+  "questionActivityModerate": "Умеренно Активный",
+  "questionActivityIntense": "Очень Активный",
+  "questionBodyShapeTitle": "Как выглядит ваше тело сейчас?",
+  "questionBodyShapeSlim": "Стройный / Подтянутый",
+  "questionBodyShapeOverweight": "Немного с Лишним Весом",
+  "questionBodyShapeCurvy": "Пышный / Рельефный",
+  "questionBodyShapeMuscular": "Мускулистый / Сильный",
+  "questionDesiredBodyShapeTitle": "Какую форму тела вы хотите?",
+  "questionWorkoutDaysTitle": "В какие дни недели вы тренируетесь?",
+  "questionDayMon": "Понедельник",
+  "questionDayTue": "Вторник",
+  "questionDayWed": "Среда",
+  "questionDayThu": "Четверг",
+  "questionDayFri": "Пятница",
+  "questionDaySat": "Суббота",
+  "questionDaySun": "Воскресенье",
+  "questionWorkoutDurationTitle": "Сколько длится ваша тренировка?",
+  "questionDuration1_2h": "1-2 часа",
+  "questionDuration2_3h": "2-3 часа",
+  "questionDuration3_4h": "3-4 часа",
+  "questionDuration30m": "30 мин",
+  "questionDuration25m": "25 мин",
+  "questionDuration15m": "15 мин",
+  "questionDuration10m": "10 мин",
+  "questionGoalSpeedTitle": "За какое время вы хотите достичь цели?",
+  "questionGoalSpeedSlow": "Медленно / Стабильно",
+  "questionGoalSpeedMedium": "Средний темп",
+  "questionGoalSpeedFast": "Быстро",
+  "questionGoalSpeedVeryFast": "Очень Быстро",
+  "readyTitle": "Время двигаться уже близко…",
+  "readySubtitle": "Готов вспотеть?",
+  "readyButton": "Я готов",
+  "loadingTitle": "Ваши персональные тренировки готовятся",
+  "loadingStart": "Начать"
+  ,"homeGreeting": "Hi Evrim"
+  ,"homeWelcome": "Welcome to Slim30"
+  ,"homePremium": "Premium"
+  ,"homeDayMonShort": "M"
+  ,"homeDayTueShort": "T"
+  ,"homeDayWedShort": "W"
+  ,"homeDayThuShort": "T"
+  ,"homeDayFriShort": "F"
+  ,"homeDaySatShort": "S"
+  ,"homeDaySunShort": "S"
+  ,"homeTodayWorkoutTitle": "Workout of the Day: Fat Burn Activation"
+  ,"homeWorkoutMoves": "8 Moves"
+  ,"homeWorkoutCalories": "100 Kcal"
+  ,"homeWorkoutDuration": "30 Min"
+  ,"homeStartNow": "Start Now"
+  ,"homeCompletedDaysTitle": "Completed Days"
+  ,"homeKeepGoing": "You're doing great, keep it up ✨"
+  ,"homeProgressTitle": "Your Progress"
+  ,"homeCaloriesBurned": "Calories Burned"
+  ,"homeHydrationRate": "Hydration Rate"
+  ,"homeWeightLost": "Weight Lost"
+  ,"homeStreaks": "Streaks"
+  ,"homeTotalCompleted": "Total Completed"
+  ,"homeSuccessRate": "Success Rate"
+  ,"homeAmazing": "Amazing 💪🏻"
+  ,"homeDontBreakChain": "Don't Break the Chain 💥"
+  ,"homeContinueTitle": "Continue Where You Left Off"
+  ,"homeWorkoutTag": "Fat Burn Activation"
+  ,"homeCurrentExercise": "Modified Push-Up"
+  ,"homeSetsAndTime": "3 sets x 40 sec"
+  ,"homeRestBetweenSets": "Rest: 30 sec"
+  ,"homeContinueButton": "Continue"
+  ,"homeMoodTitle": "Day 9: How Does Your Body Feel?"
+  ,"homeMoodTired": "Tired"
+  ,"homeMoodEnergetic": "Energetic"
+  ,"homeMoodStrong": "Strong"
+  ,"homeProgramName": "Full Body Metabolic"
+  ,"homeTransformationTitle": "Transformation Metrics"
+  ,"homeMuscleGain": "Muscle Mass Gain"
+  ,"homeWaistChange": "Waist Change"
+  ,"homeBodyFatChange": "Body Fat Change"
+  ,"homeTabHome": "Home"
+  ,"homeTabWorkout": "Workout"
+  ,"homeTabProgress": "Progress"
+  ,"homeTabProfile": "Profile"
+  ,"profileTitle": "Профиль"
+  ,"profileDoneTimeLabel": "Потраченное время"
+  ,"profileCompletedActivityLabel": "Завершенные активности"
+  ,"profileStreaksLabel": "Мои серии"
+  ,"profileAccountSettings": "Настройки аккаунта"
+  ,"profileEditProfile": "Редактировать профиль"
+  ,"profileNotifications": "Уведомления"
+  ,"profilePremium": "Премиум"
+  ,"profileSupportOther": "Поддержка и другое"
+  ,"profileConnectHealth": "Подключить приложение Здоровье"
+  ,"profileLanguagePreferences": "Языковые настройки"
+  ,"profileFaq": "Часто задаваемые вопросы"
+  ,"profileRateUs": "Оцените нас"
+  ,"profileShareApp": "Поделиться приложением"
+  ,"profileLogout": "Выйти"
+}

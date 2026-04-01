@@ -1,0 +1,138 @@
+{
+  "@@locale": "en",
+  "appTitle": "Slim30",
+  "splashBrand": "Slim30",
+  "onboardingSkip": "Skip",
+  "onboardingContinue": "Continue",
+  "onboardingPage1Title": "A Lighter You in 30 Days",
+  "onboardingPage1Description": "Losing weight does not have to be complicated. Take a big step toward change with daily mini tasks and just a little time.",
+  "onboardingPage2Title": "A Smart Plan Just for You",
+  "onboardingPage2Description": "AI analyzes your goals, age, and level, then creates a personal exercise and lifestyle plan for your needs. You do not need to think about what to do, just follow it.",
+  "onboardingStart": "Get Started",
+  "onboardingPage3Title": "One Step Closer Every Day",
+  "onboardingPage3Description": "Burn fat, boost your metabolism, and stay motivated with short, effective workouts. In 30 days, you will see the difference in the mirror.",
+  "loginTitle": "Welcome to Slim30",
+  "loginSubtitle": "Good to see you. Sign in to pick up right where you left off.",
+  "loginApple": "Sign in with Apple",
+  "loginGoogle": "Sign in with Google",
+  "loginGuest": "Continue as Guest",
+  "loginLegal": "By signing up for Slim30 you agree to our Terms of Service. To learn more about how we handle your data, please review our Privacy Policy and Cookie Policy.",
+  "questionSkip": "Skip",
+  "questionBack": "Back",
+  "questionNext": "Next",
+  "questionGenderTitle": "What Is Your Gender?",
+  "questionAgeTitle": "What Is Your Age?",
+  "questionGenderFemale": "Female",
+  "questionGenderMale": "Male",
+  "questionGenderUnspecified": "Prefer Not to Say",
+  "questionHeightTitle": "What Is Your Height?",
+  "questionWeightTitle": "What Is Your Current Weight?",
+  "questionTargetWeightTitle": "What Is Your Target Weight?",
+  "motivationTitle": "This Is Not Just Weight. It's a Decision.",
+  "motivationSubtitle": "The decision you make today will be reflected in tomorrow's mirror.",
+  "motivationCaption": "Stay disciplined, trust the process. 🤗",
+  "questionWorkoutTitle": "Preferred Workout Type",
+  "questionWorkoutCardio": "Cardio",
+  "questionWorkoutPilates": "Pilates",
+  "questionWorkoutRunning": "Running",
+  "questionWorkoutStretching": "Stretching & Mobility",
+  "questionWorkoutHiit": "HIIT",
+  "questionWorkoutWeight": "Weights",
+  "questionActivityTitle": "What Is Your Activity Level?",
+  "questionActivitySedentary": "Sedentary",
+  "questionActivityLight": "Lightly Active",
+  "questionActivityModerate": "Moderate",
+  "questionActivityIntense": "Intense",
+  "questionBodyShapeTitle": "What Is Your Current Body Shape?",
+  "questionBodyShapeSlim": "Slim / Fit",
+  "questionBodyShapeOverweight": "Slightly Overweight",
+  "questionBodyShapeCurvy": "Curvy / Toned",
+  "questionBodyShapeMuscular": "Muscular / Strong",
+  "questionDesiredBodyShapeTitle": "What Is Your Desired Body Shape?",
+  "questionWorkoutDaysTitle": "Which Days Do You Work Out?",
+  "questionDayMon": "Monday",
+  "questionDayTue": "Tuesday",
+  "questionDayWed": "Wednesday",
+  "questionDayThu": "Thursday",
+  "questionDayFri": "Friday",
+  "questionDaySat": "Saturday",
+  "questionDaySun": "Sunday",
+  "questionWorkoutDurationTitle": "How Long Is Your Workout?",
+  "questionDuration1_2h": "1-2 hours",
+  "questionDuration2_3h": "2-3 hours",
+  "questionDuration3_4h": "3-4 hours",
+  "questionDuration30m": "30 min",
+  "questionDuration25m": "25 min",
+  "questionDuration15m": "15 min",
+  "questionDuration10m": "10 min",
+  "questionGoalSpeedTitle": "How Fast Do You Want to Reach Your Goal?",
+  "questionGoalSpeedSlow": "Slow / Steady",
+  "questionGoalSpeedMedium": "Medium Pace",
+  "questionGoalSpeedFast": "Fast",
+  "questionGoalSpeedVeryFast": "Very Fast",
+  "readyTitle": "It's Almost Time to Move…",
+  "readySubtitle": "Ready to break a sweat?",
+  "readyButton": "I'm Ready",
+  "loadingTitle": "Your Personal Workouts Are Being Prepared",
+  "loadingStart": "Start"
+  ,"homeGreeting": "Hi Evrim"
+  ,"homeWelcome": "Welcome to Slim30"
+  ,"homePremium": "Premium"
+  ,"homeDayMonShort": "M"
+  ,"homeDayTueShort": "T"
+  ,"homeDayWedShort": "W"
+  ,"homeDayThuShort": "T"
+  ,"homeDayFriShort": "F"
+  ,"homeDaySatShort": "S"
+  ,"homeDaySunShort": "S"
+  ,"homeTodayWorkoutTitle": "Workout of the Day: Fat Burn Activation"
+  ,"homeWorkoutMoves": "8 Moves"
+  ,"homeWorkoutCalories": "100 Kcal"
+  ,"homeWorkoutDuration": "30 Min"
+  ,"homeStartNow": "Start Now"
+  ,"homeCompletedDaysTitle": "Completed Days"
+  ,"homeKeepGoing": "You're doing great, keep it up ✨"
+  ,"homeProgressTitle": "Your Progress"
+  ,"homeCaloriesBurned": "Calories Burned"
+  ,"homeHydrationRate": "Hydration Rate"
+  ,"homeWeightLost": "Weight Lost"
+  ,"homeStreaks": "Streaks"
+  ,"homeTotalCompleted": "Total Completed"
+  ,"homeSuccessRate": "Success Rate"
+  ,"homeAmazing": "Amazing 💪🏻"
+  ,"homeDontBreakChain": "Don't Break the Chain 💥"
+  ,"homeContinueTitle": "Continue Where You Left Off"
+  ,"homeWorkoutTag": "Fat Burn Activation"
+  ,"homeCurrentExercise": "Modified Push-Up"
+  ,"homeSetsAndTime": "3 sets x 40 sec"
+  ,"homeRestBetweenSets": "Rest: 30 sec"
+  ,"homeContinueButton": "Continue"
+  ,"homeMoodTitle": "Day 9: How Does Your Body Feel?"
+  ,"homeMoodTired": "Tired"
+  ,"homeMoodEnergetic": "Energetic"
+  ,"homeMoodStrong": "Strong"
+  ,"homeProgramName": "Full Body Metabolic"
+  ,"homeTransformationTitle": "Transformation Metrics"
+  ,"homeMuscleGain": "Muscle Mass Gain"
+  ,"homeWaistChange": "Waist Change"
+  ,"homeBodyFatChange": "Body Fat Change"
+  ,"homeTabHome": "Home"
+  ,"homeTabWorkout": "Workout"
+  ,"homeTabProgress": "Progress"
+  ,"homeTabProfile": "Profile"
+  ,"profileTitle": "Profile"
+  ,"profileDoneTimeLabel": "Time spent"
+  ,"profileCompletedActivityLabel": "Completed Activity"
+  ,"profileStreaksLabel": "My streaks"
+  ,"profileAccountSettings": "Account Settings"
+  ,"profileEditProfile": "Edit Profile"
+  ,"profileNotifications": "Notifications"
+  ,"profilePremium": "Premium"
+  ,"profileSupportOther": "Support & Other"
+  ,"profileConnectHealth": "Connect with Health App"
+  ,"profileLanguagePreferences": "Language Preferences"
+  ,"profileFaq": "Frequently Asked Questions"
+  ,"profileRateUs": "Rate Us"
+  ,"profileShareApp": "Share the App"
+  ,"profileLogout": "Log Out"
+}

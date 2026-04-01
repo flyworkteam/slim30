@@ -1,0 +1,138 @@
+{
+  "@@locale": "hi",
+  "appTitle": "Slim30",
+  "splashBrand": "Slim30",
+  "onboardingSkip": "छोड़ें",
+  "onboardingContinue": "जारी रखें",
+  "onboardingPage1Title": "30 दिनों में एक हल्का-फुल्का आप",
+  "onboardingPage1Description": "वजन कम करना मुश्किल नहीं होना चाहिए। रोज़ाना छोटे-छोटे कार्यों और थोड़े समय के साथ बदलाव की ओर एक बड़ा कदम उठाएं।",
+  "onboardingPage2Title": "सिर्फ आपके लिए बना स्मार्ट प्लान",
+  "onboardingPage2Description": "AI आपके लक्ष्यों, उम्र और फिटनेस स्तर का विश्लेषण करके आपकी जरूरतों के हिसाब से एक व्यक्तिगत व्यायाम और जीवनशैली योजना तैयार करता है। आपको सोचने की जरूरत नहीं कि क्या करें — बस इसे फॉलो करें।",
+  "onboardingStart": "शुरू करें",
+  "onboardingPage3Title": "हर दिन एक कदम और करीब",
+  "onboardingPage3Description": "छोटे और असरदार वर्कआउट से फैट जलाएं, मेटाबॉलिज्म बढ़ाएं और प्रेरित रहें। 30 दिनों में आप खुद आईने में फर्क देखेंगे।",
+  "loginTitle": "Slim30 में आपका स्वागत है",
+  "loginSubtitle": "आपको देखकर अच्छा लगा। साइन इन करें और जहाँ छोड़ा था, वहीं से जारी रखें।",
+  "loginApple": "Apple से साइन इन करें",
+  "loginGoogle": "Google से साइन इन करें",
+  "loginGuest": "अतिथि के रूप में जारी रखें",
+  "loginLegal": "Slim30 के लिए साइन अप करके आप हमारी सेवा की शर्तों से सहमत होते हैं। हम आपके डेटा को कैसे संभालते हैं, यह जानने के लिए कृपया हमारी गोपनीयता नीति और कुकी नीति पढ़ें।",
+  "questionSkip": "छोड़ें",
+  "questionBack": "वापस",
+  "questionNext": "आगे",
+  "questionGenderTitle": "आपका लिंग क्या है?",
+  "questionAgeTitle": "आपकी आयु क्या है?",
+  "questionGenderFemale": "महिला",
+  "questionGenderMale": "पुरुष",
+  "questionGenderUnspecified": "बताना नहीं चाहते",
+  "questionHeightTitle": "आपकी लंबाई क्या है?",
+  "questionWeightTitle": "आपका वर्तमान वजन क्या है?",
+  "questionTargetWeightTitle": "आपका लक्ष्य वजन क्या है?",
+  "motivationTitle": "यह सिर्फ एक वजन नहीं है। यह एक फैसला है।",
+  "motivationSubtitle": "आज लिया गया फैसला कल के आईने में दिखेगा।",
+  "motivationCaption": "अनुशासित रहो, प्रक्रिया पर भरोसा करो। 🤗",
+  "questionWorkoutTitle": "पसंदीदा वर्कआउट प्रकार",
+  "questionWorkoutCardio": "कार्डियो",
+  "questionWorkoutPilates": "Pilates",
+  "questionWorkoutRunning": "दौड़ना",
+  "questionWorkoutStretching": "स्ट्रेचिंग और मोबिलिटी",
+  "questionWorkoutHiit": "HIIT",
+  "questionWorkoutWeight": "वेट ट्रेनिंग",
+  "questionActivityTitle": "आपकी गतिविधि का स्तर क्या है?",
+  "questionActivitySedentary": "निष्क्रिय",
+  "questionActivityLight": "थोड़ा सक्रिय",
+  "questionActivityModerate": "मध्यम सक्रिय",
+  "questionActivityIntense": "बहुत सक्रिय",
+  "questionBodyShapeTitle": "आपकी वर्तमान शारीरिक बनावट क्या है?",
+  "questionBodyShapeSlim": "पतला / फिट",
+  "questionBodyShapeOverweight": "थोड़ा अधिक वजन",
+  "questionBodyShapeCurvy": "गोलाई / टोन्ड",
+  "questionBodyShapeMuscular": "मांसल / मजबूत",
+  "questionDesiredBodyShapeTitle": "आप कैसी शारीरिक बनावट चाहते हैं?",
+  "questionWorkoutDaysTitle": "आप सप्ताह के किन दिनों व्यायाम करते हैं?",
+  "questionDayMon": "सोमवार",
+  "questionDayTue": "मंगलवार",
+  "questionDayWed": "बुधवार",
+  "questionDayThu": "गुरुवार",
+  "questionDayFri": "शुक्रवार",
+  "questionDaySat": "शनिवार",
+  "questionDaySun": "रविवार",
+  "questionWorkoutDurationTitle": "आपका वर्कआउट कितने समय का होता है?",
+  "questionDuration1_2h": "1-2 घंटे",
+  "questionDuration2_3h": "2-3 घंटे",
+  "questionDuration3_4h": "3-4 घंटे",
+  "questionDuration30m": "30 मिनट",
+  "questionDuration25m": "25 मिनट",
+  "questionDuration15m": "15 मिनट",
+  "questionDuration10m": "10 मिनट",
+  "questionGoalSpeedTitle": "आप अपना लक्ष्य कितने समय में हासिल करना चाहते हैं?",
+  "questionGoalSpeedSlow": "धीरे / स्थिर",
+  "questionGoalSpeedMedium": "मध्यम गति",
+  "questionGoalSpeedFast": "तेज़",
+  "questionGoalSpeedVeryFast": "बहुत तेज़",
+  "readyTitle": "हिलने का समय लगभग आ गया…",
+  "readySubtitle": "पसीना बहाने के लिए तैयार हो?",
+  "readyButton": "मैं तैयार हूँ",
+  "loadingTitle": "आपके लिए खास वर्कआउट तैयार हो रहे हैं",
+  "loadingStart": "शुरू करें"
+  ,"homeGreeting": "Hi Evrim"
+  ,"homeWelcome": "Welcome to Slim30"
+  ,"homePremium": "Premium"
+  ,"homeDayMonShort": "M"
+  ,"homeDayTueShort": "T"
+  ,"homeDayWedShort": "W"
+  ,"homeDayThuShort": "T"
+  ,"homeDayFriShort": "F"
+  ,"homeDaySatShort": "S"
+  ,"homeDaySunShort": "S"
+  ,"homeTodayWorkoutTitle": "Workout of the Day: Fat Burn Activation"
+  ,"homeWorkoutMoves": "8 Moves"
+  ,"homeWorkoutCalories": "100 Kcal"
+  ,"homeWorkoutDuration": "30 Min"
+  ,"homeStartNow": "Start Now"
+  ,"homeCompletedDaysTitle": "Completed Days"
+  ,"homeKeepGoing": "You're doing great, keep it up ✨"
+  ,"homeProgressTitle": "Your Progress"
+  ,"homeCaloriesBurned": "Calories Burned"
+  ,"homeHydrationRate": "Hydration Rate"
+  ,"homeWeightLost": "Weight Lost"
+  ,"homeStreaks": "Streaks"
+  ,"homeTotalCompleted": "Total Completed"
+  ,"homeSuccessRate": "Success Rate"
+  ,"homeAmazing": "Amazing 💪🏻"
+  ,"homeDontBreakChain": "Don't Break the Chain 💥"
+  ,"homeContinueTitle": "Continue Where You Left Off"
+  ,"homeWorkoutTag": "Fat Burn Activation"
+  ,"homeCurrentExercise": "Modified Push-Up"
+  ,"homeSetsAndTime": "3 sets x 40 sec"
+  ,"homeRestBetweenSets": "Rest: 30 sec"
+  ,"homeContinueButton": "Continue"
+  ,"homeMoodTitle": "Day 9: How Does Your Body Feel?"
+  ,"homeMoodTired": "Tired"
+  ,"homeMoodEnergetic": "Energetic"
+  ,"homeMoodStrong": "Strong"
+  ,"homeProgramName": "Full Body Metabolic"
+  ,"homeTransformationTitle": "Transformation Metrics"
+  ,"homeMuscleGain": "Muscle Mass Gain"
+  ,"homeWaistChange": "Waist Change"
+  ,"homeBodyFatChange": "Body Fat Change"
+  ,"homeTabHome": "Home"
+  ,"homeTabWorkout": "Workout"
+  ,"homeTabProgress": "Progress"
+  ,"homeTabProfile": "Profile"
+  ,"profileTitle": "प्रोफ़ाइल"
+  ,"profileDoneTimeLabel": "किया गया समय"
+  ,"profileCompletedActivityLabel": "पूर्ण गतिविधि"
+  ,"profileStreaksLabel": "मेरी श्रृंखलाएँ"
+  ,"profileAccountSettings": "खाता सेटिंग्स"
+  ,"profileEditProfile": "प्रोफ़ाइल संपादित करें"
+  ,"profileNotifications": "सूचनाएँ"
+  ,"profilePremium": "प्रीमियम"
+  ,"profileSupportOther": "सहायता और अन्य"
+  ,"profileConnectHealth": "हेल्थ ऐप से कनेक्ट करें"
+  ,"profileLanguagePreferences": "भाषा प्राथमिकताएँ"
+  ,"profileFaq": "अक्सर पूछे जाने वाले सवाल"
+  ,"profileRateUs": "हमें रेट करें"
+  ,"profileShareApp": "ऐप साझा करें"
+  ,"profileLogout": "लॉग आउट"
+}

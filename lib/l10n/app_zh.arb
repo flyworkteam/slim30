@@ -1,0 +1,138 @@
+{
+  "@@locale": "zh",
+  "appTitle": "Slim30",
+  "splashBrand": "Slim30",
+  "onboardingSkip": "跳过",
+  "onboardingContinue": "继续",
+  "onboardingPage1Title": "30天，遇见更轻盈的自己",
+  "onboardingPage1Description": "减重不必复杂。每天完成几个小任务，只需花一点时间，就能迈出改变的一大步。",
+  "onboardingPage2Title": "专为你定制的智能计划",
+  "onboardingPage2Description": "AI 会分析你的目标、年龄和健身水平，为你量身打造个性化的运动和生活方式计划。你不需要想该做什么，只需跟着走就好。",
+  "onboardingStart": "立即开始",
+  "onboardingPage3Title": "每一天，都离目标更近一步",
+  "onboardingPage3Description": "通过短时高效的训练燃烧脂肪、提升代谢、保持动力。30天后，你会在镜子里看到真实的改变。",
+  "loginTitle": "欢迎来到 Slim30",
+  "loginSubtitle": "很高兴见到你。登录账号，从上次停下的地方继续吧。",
+  "loginApple": "使用 Apple 登录",
+  "loginGoogle": "使用 Google 登录",
+  "loginGuest": "以访客身份继续",
+  "loginLegal": "注册 Slim30 即表示您同意我们的服务条款。如需了解我们如何处理您的数据，请查阅我们的隐私政策和 Cookie 政策。",
+  "questionSkip": "跳过",
+  "questionBack": "返回",
+  "questionNext": "下一步",
+  "questionGenderTitle": "您的性别是？",
+  "questionAgeTitle": "您几岁？",
+  "questionGenderFemale": "女",
+  "questionGenderMale": "男",
+  "questionGenderUnspecified": "不便透露",
+  "questionHeightTitle": "您的身高是多少？",
+  "questionWeightTitle": "您当前的体重是多少？",
+  "questionTargetWeightTitle": "您的目标体重是多少？",
+  "motivationTitle": "这不只是体重，这是一个决定。",
+  "motivationSubtitle": "你今天做出的决定，将在明天的镜子里呈现。",
+  "motivationCaption": "保持自律，相信过程。 🤗",
+  "questionWorkoutTitle": "偏好的训练类型",
+  "questionWorkoutCardio": "有氧运动",
+  "questionWorkoutPilates": "Pilates",
+  "questionWorkoutRunning": "跑步",
+  "questionWorkoutStretching": "拉伸与灵活性",
+  "questionWorkoutHiit": "HIIT",
+  "questionWorkoutWeight": "力量训练",
+  "questionActivityTitle": "您的活动水平如何？",
+  "questionActivitySedentary": "久坐不动",
+  "questionActivityLight": "轻度活动",
+  "questionActivityModerate": "中等活动",
+  "questionActivityIntense": "高强度活动",
+  "questionBodyShapeTitle": "您目前的体型是哪种？",
+  "questionBodyShapeSlim": "纤细 / 健美",
+  "questionBodyShapeOverweight": "略微超重",
+  "questionBodyShapeCurvy": "丰满 / 健美",
+  "questionBodyShapeMuscular": "肌肉型 / 强壮",
+  "questionDesiredBodyShapeTitle": "您希望拥有哪种体型？",
+  "questionWorkoutDaysTitle": "您每周哪几天锻炼？",
+  "questionDayMon": "周一",
+  "questionDayTue": "周二",
+  "questionDayWed": "周三",
+  "questionDayThu": "周四",
+  "questionDayFri": "周五",
+  "questionDaySat": "周六",
+  "questionDaySun": "周日",
+  "questionWorkoutDurationTitle": "您的锻炼时长是多少？",
+  "questionDuration1_2h": "1-2小时",
+  "questionDuration2_3h": "2-3小时",
+  "questionDuration3_4h": "3-4小时",
+  "questionDuration30m": "30分钟",
+  "questionDuration25m": "25分钟",
+  "questionDuration15m": "15分钟",
+  "questionDuration10m": "10分钟",
+  "questionGoalSpeedTitle": "您希望多快达成目标？",
+  "questionGoalSpeedSlow": "慢速 / 稳定",
+  "questionGoalSpeedMedium": "中等速度",
+  "questionGoalSpeedFast": "快速",
+  "questionGoalSpeedVeryFast": "非常快速",
+  "readyTitle": "行动的时刻即将到来…",
+  "readySubtitle": "准备好流汗了吗？",
+  "readyButton": "我准备好了",
+  "loadingTitle": "正在为您准备专属训练计划",
+  "loadingStart": "开始"
+  ,"homeGreeting": "Hi Evrim"
+  ,"homeWelcome": "Welcome to Slim30"
+  ,"homePremium": "Premium"
+  ,"homeDayMonShort": "M"
+  ,"homeDayTueShort": "T"
+  ,"homeDayWedShort": "W"
+  ,"homeDayThuShort": "T"
+  ,"homeDayFriShort": "F"
+  ,"homeDaySatShort": "S"
+  ,"homeDaySunShort": "S"
+  ,"homeTodayWorkoutTitle": "Workout of the Day: Fat Burn Activation"
+  ,"homeWorkoutMoves": "8 Moves"
+  ,"homeWorkoutCalories": "100 Kcal"
+  ,"homeWorkoutDuration": "30 Min"
+  ,"homeStartNow": "Start Now"
+  ,"homeCompletedDaysTitle": "Completed Days"
+  ,"homeKeepGoing": "You're doing great, keep it up ✨"
+  ,"homeProgressTitle": "Your Progress"
+  ,"homeCaloriesBurned": "Calories Burned"
+  ,"homeHydrationRate": "Hydration Rate"
+  ,"homeWeightLost": "Weight Lost"
+  ,"homeStreaks": "Streaks"
+  ,"homeTotalCompleted": "Total Completed"
+  ,"homeSuccessRate": "Success Rate"
+  ,"homeAmazing": "Amazing 💪🏻"
+  ,"homeDontBreakChain": "Don't Break the Chain 💥"
+  ,"homeContinueTitle": "Continue Where You Left Off"
+  ,"homeWorkoutTag": "Fat Burn Activation"
+  ,"homeCurrentExercise": "Modified Push-Up"
+  ,"homeSetsAndTime": "3 sets x 40 sec"
+  ,"homeRestBetweenSets": "Rest: 30 sec"
+  ,"homeContinueButton": "Continue"
+  ,"homeMoodTitle": "Day 9: How Does Your Body Feel?"
+  ,"homeMoodTired": "Tired"
+  ,"homeMoodEnergetic": "Energetic"
+  ,"homeMoodStrong": "Strong"
+  ,"homeProgramName": "Full Body Metabolic"
+  ,"homeTransformationTitle": "Transformation Metrics"
+  ,"homeMuscleGain": "Muscle Mass Gain"
+  ,"homeWaistChange": "Waist Change"
+  ,"homeBodyFatChange": "Body Fat Change"
+  ,"homeTabHome": "Home"
+  ,"homeTabWorkout": "Workout"
+  ,"homeTabProgress": "Progress"
+  ,"homeTabProfile": "Profile"
+  ,"profileTitle": "个人资料"
+  ,"profileDoneTimeLabel": "已完成时长"
+  ,"profileCompletedActivityLabel": "已完成活动"
+  ,"profileStreaksLabel": "我的连续记录"
+  ,"profileAccountSettings": "账户设置"
+  ,"profileEditProfile": "编辑资料"
+  ,"profileNotifications": "通知"
+  ,"profilePremium": "高级会员"
+  ,"profileSupportOther": "支持与其他"
+  ,"profileConnectHealth": "连接健康应用"
+  ,"profileLanguagePreferences": "语言偏好"
+  ,"profileFaq": "常见问题"
+  ,"profileRateUs": "给我们评分"
+  ,"profileShareApp": "分享应用"
+  ,"profileLogout": "退出登录"
+}

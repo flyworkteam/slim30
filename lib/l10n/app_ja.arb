@@ -1,0 +1,138 @@
+{
+  "@@locale": "ja",
+  "appTitle": "Slim30",
+  "splashBrand": "Slim30",
+  "onboardingSkip": "スキップ",
+  "onboardingContinue": "次へ",
+  "onboardingPage1Title": "30日で、もっと軽やかな自分へ",
+  "onboardingPage1Description": "ダイエットは難しくなくていい。毎日のちょっとしたタスクと少しの時間で、大きな変化への第一歩を踏み出しましょう。",
+  "onboardingPage2Title": "あなただけのスマートプラン",
+  "onboardingPage2Description": "AIがあなたの目標・年齢・レベルを分析し、あなたの生活に合った個別のエクササイズとライフスタイルプランを作成します。何をすべきか迷う必要はありません。あとはプランに従うだけ。",
+  "onboardingStart": "はじめる",
+  "onboardingPage3Title": "毎日、ゴールに一歩ずつ近づく",
+  "onboardingPage3Description": "短時間で効果的なトレーニングで脂肪を燃焼し、代謝を上げて、モチベーションを維持しましょう。30日後には、鏡の中の自分が変わっていることに気づくはずです。",
+  "loginTitle": "Slim30へようこそ",
+  "loginSubtitle": "お帰りなさい。サインインして、続きから始めましょう。",
+  "loginApple": "Appleでサインイン",
+  "loginGoogle": "Googleでサインイン",
+  "loginGuest": "ゲストとして続ける",
+  "loginLegal": "Slim30に登録することで、利用規約に同意したものとみなされます。データの取り扱いについては、プライバシーポリシーおよびCookieポリシーをご覧ください。",
+  "questionSkip": "スキップ",
+  "questionBack": "戻る",
+  "questionNext": "次へ",
+  "questionGenderTitle": "性別を教えてください",
+  "questionAgeTitle": "年齢はおいくつですか？",
+  "questionGenderFemale": "女性",
+  "questionGenderMale": "男性",
+  "questionGenderUnspecified": "回答しない",
+  "questionHeightTitle": "身長はどれくらいですか？",
+  "questionWeightTitle": "現在の体重はどれくらいですか？",
+  "questionTargetWeightTitle": "目標体重はどれくらいですか？",
+  "motivationTitle": "これは単なる体重ではない。一つの決断だ。",
+  "motivationSubtitle": "今日下した決断が、明日の鏡に映し出される。",
+  "motivationCaption": "規律を守り、プロセスを信じよう。 🤗",
+  "questionWorkoutTitle": "好きなトレーニングの種類",
+  "questionWorkoutCardio": "有酸素運動",
+  "questionWorkoutPilates": "Pilates",
+  "questionWorkoutRunning": "ランニング",
+  "questionWorkoutStretching": "ストレッチ＆モビリティ",
+  "questionWorkoutHiit": "HIIT",
+  "questionWorkoutWeight": "ウェイトトレーニング",
+  "questionActivityTitle": "運動レベルはどのくらいですか？",
+  "questionActivitySedentary": "ほとんど動かない",
+  "questionActivityLight": "少し動く",
+  "questionActivityModerate": "適度に動く",
+  "questionActivityIntense": "よく動く",
+  "questionBodyShapeTitle": "現在の体型はどれですか？",
+  "questionBodyShapeSlim": "スリム / 引き締まった",
+  "questionBodyShapeOverweight": "やや太り気味",
+  "questionBodyShapeCurvy": "ふっくら / トーン体型",
+  "questionBodyShapeMuscular": "筋肉質 / 体格がいい",
+  "questionDesiredBodyShapeTitle": "理想の体型はどれですか？",
+  "questionWorkoutDaysTitle": "週のどの曜日にトレーニングしますか？",
+  "questionDayMon": "月曜日",
+  "questionDayTue": "火曜日",
+  "questionDayWed": "水曜日",
+  "questionDayThu": "木曜日",
+  "questionDayFri": "金曜日",
+  "questionDaySat": "土曜日",
+  "questionDaySun": "日曜日",
+  "questionWorkoutDurationTitle": "トレーニングの時間はどのくらいですか？",
+  "questionDuration1_2h": "1〜2時間",
+  "questionDuration2_3h": "2〜3時間",
+  "questionDuration3_4h": "3〜4時間",
+  "questionDuration30m": "30分",
+  "questionDuration25m": "25分",
+  "questionDuration15m": "15分",
+  "questionDuration10m": "10分",
+  "questionGoalSpeedTitle": "目標にどのくらいで達成したいですか？",
+  "questionGoalSpeedSlow": "ゆっくり / 着実に",
+  "questionGoalSpeedMedium": "普通のペース",
+  "questionGoalSpeedFast": "速く",
+  "questionGoalSpeedVeryFast": "とても速く",
+  "readyTitle": "動き出す時間が近づいている…",
+  "readySubtitle": "汗をかく準備はできてる？",
+  "readyButton": "準備できた",
+  "loadingTitle": "あなた専用のトレーニングを準備中",
+  "loadingStart": "スタート"
+  ,"homeGreeting": "Hi Evrim"
+  ,"homeWelcome": "Welcome to Slim30"
+  ,"homePremium": "Premium"
+  ,"homeDayMonShort": "M"
+  ,"homeDayTueShort": "T"
+  ,"homeDayWedShort": "W"
+  ,"homeDayThuShort": "T"
+  ,"homeDayFriShort": "F"
+  ,"homeDaySatShort": "S"
+  ,"homeDaySunShort": "S"
+  ,"homeTodayWorkoutTitle": "Workout of the Day: Fat Burn Activation"
+  ,"homeWorkoutMoves": "8 Moves"
+  ,"homeWorkoutCalories": "100 Kcal"
+  ,"homeWorkoutDuration": "30 Min"
+  ,"homeStartNow": "Start Now"
+  ,"homeCompletedDaysTitle": "Completed Days"
+  ,"homeKeepGoing": "You're doing great, keep it up ✨"
+  ,"homeProgressTitle": "Your Progress"
+  ,"homeCaloriesBurned": "Calories Burned"
+  ,"homeHydrationRate": "Hydration Rate"
+  ,"homeWeightLost": "Weight Lost"
+  ,"homeStreaks": "Streaks"
+  ,"homeTotalCompleted": "Total Completed"
+  ,"homeSuccessRate": "Success Rate"
+  ,"homeAmazing": "Amazing 💪🏻"
+  ,"homeDontBreakChain": "Don't Break the Chain 💥"
+  ,"homeContinueTitle": "Continue Where You Left Off"
+  ,"homeWorkoutTag": "Fat Burn Activation"
+  ,"homeCurrentExercise": "Modified Push-Up"
+  ,"homeSetsAndTime": "3 sets x 40 sec"
+  ,"homeRestBetweenSets": "Rest: 30 sec"
+  ,"homeContinueButton": "Continue"
+  ,"homeMoodTitle": "Day 9: How Does Your Body Feel?"
+  ,"homeMoodTired": "Tired"
+  ,"homeMoodEnergetic": "Energetic"
+  ,"homeMoodStrong": "Strong"
+  ,"homeProgramName": "Full Body Metabolic"
+  ,"homeTransformationTitle": "Transformation Metrics"
+  ,"homeMuscleGain": "Muscle Mass Gain"
+  ,"homeWaistChange": "Waist Change"
+  ,"homeBodyFatChange": "Body Fat Change"
+  ,"homeTabHome": "Home"
+  ,"homeTabWorkout": "Workout"
+  ,"homeTabProgress": "Progress"
+  ,"homeTabProfile": "Profile"
+  ,"profileTitle": "プロフィール"
+  ,"profileDoneTimeLabel": "実施時間"
+  ,"profileCompletedActivityLabel": "完了したアクティビティ"
+  ,"profileStreaksLabel": "連続記録"
+  ,"profileAccountSettings": "アカウント設定"
+  ,"profileEditProfile": "プロフィールを編集"
+  ,"profileNotifications": "通知"
+  ,"profilePremium": "プレミアム"
+  ,"profileSupportOther": "サポート・その他"
+  ,"profileConnectHealth": "ヘルスケアと連携"
+  ,"profileLanguagePreferences": "言語設定"
+  ,"profileFaq": "よくある質問"
+  ,"profileRateUs": "評価する"
+  ,"profileShareApp": "アプリを共有"
+  ,"profileLogout": "ログアウト"
+}

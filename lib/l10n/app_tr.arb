@@ -1,0 +1,138 @@
+{
+  "@@locale": "tr",
+  "appTitle": "Slim30",
+  "splashBrand": "Slim30",
+  "onboardingSkip": "Atla",
+  "onboardingContinue": "Devam et",
+  "onboardingPage1Title": "30 Günde Daha Hafif Bir Sen",
+  "onboardingPage1Description": "Kilo vermek karmaşık olmak zorunda değil. Günlük mini görevlerle, az zaman ayırarak büyük değişime adım at.",
+  "onboardingPage2Title": "Sana Özel Akıllı Plan",
+  "onboardingPage2Description": "Yapay zekâ hedeflerini, yaşını ve seviyeni analiz eder; ihtiyaçlarına göre kişisel bir egzersiz ve yaşam planı oluşturur. Ne yapacağını düşünmek zorunda değilsin, sadece uygula.",
+  "onboardingStart": "Başlayın",
+  "onboardingPage3Title": "Her Gün Bir Adım Daha Yakın",
+  "onboardingPage3Description": "Kısa ve etkili antrenmanlarla yağ yak, metabolizmanı hızlandır ve motivasyonunu koru. 30 gün sonra farkı aynada göreceksin.",
+  "loginTitle": "Slim30'a Hoşgeldin",
+  "loginSubtitle": "Seni gördüğüme sevindim. Giriş yaparak kaldığın yerden devam edebilirsin.",
+  "loginApple": "Apple ile giriş yapın",
+  "loginGoogle": "Google ile giriş yapın",
+  "loginGuest": "Misafir Olarak Devam Et",
+  "loginLegal": "Slim30'a kaydolmakla Hizmet Şartlarımızı kabul etmiş olursunuz. Verilerinizi nasıl işlediğimiz hakkında daha fazla bilgi edinmek için Gizlilik Politikamızı ve Çerez Politikamızı inceleyiniz.",
+  "questionSkip": "Atla",
+  "questionBack": "Geri",
+  "questionNext": "İleri",
+  "questionGenderTitle": "Cinsiyetiniz Nedir?",
+  "questionAgeTitle": "Yaşınız Nedir?",
+  "questionGenderFemale": "Kadın",
+  "questionGenderMale": "Erkek",
+  "questionGenderUnspecified": "Belirtmek İstemiyorum",
+  "questionHeightTitle": "Boyunuz Nedir?",
+  "questionWeightTitle": "Mevcut Kilonuz Nedir?",
+  "questionTargetWeightTitle": "Hedef Kilonuz Nedir?",
+  "motivationTitle": "Bu Sadece Bir Kilo Değil, Bir Karar.",
+  "motivationSubtitle": "Bugün verdiğin karar, yarının aynadaki yansıması olacak.",
+  "motivationCaption": "Disiplinli kal, sürece güven. 🤗",
+  "questionWorkoutTitle": "Tercih Ettiğiniz Antrenman Tipi",
+  "questionWorkoutCardio": "Kardiyo",
+  "questionWorkoutPilates": "Pilates",
+  "questionWorkoutRunning": "Koşu",
+  "questionWorkoutStretching": "Esneme & Mobilite",
+  "questionWorkoutHiit": "HIIT",
+  "questionWorkoutWeight": "Ağırlık",
+  "questionActivityTitle": "Aktivite Düzeyiniz Nedir?",
+  "questionActivitySedentary": "Hareketsiz",
+  "questionActivityLight": "Hafif Hareketli",
+  "questionActivityModerate": "Orta - Yoğun",
+  "questionActivityIntense": "Yoğun",
+  "questionBodyShapeTitle": "Şu anki Vücut Şekliniz Hangisi?",
+  "questionBodyShapeSlim": "İnce / Fit",
+  "questionBodyShapeOverweight": "Hafif Kilolu",
+  "questionBodyShapeCurvy": "Dolgun / Formlu",
+  "questionBodyShapeMuscular": "Kaslı / Güçlü",
+  "questionDesiredBodyShapeTitle": "İstediğiniz Vücut Şekliniz Hangisi?",
+  "questionWorkoutDaysTitle": "Haftanın Hangi Günleri Antrenman Yaparsınız?",
+  "questionDayMon": "Pazartesi",
+  "questionDayTue": "Salı",
+  "questionDayWed": "Çarşamba",
+  "questionDayThu": "Perşembe",
+  "questionDayFri": "Cuma",
+  "questionDaySat": "Cumartesi",
+  "questionDaySun": "Pazar",
+  "questionWorkoutDurationTitle": "Antrenman Süreniz Ne Kadar?",
+  "questionDuration1_2h": "1-2 saat",
+  "questionDuration2_3h": "2-3 saat",
+  "questionDuration3_4h": "3-4 saat",
+  "questionDuration30m": "30 dakika",
+  "questionDuration25m": "25 dakika",
+  "questionDuration15m": "15 dakika",
+  "questionDuration10m": "10 dakika",
+  "questionGoalSpeedTitle": "Hedefinize Ne Kadar Sürede Ulaşmak İstiyorsunuz?",
+  "questionGoalSpeedSlow": "Yavaş / Sabit",
+  "questionGoalSpeedMedium": "Orta Hız",
+  "questionGoalSpeedFast": "Hızlı",
+  "questionGoalSpeedVeryFast": "Çok Hızlı",
+  "readyTitle": "Hareket Zamanı Yaklaşıyor…",
+  "readySubtitle": "Ter atmaya hazır mısın?",
+  "readyButton": "Hazırım",
+  "loadingTitle": "Sana Özel Antrenmanlar Hazırlanıyor",
+  "loadingStart": "Başlayın"
+  ,"homeGreeting": "Selam Evrim"
+  ,"homeWelcome": "Slim30'a Hoşgeldin"
+  ,"homePremium": "Premium"
+  ,"homeDayMonShort": "P"
+  ,"homeDayTueShort": "S"
+  ,"homeDayWedShort": "Ç"
+  ,"homeDayThuShort": "P"
+  ,"homeDayFriShort": "C"
+  ,"homeDaySatShort": "C"
+  ,"homeDaySunShort": "P"
+  ,"homeTodayWorkoutTitle": "Günün Antrenmanı: Yağ Yakım Aktivasyonu"
+  ,"homeWorkoutMoves": "8 Hareket"
+  ,"homeWorkoutCalories": "100 Kcal"
+  ,"homeWorkoutDuration": "30 Dakika"
+  ,"homeStartNow": "Şimdi Başla"
+  ,"homeCompletedDaysTitle": "Tamamlanan Günler"
+  ,"homeKeepGoing": "Harika gidiyorsun, böyle devam et ✨"
+  ,"homeProgressTitle": "İlerleme Durumun"
+  ,"homeCaloriesBurned": "Harcanan Kalori"
+  ,"homeHydrationRate": "Su İçme Oranın"
+  ,"homeWeightLost": "Verilen Kilo"
+  ,"homeStreaks": "Serilerin"
+  ,"homeTotalCompleted": "Toplam Tamamlanan"
+  ,"homeSuccessRate": "Başarı Yüzden"
+  ,"homeAmazing": "Harikasın 💪🏻"
+  ,"homeDontBreakChain": "Zinciri Kırma 💥"
+  ,"homeContinueTitle": "Kaldığın Yerden Devam Et"
+  ,"homeWorkoutTag": "Yağ Yakım Aktivasyonu"
+  ,"homeCurrentExercise": "Modified Push-Up"
+  ,"homeSetsAndTime": "3 set x 40 sn"
+  ,"homeRestBetweenSets": "Set arası: 30 sn"
+  ,"homeContinueButton": "Devam Et"
+  ,"homeMoodTitle": "9. Günündesin, Bedenin Nasıl Hissediyor?"
+  ,"homeMoodTired": "Yorgun"
+  ,"homeMoodEnergetic": "Enerjik"
+  ,"homeMoodStrong": "Güçlü"
+  ,"homeProgramName": "Full Body Metabolik"
+  ,"homeTransformationTitle": "Dönüşüm Verileri"
+  ,"homeMuscleGain": "Kas Kütle Artışın"
+  ,"homeWaistChange": "Bel Çevresi Değişimi"
+  ,"homeBodyFatChange": "Yağ Oranı Değişimi"
+  ,"homeTabHome": "Anasayfa"
+  ,"homeTabWorkout": "Antrenman"
+  ,"homeTabProgress": "İlerleme"
+  ,"homeTabProfile": "Profil"
+  ,"profileTitle": "Profil"
+  ,"profileDoneTimeLabel": "Yapılan süre"
+  ,"profileCompletedActivityLabel": "Tamamlanan Aktivite"
+  ,"profileStreaksLabel": "Serilerim"
+  ,"profileAccountSettings": "Hesap Ayarları"
+  ,"profileEditProfile": "Profili Düzenle"
+  ,"profileNotifications": "Bildirimler"
+  ,"profilePremium": "Premium"
+  ,"profileSupportOther": "Destek & Diğer"
+  ,"profileConnectHealth": "App Sağlık ile Bağlan"
+  ,"profileLanguagePreferences": "Dil Tercihleri"
+  ,"profileFaq": "Sıkça Sorulan Sorular"
+  ,"profileRateUs": "Bize Oy Ver"
+  ,"profileShareApp": "Uygulamayı Paylaş"
+  ,"profileLogout": "Çıkış Yap"
+}

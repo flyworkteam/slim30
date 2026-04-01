@@ -1,0 +1,138 @@
+{
+  "@@locale": "fr",
+  "appTitle": "Slim30",
+  "splashBrand": "Slim30",
+  "onboardingSkip": "Passer",
+  "onboardingContinue": "Continuer",
+  "onboardingPage1Title": "Un toi plus léger en 30 jours",
+  "onboardingPage1Description": "Perdre du poids n'a pas à être compliqué. Faites un grand pas vers le changement grâce à de petites tâches quotidiennes et un peu de temps.",
+  "onboardingPage2Title": "Un plan intelligent rien que pour vous",
+  "onboardingPage2Description": "L'IA analyse vos objectifs, votre âge et votre niveau, puis crée un plan personnalisé d'exercice et de mode de vie adapté à vos besoins. Pas besoin de réfléchir à quoi faire, il suffit de suivre le programme.",
+  "onboardingStart": "Commencer",
+  "onboardingPage3Title": "Un pas de plus chaque jour",
+  "onboardingPage3Description": "Brûlez des graisses, boostez votre métabolisme et restez motivé avec des séances courtes et efficaces. En 30 jours, vous verrez la différence dans le miroir.",
+  "loginTitle": "Bienvenue sur Slim30",
+  "loginSubtitle": "Ravi de vous revoir. Connectez-vous pour reprendre là où vous en étiez.",
+  "loginApple": "Se connecter avec Apple",
+  "loginGoogle": "Se connecter avec Google",
+  "loginGuest": "Continuer en tant qu'invité",
+  "loginLegal": "En vous inscrivant à Slim30, vous acceptez nos Conditions d'utilisation. Pour en savoir plus sur la gestion de vos données, consultez notre Politique de confidentialité et notre Politique en matière de cookies.",
+  "questionSkip": "Passer",
+  "questionBack": "Retour",
+  "questionNext": "Suivant",
+  "questionGenderTitle": "Quel est votre genre ?",
+  "questionAgeTitle": "Quel âge avez-vous ?",
+  "questionGenderFemale": "Femme",
+  "questionGenderMale": "Homme",
+  "questionGenderUnspecified": "Préfère ne pas répondre",
+  "questionHeightTitle": "Quelle est votre taille ?",
+  "questionWeightTitle": "Quel est votre poids actuel ?",
+  "questionTargetWeightTitle": "Quel est votre poids cible ?",
+  "motivationTitle": "Ce n'est pas qu'un poids. C'est une décision.",
+  "motivationSubtitle": "La décision que tu prends aujourd'hui se reflétera dans le miroir de demain.",
+  "motivationCaption": "Reste discipliné, fais confiance au processus. 🤗",
+  "questionWorkoutTitle": "Type d'entraînement préféré",
+  "questionWorkoutCardio": "Cardio",
+  "questionWorkoutPilates": "Pilates",
+  "questionWorkoutRunning": "Course à pied",
+  "questionWorkoutStretching": "Étirements et mobilité",
+  "questionWorkoutHiit": "HIIT",
+  "questionWorkoutWeight": "Musculation",
+  "questionActivityTitle": "Quel est votre niveau d'activité ?",
+  "questionActivitySedentary": "Sédentaire",
+  "questionActivityLight": "Légèrement Actif",
+  "questionActivityModerate": "Modérément Actif",
+  "questionActivityIntense": "Très Actif",
+  "questionBodyShapeTitle": "Quelle est votre morphologie actuelle ?",
+  "questionBodyShapeSlim": "Mince / En Forme",
+  "questionBodyShapeOverweight": "Légèrement en Surpoids",
+  "questionBodyShapeCurvy": "Rond / Tonique",
+  "questionBodyShapeMuscular": "Musclé / Fort",
+  "questionDesiredBodyShapeTitle": "Quelle morphologie souhaitez-vous avoir ?",
+  "questionWorkoutDaysTitle": "Quels jours vous entraînez-vous ?",
+  "questionDayMon": "Lundi",
+  "questionDayTue": "Mardi",
+  "questionDayWed": "Mercredi",
+  "questionDayThu": "Jeudi",
+  "questionDayFri": "Vendredi",
+  "questionDaySat": "Samedi",
+  "questionDaySun": "Dimanche",
+  "questionWorkoutDurationTitle": "Combien de temps dure votre séance ?",
+  "questionDuration1_2h": "1-2 h",
+  "questionDuration2_3h": "2-3 h",
+  "questionDuration3_4h": "3-4 h",
+  "questionDuration30m": "30 min",
+  "questionDuration25m": "25 min",
+  "questionDuration15m": "15 min",
+  "questionDuration10m": "10 min",
+  "questionGoalSpeedTitle": "En combien de temps voulez-vous atteindre votre objectif ?",
+  "questionGoalSpeedSlow": "Lent / Régulier",
+  "questionGoalSpeedMedium": "Rythme Modéré",
+  "questionGoalSpeedFast": "Rapide",
+  "questionGoalSpeedVeryFast": "Très Rapide",
+  "readyTitle": "L'heure de bouger approche…",
+  "readySubtitle": "Prêt à transpirer ?",
+  "readyButton": "Je suis prêt",
+  "loadingTitle": "Vos entraînements personnalisés sont en cours de préparation",
+  "loadingStart": "Commencer"
+  ,"homeGreeting": "Hi Evrim"
+  ,"homeWelcome": "Welcome to Slim30"
+  ,"homePremium": "Premium"
+  ,"homeDayMonShort": "M"
+  ,"homeDayTueShort": "T"
+  ,"homeDayWedShort": "W"
+  ,"homeDayThuShort": "T"
+  ,"homeDayFriShort": "F"
+  ,"homeDaySatShort": "S"
+  ,"homeDaySunShort": "S"
+  ,"homeTodayWorkoutTitle": "Workout of the Day: Fat Burn Activation"
+  ,"homeWorkoutMoves": "8 Moves"
+  ,"homeWorkoutCalories": "100 Kcal"
+  ,"homeWorkoutDuration": "30 Min"
+  ,"homeStartNow": "Start Now"
+  ,"homeCompletedDaysTitle": "Completed Days"
+  ,"homeKeepGoing": "You're doing great, keep it up ✨"
+  ,"homeProgressTitle": "Your Progress"
+  ,"homeCaloriesBurned": "Calories Burned"
+  ,"homeHydrationRate": "Hydration Rate"
+  ,"homeWeightLost": "Weight Lost"
+  ,"homeStreaks": "Streaks"
+  ,"homeTotalCompleted": "Total Completed"
+  ,"homeSuccessRate": "Success Rate"
+  ,"homeAmazing": "Amazing 💪🏻"
+  ,"homeDontBreakChain": "Don't Break the Chain 💥"
+  ,"homeContinueTitle": "Continue Where You Left Off"
+  ,"homeWorkoutTag": "Fat Burn Activation"
+  ,"homeCurrentExercise": "Modified Push-Up"
+  ,"homeSetsAndTime": "3 sets x 40 sec"
+  ,"homeRestBetweenSets": "Rest: 30 sec"
+  ,"homeContinueButton": "Continue"
+  ,"homeMoodTitle": "Day 9: How Does Your Body Feel?"
+  ,"homeMoodTired": "Tired"
+  ,"homeMoodEnergetic": "Energetic"
+  ,"homeMoodStrong": "Strong"
+  ,"homeProgramName": "Full Body Metabolic"
+  ,"homeTransformationTitle": "Transformation Metrics"
+  ,"homeMuscleGain": "Muscle Mass Gain"
+  ,"homeWaistChange": "Waist Change"
+  ,"homeBodyFatChange": "Body Fat Change"
+  ,"homeTabHome": "Home"
+  ,"homeTabWorkout": "Workout"
+  ,"homeTabProgress": "Progress"
+  ,"homeTabProfile": "Profile"
+  ,"profileTitle": "Profil"
+  ,"profileDoneTimeLabel": "Temps effectué"
+  ,"profileCompletedActivityLabel": "Activité terminée"
+  ,"profileStreaksLabel": "Mes séries"
+  ,"profileAccountSettings": "Paramètres du compte"
+  ,"profileEditProfile": "Modifier le profil"
+  ,"profileNotifications": "Notifications"
+  ,"profilePremium": "Premium"
+  ,"profileSupportOther": "Support & autres"
+  ,"profileConnectHealth": "Connecter à l'app Santé"
+  ,"profileLanguagePreferences": "Préférences de langue"
+  ,"profileFaq": "Questions fréquentes"
+  ,"profileRateUs": "Donnez-nous une note"
+  ,"profileShareApp": "Partager l'app"
+  ,"profileLogout": "Se déconnecter"
+}

@@ -1,0 +1,138 @@
+{
+  "@@locale": "ko",
+  "appTitle": "Slim30",
+  "splashBrand": "Slim30",
+  "onboardingSkip": "건너뛰기",
+  "onboardingContinue": "계속",
+  "onboardingPage1Title": "30일 만에 더 가벼운 나",
+  "onboardingPage1Description": "체중 감량이 복잡할 필요는 없어요. 매일 작은 과제와 조금의 시간으로 변화를 향한 큰 한 걸음을 내디뎌 보세요.",
+  "onboardingPage2Title": "나를 위한 맞춤 스마트 플랜",
+  "onboardingPage2Description": "AI가 목표, 나이, 운동 수준을 분석해 내게 딱 맞는 운동 및 생활 습관 계획을 만들어 드려요. 무엇을 해야 할지 고민할 필요 없이, 그냥 따라오기만 하면 돼요.",
+  "onboardingStart": "시작하기",
+  "onboardingPage3Title": "매일 한 걸음씩 목표에 가까이",
+  "onboardingPage3Description": "짧고 효과적인 운동으로 지방을 태우고, 신진대사를 높이며, 동기를 유지하세요. 30일 후에는 거울 속에서 달라진 나를 발견하게 될 거예요.",
+  "loginTitle": "Slim30에 오신 것을 환영합니다",
+  "loginSubtitle": "반가워요. 로그인하고 마지막으로 멈춘 곳부터 이어가세요.",
+  "loginApple": "Apple로 로그인",
+  "loginGoogle": "Google로 로그인",
+  "loginGuest": "게스트로 계속하기",
+  "loginLegal": "Slim30에 가입하면 서비스 약관에 동의하는 것으로 간주됩니다. 데이터 처리 방식에 대해 자세히 알아보려면 개인정보 처리방침 및 쿠키 정책을 확인해 주세요.",
+  "questionSkip": "건너뛰기",
+  "questionBack": "뒤로",
+  "questionNext": "다음",
+  "questionGenderTitle": "성별이 어떻게 되나요?",
+  "questionAgeTitle": "나이가 어떻게 되나요?",
+  "questionGenderFemale": "여성",
+  "questionGenderMale": "남성",
+  "questionGenderUnspecified": "밝히고 싶지 않음",
+  "questionHeightTitle": "키가 어떻게 되나요?",
+  "questionWeightTitle": "현재 체중이 어떻게 되나요?",
+  "questionTargetWeightTitle": "목표 체중이 어떻게 되나요?",
+  "motivationTitle": "이건 단순한 체중이 아닙니다. 하나의 결심입니다.",
+  "motivationSubtitle": "오늘의 결심이 내일의 거울에 비칠 것입니다.",
+  "motivationCaption": "자기 절제를 유지하고, 과정을 믿으세요. 🤗",
+  "questionWorkoutTitle": "선호하는 운동 유형",
+  "questionWorkoutCardio": "유산소 운동",
+  "questionWorkoutPilates": "Pilates",
+  "questionWorkoutRunning": "달리기",
+  "questionWorkoutStretching": "스트레칭 & 유연성",
+  "questionWorkoutHiit": "HIIT",
+  "questionWorkoutWeight": "웨이트 트레이닝",
+  "questionActivityTitle": "활동 수준이 어떻게 되나요?",
+  "questionActivitySedentary": "비활동적",
+  "questionActivityLight": "가볍게 활동",
+  "questionActivityModerate": "보통 활동",
+  "questionActivityIntense": "활발히 활동",
+  "questionBodyShapeTitle": "현재 체형이 어떻게 되나요?",
+  "questionBodyShapeSlim": "날씬 / 탄탄",
+  "questionBodyShapeOverweight": "약간 과체중",
+  "questionBodyShapeCurvy": "볼륨감 / 탄탄",
+  "questionBodyShapeMuscular": "근육질 / 강인",
+  "questionDesiredBodyShapeTitle": "원하는 체형이 어떻게 되나요?",
+  "questionWorkoutDaysTitle": "주중 어떤 날 운동하나요?",
+  "questionDayMon": "월요일",
+  "questionDayTue": "화요일",
+  "questionDayWed": "수요일",
+  "questionDayThu": "목요일",
+  "questionDayFri": "금요일",
+  "questionDaySat": "토요일",
+  "questionDaySun": "일요일",
+  "questionWorkoutDurationTitle": "운동 시간이 얼마나 되나요?",
+  "questionDuration1_2h": "1-2시간",
+  "questionDuration2_3h": "2-3시간",
+  "questionDuration3_4h": "3-4시간",
+  "questionDuration30m": "30분",
+  "questionDuration25m": "25분",
+  "questionDuration15m": "15분",
+  "questionDuration10m": "10분",
+  "questionGoalSpeedTitle": "목표를 얼마나 빨리 달성하고 싶으신가요?",
+  "questionGoalSpeedSlow": "천천히 / 꾸준히",
+  "questionGoalSpeedMedium": "보통 속도",
+  "questionGoalSpeedFast": "빠르게",
+  "questionGoalSpeedVeryFast": "매우 빠르게",
+  "readyTitle": "움직일 시간이 다가오고 있어요…",
+  "readySubtitle": "땀 흘릴 준비 됐나요?",
+  "readyButton": "준비됐어요",
+  "loadingTitle": "맞춤 운동 프로그램을 준비하고 있어요",
+  "loadingStart": "시작하기"
+  ,"homeGreeting": "Hi Evrim"
+  ,"homeWelcome": "Welcome to Slim30"
+  ,"homePremium": "Premium"
+  ,"homeDayMonShort": "M"
+  ,"homeDayTueShort": "T"
+  ,"homeDayWedShort": "W"
+  ,"homeDayThuShort": "T"
+  ,"homeDayFriShort": "F"
+  ,"homeDaySatShort": "S"
+  ,"homeDaySunShort": "S"
+  ,"homeTodayWorkoutTitle": "Workout of the Day: Fat Burn Activation"
+  ,"homeWorkoutMoves": "8 Moves"
+  ,"homeWorkoutCalories": "100 Kcal"
+  ,"homeWorkoutDuration": "30 Min"
+  ,"homeStartNow": "Start Now"
+  ,"homeCompletedDaysTitle": "Completed Days"
+  ,"homeKeepGoing": "You're doing great, keep it up ✨"
+  ,"homeProgressTitle": "Your Progress"
+  ,"homeCaloriesBurned": "Calories Burned"
+  ,"homeHydrationRate": "Hydration Rate"
+  ,"homeWeightLost": "Weight Lost"
+  ,"homeStreaks": "Streaks"
+  ,"homeTotalCompleted": "Total Completed"
+  ,"homeSuccessRate": "Success Rate"
+  ,"homeAmazing": "Amazing 💪🏻"
+  ,"homeDontBreakChain": "Don't Break the Chain 💥"
+  ,"homeContinueTitle": "Continue Where You Left Off"
+  ,"homeWorkoutTag": "Fat Burn Activation"
+  ,"homeCurrentExercise": "Modified Push-Up"
+  ,"homeSetsAndTime": "3 sets x 40 sec"
+  ,"homeRestBetweenSets": "Rest: 30 sec"
+  ,"homeContinueButton": "Continue"
+  ,"homeMoodTitle": "Day 9: How Does Your Body Feel?"
+  ,"homeMoodTired": "Tired"
+  ,"homeMoodEnergetic": "Energetic"
+  ,"homeMoodStrong": "Strong"
+  ,"homeProgramName": "Full Body Metabolic"
+  ,"homeTransformationTitle": "Transformation Metrics"
+  ,"homeMuscleGain": "Muscle Mass Gain"
+  ,"homeWaistChange": "Waist Change"
+  ,"homeBodyFatChange": "Body Fat Change"
+  ,"homeTabHome": "Home"
+  ,"homeTabWorkout": "Workout"
+  ,"homeTabProgress": "Progress"
+  ,"homeTabProfile": "Profile"
+  ,"profileTitle": "프로필"
+  ,"profileDoneTimeLabel": "운동 시간"
+  ,"profileCompletedActivityLabel": "완료한 활동"
+  ,"profileStreaksLabel": "내 연속 기록"
+  ,"profileAccountSettings": "계정 설정"
+  ,"profileEditProfile": "프로필 편집"
+  ,"profileNotifications": "알림"
+  ,"profilePremium": "프리미엄"
+  ,"profileSupportOther": "지원 및 기타"
+  ,"profileConnectHealth": "건강 앱과 연결"
+  ,"profileLanguagePreferences": "언어 설정"
+  ,"profileFaq": "자주 묻는 질문"
+  ,"profileRateUs": "평가하기"
+  ,"profileShareApp": "앱 공유"
+  ,"profileLogout": "로그아웃"
+}
