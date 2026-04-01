@@ -1186,6 +1186,12 @@ abstract class AppLocalizations {
   /// **'Link copied to clipboard.'**
   String get shareAppCopiedMessage;
 
+  /// No description provided for @shareAppShareMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Join me on Slim30:'**
+  String get shareAppShareMessage;
+
   /// No description provided for @shareAppInstagram.
   ///
   /// In en, this message translates to:

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
 
 class ShareAppView extends StatelessWidget {
@@ -72,10 +73,10 @@ class ShareAppView extends StatelessWidget {
                                   linkedInLabel: l10n.shareAppLinkedIn,
                                   whatsAppLabel: l10n.shareAppWhatsApp,
                                   twitterLabel: l10n.shareAppTwitter,
-                                  onTapInstagram: () => _copyLink(context),
-                                  onTapLinkedIn: () => _copyLink(context),
-                                  onTapWhatsApp: () => _copyLink(context),
-                                  onTapTwitter: () => _copyLink(context),
+                                  onTapInstagram: () => _shareApp(context),
+                                  onTapLinkedIn: () => _shareApp(context),
+                                  onTapWhatsApp: () => _shareApp(context),
+                                  onTapTwitter: () => _shareApp(context),
                                 ),
                               ],
                             ),
@@ -123,6 +124,12 @@ class ShareAppView extends StatelessWidget {
           behavior: SnackBarBehavior.floating,
         ),
       );
+  }
+
+  Future<void> _shareApp(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
+    final shareText = '${l10n.shareAppShareMessage} $_shareLink';
+    await Share.share(shareText);
   }
 }
 

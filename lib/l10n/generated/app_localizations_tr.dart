@@ -566,6 +566,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get shareAppCopiedMessage => 'Baglanti panoya kopyalandi.';
 
   @override
+  String get shareAppShareMessage => 'Bana Slim30\'da katil:';
+
+  @override
   String get shareAppInstagram => 'Instagram';
 
   @override

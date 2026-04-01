@@ -561,6 +561,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get shareAppCopiedMessage => 'リンクをクリップボードにコピーしました。';
 
   @override
+  String get shareAppShareMessage => 'Slim30を一緒にはじめよう:';
+
+  @override
   String get shareAppInstagram => 'Instagram';
 
   @override

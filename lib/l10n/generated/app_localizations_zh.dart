@@ -561,6 +561,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get shareAppCopiedMessage => '链接已复制到剪贴板。';
 
   @override
+  String get shareAppShareMessage => '和我一起使用 Slim30:';
+
+  @override
   String get shareAppInstagram => 'Instagram';
 
   @override

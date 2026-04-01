@@ -570,6 +570,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get shareAppCopiedMessage => 'Lien copie dans le presse-papiers.';
 
   @override
+  String get shareAppShareMessage => 'Rejoins-moi sur Slim30 :';
+
+  @override
   String get shareAppInstagram => 'Instagram';
 
   @override

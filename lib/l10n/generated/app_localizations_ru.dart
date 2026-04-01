@@ -563,6 +563,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get shareAppCopiedMessage => 'Ссылка скопирована в буфер обмена.';
 
   @override
+  String get shareAppShareMessage => 'Присоединяйся ко мне в Slim30:';
+
+  @override
   String get shareAppInstagram => 'Instagram';
 
   @override

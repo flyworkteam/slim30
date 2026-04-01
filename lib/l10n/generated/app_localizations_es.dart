@@ -567,6 +567,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get shareAppCopiedMessage => 'Enlace copiado al portapapeles.';
 
   @override
+  String get shareAppShareMessage => 'Unete a Slim30 conmigo:';
+
+  @override
   String get shareAppInstagram => 'Instagram';
 
   @override

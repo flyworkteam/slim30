@@ -568,6 +568,9 @@ class AppLocalizationsPt extends AppLocalizations {
       'Link copiado para a area de transferencia.';
 
   @override
+  String get shareAppShareMessage => 'Junte-se a mim no Slim30:';
+
+  @override
   String get shareAppInstagram => 'Instagram';
 
   @override

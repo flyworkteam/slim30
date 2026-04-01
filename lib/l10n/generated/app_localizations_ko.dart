@@ -561,6 +561,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get shareAppCopiedMessage => '링크가 클립보드에 복사되었습니다.';
 
   @override
+  String get shareAppShareMessage => 'Slim30를 함께 시작해요:';
+
+  @override
   String get shareAppInstagram => 'Instagram';
 
   @override

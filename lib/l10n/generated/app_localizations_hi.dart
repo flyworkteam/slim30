@@ -566,6 +566,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get shareAppCopiedMessage => 'लिंक क्लिपबोर्ड में कॉपी हो गया।';
 
   @override
+  String get shareAppShareMessage => 'Slim30 पर मेरे साथ जुड़ें:';
+
+  @override
   String get shareAppInstagram => 'Instagram';
 
   @override
