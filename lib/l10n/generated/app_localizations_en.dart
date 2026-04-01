@@ -578,4 +578,64 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shareAppTwitter => 'Twitter';
+
+  @override
+  String get notificationsTitle => 'Notifications';
+
+  @override
+  String get notificationsToday => 'Today';
+
+  @override
+  String get notificationsYesterday => 'Yesterday';
+
+  @override
+  String get notificationsClearAll => 'Clear All';
+
+  @override
+  String get notificationsClearedMessage => 'All notifications cleared.';
+
+  @override
+  String get notificationsWorkoutTitle => 'It\'s your workout time 💪';
+
+  @override
+  String get notificationsWorkoutBody => 'If you are ready, let\'s begin.';
+
+  @override
+  String get notificationsWorkoutTime => '2 hours ago';
+
+  @override
+  String get notificationsStreakTitle => 'You have a 3-day streak 🔥';
+
+  @override
+  String get notificationsStreakBody => 'Keep it going.';
+
+  @override
+  String get notificationsStreakTime => '5 hours ago';
+
+  @override
+  String get notificationsStretchTitle => 'Finish the day with stretching.';
+
+  @override
+  String get notificationsStretchBody => 'Relax and recharge.';
+
+  @override
+  String get notificationsStretchTime => '7 hours ago';
+
+  @override
+  String get notificationsDoneTitle => 'Today\'s workouts are completed';
+
+  @override
+  String get notificationsDoneBody => 'We are switching to discipline mode.';
+
+  @override
+  String get notificationsDoneTime => '1 day ago';
+
+  @override
+  String get notificationsWeeklyTitle => 'You\'re close to your weekly goal!';
+
+  @override
+  String get notificationsWeeklyBody => '75% completed.';
+
+  @override
+  String get notificationsWeeklyTime => '1 day ago';
 }

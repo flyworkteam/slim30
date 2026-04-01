@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ShareAppView extends StatelessWidget {
   const ShareAppView({super.key});
@@ -73,10 +74,22 @@ class ShareAppView extends StatelessWidget {
                                   linkedInLabel: l10n.shareAppLinkedIn,
                                   whatsAppLabel: l10n.shareAppWhatsApp,
                                   twitterLabel: l10n.shareAppTwitter,
-                                  onTapInstagram: () => _shareApp(context),
-                                  onTapLinkedIn: () => _shareApp(context),
-                                  onTapWhatsApp: () => _shareApp(context),
-                                  onTapTwitter: () => _shareApp(context),
+                                  onTapInstagram: () => _shareToChannel(
+                                    context,
+                                    _SocialChannel.instagram,
+                                  ),
+                                  onTapLinkedIn: () => _shareToChannel(
+                                    context,
+                                    _SocialChannel.linkedin,
+                                  ),
+                                  onTapWhatsApp: () => _shareToChannel(
+                                    context,
+                                    _SocialChannel.whatsapp,
+                                  ),
+                                  onTapTwitter: () => _shareToChannel(
+                                    context,
+                                    _SocialChannel.twitter,
+                                  ),
                                 ),
                               ],
                             ),
@@ -131,7 +144,37 @@ class ShareAppView extends StatelessWidget {
     final shareText = '${l10n.shareAppShareMessage} $_shareLink';
     await Share.share(shareText);
   }
+
+  Future<void> _shareToChannel(
+    BuildContext context,
+    _SocialChannel channel,
+  ) async {
+    final l10n = AppLocalizations.of(context)!;
+    final shareText = '${l10n.shareAppShareMessage} $_shareLink';
+    final encodedText = Uri.encodeComponent(shareText);
+    final encodedUrl = Uri.encodeComponent(_shareLink);
+
+    final Uri? uri = switch (channel) {
+      _SocialChannel.instagram => null,
+      _SocialChannel.linkedin => Uri.parse(
+        'https://www.linkedin.com/sharing/share-offsite/?url=$encodedUrl',
+      ),
+      _SocialChannel.whatsapp => Uri.parse('https://wa.me/?text=$encodedText'),
+      _SocialChannel.twitter => Uri.parse(
+        'https://twitter.com/intent/tweet?text=$encodedText',
+      ),
+    };
+
+    if (uri != null && await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+      return;
+    }
+
+    await _shareApp(context);
+  }
 }
+
+enum _SocialChannel { instagram, linkedin, whatsapp, twitter }
 
 class _Header extends StatelessWidget {
   const _Header({required this.title});

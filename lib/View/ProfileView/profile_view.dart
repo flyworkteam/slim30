@@ -398,13 +398,13 @@ class _SupportSection extends StatelessWidget {
               trailing: _Chevron(),
               onTap: () => Navigator.of(context).pushNamed(AppRoutes.faq),
             ),
-            _SettingRow(
-              iconPath:
-                  '${ProfileView._profileIconBase}/iconsax-like-dislike.svg',
-              title: l10n.profileRateUs,
-              trailing: _Chevron(),
-              onTap: () {},
-            ),
+            // _SettingRow(
+            //   iconPath:
+            //       '${ProfileView._profileIconBase}/iconsax-like-dislike.svg',
+            //   title: l10n.profileRateUs,
+            //   trailing: _Chevron(),
+            //   onTap: () {},
+            // ),
             _SettingRow(
               iconPath:
                   '${ProfileView._profileIconBase}/iconsax-export-arrow-02.svg',

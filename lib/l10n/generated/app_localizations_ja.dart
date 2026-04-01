@@ -574,4 +574,64 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get shareAppTwitter => 'Twitter';
+
+  @override
+  String get notificationsTitle => '通知';
+
+  @override
+  String get notificationsToday => '今日';
+
+  @override
+  String get notificationsYesterday => '昨日';
+
+  @override
+  String get notificationsClearAll => 'すべて削除';
+
+  @override
+  String get notificationsClearedMessage => 'すべての通知を削除しました。';
+
+  @override
+  String get notificationsWorkoutTitle => 'ワークアウトの時間です 💪';
+
+  @override
+  String get notificationsWorkoutBody => '準備ができたら始めましょう。';
+
+  @override
+  String get notificationsWorkoutTime => '2時間前';
+
+  @override
+  String get notificationsStreakTitle => '3日連続です 🔥';
+
+  @override
+  String get notificationsStreakBody => 'この調子で続けましょう。';
+
+  @override
+  String get notificationsStreakTime => '5時間前';
+
+  @override
+  String get notificationsStretchTitle => 'ストレッチで1日を締めくくろう。';
+
+  @override
+  String get notificationsStretchBody => 'リラックスして回復しましょう。';
+
+  @override
+  String get notificationsStretchTime => '7時間前';
+
+  @override
+  String get notificationsDoneTitle => '今日のワークアウトは完了しました';
+
+  @override
+  String get notificationsDoneBody => '規律モードに切り替えます。';
+
+  @override
+  String get notificationsDoneTime => '1日前';
+
+  @override
+  String get notificationsWeeklyTitle => '週間目標まであと少し！';
+
+  @override
+  String get notificationsWeeklyBody => '75%完了。';
+
+  @override
+  String get notificationsWeeklyTime => '1日前';
 }

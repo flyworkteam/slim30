@@ -1215,6 +1215,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Twitter'**
   String get shareAppTwitter;
+
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationsTitle;
+
+  /// No description provided for @notificationsToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get notificationsToday;
+
+  /// No description provided for @notificationsYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get notificationsYesterday;
+
+  /// No description provided for @notificationsClearAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear All'**
+  String get notificationsClearAll;
+
+  /// No description provided for @notificationsClearedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'All notifications cleared.'**
+  String get notificationsClearedMessage;
+
+  /// No description provided for @notificationsWorkoutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'It\'s your workout time 💪'**
+  String get notificationsWorkoutTitle;
+
+  /// No description provided for @notificationsWorkoutBody.
+  ///
+  /// In en, this message translates to:
+  /// **'If you are ready, let\'s begin.'**
+  String get notificationsWorkoutBody;
+
+  /// No description provided for @notificationsWorkoutTime.
+  ///
+  /// In en, this message translates to:
+  /// **'2 hours ago'**
+  String get notificationsWorkoutTime;
+
+  /// No description provided for @notificationsStreakTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You have a 3-day streak 🔥'**
+  String get notificationsStreakTitle;
+
+  /// No description provided for @notificationsStreakBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep it going.'**
+  String get notificationsStreakBody;
+
+  /// No description provided for @notificationsStreakTime.
+  ///
+  /// In en, this message translates to:
+  /// **'5 hours ago'**
+  String get notificationsStreakTime;
+
+  /// No description provided for @notificationsStretchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Finish the day with stretching.'**
+  String get notificationsStretchTitle;
+
+  /// No description provided for @notificationsStretchBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Relax and recharge.'**
+  String get notificationsStretchBody;
+
+  /// No description provided for @notificationsStretchTime.
+  ///
+  /// In en, this message translates to:
+  /// **'7 hours ago'**
+  String get notificationsStretchTime;
+
+  /// No description provided for @notificationsDoneTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s workouts are completed'**
+  String get notificationsDoneTitle;
+
+  /// No description provided for @notificationsDoneBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We are switching to discipline mode.'**
+  String get notificationsDoneBody;
+
+  /// No description provided for @notificationsDoneTime.
+  ///
+  /// In en, this message translates to:
+  /// **'1 day ago'**
+  String get notificationsDoneTime;
+
+  /// No description provided for @notificationsWeeklyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re close to your weekly goal!'**
+  String get notificationsWeeklyTitle;
+
+  /// No description provided for @notificationsWeeklyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'75% completed.'**
+  String get notificationsWeeklyBody;
+
+  /// No description provided for @notificationsWeeklyTime.
+  ///
+  /// In en, this message translates to:
+  /// **'1 day ago'**
+  String get notificationsWeeklyTime;
 }
 
 class _AppLocalizationsDelegate

@@ -148,15 +148,19 @@ class _Header extends StatelessWidget {
           ),
         ),
         SizedBox(width: 8.w),
-        Container(
-          width: 34.w,
-          height: 34.w,
-          decoration: BoxDecoration(
-            color: const Color(0xFFF5F5F5),
-            borderRadius: BorderRadius.circular(30.r),
+        InkWell(
+          onTap: () => Navigator.of(context).pushNamed(AppRoutes.notifications),
+          borderRadius: BorderRadius.circular(30.r),
+          child: Container(
+            width: 34.w,
+            height: 34.w,
+            decoration: BoxDecoration(
+              color: const Color(0xFFF5F5F5),
+              borderRadius: BorderRadius.circular(30.r),
+            ),
+            padding: EdgeInsets.all(7.w),
+            child: SvgPicture.asset('$iconBase/iconsax-notification-bing.svg'),
           ),
-          padding: EdgeInsets.all(7.w),
-          child: SvgPicture.asset('$iconBase/iconsax-notification-bing.svg'),
         ),
       ],
     );

@@ -574,4 +574,64 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get shareAppTwitter => 'Twitter';
+
+  @override
+  String get notificationsTitle => '알림';
+
+  @override
+  String get notificationsToday => '오늘';
+
+  @override
+  String get notificationsYesterday => '어제';
+
+  @override
+  String get notificationsClearAll => '모두 지우기';
+
+  @override
+  String get notificationsClearedMessage => '모든 알림이 삭제되었습니다.';
+
+  @override
+  String get notificationsWorkoutTitle => '운동할 시간입니다 💪';
+
+  @override
+  String get notificationsWorkoutBody => '준비됐다면 시작해요.';
+
+  @override
+  String get notificationsWorkoutTime => '2시간 전';
+
+  @override
+  String get notificationsStreakTitle => '3일 연속 달성 중입니다 🔥';
+
+  @override
+  String get notificationsStreakBody => '계속 이어가세요.';
+
+  @override
+  String get notificationsStreakTime => '5시간 전';
+
+  @override
+  String get notificationsStretchTitle => '스트레칭으로 하루를 마무리하세요.';
+
+  @override
+  String get notificationsStretchBody => '편안히 쉬고 재충전하세요.';
+
+  @override
+  String get notificationsStretchTime => '7시간 전';
+
+  @override
+  String get notificationsDoneTitle => '오늘의 운동을 완료했어요';
+
+  @override
+  String get notificationsDoneBody => '이제 규율 모드로 전환합니다.';
+
+  @override
+  String get notificationsDoneTime => '1일 전';
+
+  @override
+  String get notificationsWeeklyTitle => '주간 목표에 가까워졌어요!';
+
+  @override
+  String get notificationsWeeklyBody => '75% 완료.';
+
+  @override
+  String get notificationsWeeklyTime => '1일 전';
 }

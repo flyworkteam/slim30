@@ -576,4 +576,64 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get shareAppTwitter => 'Twitter';
+
+  @override
+  String get notificationsTitle => 'Уведомления';
+
+  @override
+  String get notificationsToday => 'Сегодня';
+
+  @override
+  String get notificationsYesterday => 'Вчера';
+
+  @override
+  String get notificationsClearAll => 'Очистить все';
+
+  @override
+  String get notificationsClearedMessage => 'Все уведомления очищены.';
+
+  @override
+  String get notificationsWorkoutTitle => 'Пора на тренировку 💪';
+
+  @override
+  String get notificationsWorkoutBody => 'Если готов, начинаем.';
+
+  @override
+  String get notificationsWorkoutTime => '2 часа назад';
+
+  @override
+  String get notificationsStreakTitle => 'У тебя серия 3 дня 🔥';
+
+  @override
+  String get notificationsStreakBody => 'Продолжай в том же духе.';
+
+  @override
+  String get notificationsStreakTime => '5 часов назад';
+
+  @override
+  String get notificationsStretchTitle => 'Заверши день растяжкой.';
+
+  @override
+  String get notificationsStretchBody => 'Расслабься и восстановись.';
+
+  @override
+  String get notificationsStretchTime => '7 часов назад';
+
+  @override
+  String get notificationsDoneTitle => 'Сегодняшние тренировки завершены';
+
+  @override
+  String get notificationsDoneBody => 'Переходим в режим дисциплины.';
+
+  @override
+  String get notificationsDoneTime => '1 день назад';
+
+  @override
+  String get notificationsWeeklyTitle => 'Ты близок к недельной цели!';
+
+  @override
+  String get notificationsWeeklyBody => '75% выполнено.';
+
+  @override
+  String get notificationsWeeklyTime => '1 день назад';
 }

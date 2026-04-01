@@ -579,4 +579,64 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get shareAppTwitter => 'Twitter';
+
+  @override
+  String get notificationsTitle => 'Bildirimler';
+
+  @override
+  String get notificationsToday => 'Bugun';
+
+  @override
+  String get notificationsYesterday => 'Dun';
+
+  @override
+  String get notificationsClearAll => 'Tumunu Sil';
+
+  @override
+  String get notificationsClearedMessage => 'Tum bildirimler temizlendi.';
+
+  @override
+  String get notificationsWorkoutTitle => 'Antrenman saatin geldi 💪';
+
+  @override
+  String get notificationsWorkoutBody => 'Hazirsan baslayalim.';
+
+  @override
+  String get notificationsWorkoutTime => '2 saat once';
+
+  @override
+  String get notificationsStreakTitle => '3 gunluk serin var 🔥';
+
+  @override
+  String get notificationsStreakBody => 'Devam ettir.';
+
+  @override
+  String get notificationsStreakTime => '5 saat once';
+
+  @override
+  String get notificationsStretchTitle => 'Gunu esneme ile bitir.';
+
+  @override
+  String get notificationsStretchBody => 'Rahatla ve yenilen.';
+
+  @override
+  String get notificationsStretchTime => '7 saat once';
+
+  @override
+  String get notificationsDoneTitle => 'Bugunun antrenmanlari tamamlandi';
+
+  @override
+  String get notificationsDoneBody => 'Disiplin modunu aciyoruz.';
+
+  @override
+  String get notificationsDoneTime => '1 gun once';
+
+  @override
+  String get notificationsWeeklyTitle => 'Haftalik hedefe yaklastin!';
+
+  @override
+  String get notificationsWeeklyBody => '%75 tamamlandi.';
+
+  @override
+  String get notificationsWeeklyTime => '1 gun once';
 }

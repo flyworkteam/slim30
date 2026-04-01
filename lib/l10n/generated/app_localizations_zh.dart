@@ -574,4 +574,64 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get shareAppTwitter => 'Twitter';
+
+  @override
+  String get notificationsTitle => '通知';
+
+  @override
+  String get notificationsToday => '今天';
+
+  @override
+  String get notificationsYesterday => '昨天';
+
+  @override
+  String get notificationsClearAll => '全部清除';
+
+  @override
+  String get notificationsClearedMessage => '所有通知已清除。';
+
+  @override
+  String get notificationsWorkoutTitle => '该到锻炼时间了 💪';
+
+  @override
+  String get notificationsWorkoutBody => '准备好了就开始吧。';
+
+  @override
+  String get notificationsWorkoutTime => '2小时前';
+
+  @override
+  String get notificationsStreakTitle => '你已连续坚持3天 🔥';
+
+  @override
+  String get notificationsStreakBody => '继续保持。';
+
+  @override
+  String get notificationsStreakTime => '5小时前';
+
+  @override
+  String get notificationsStretchTitle => '用拉伸结束这一天。';
+
+  @override
+  String get notificationsStretchBody => '放松并恢复精力。';
+
+  @override
+  String get notificationsStretchTime => '7小时前';
+
+  @override
+  String get notificationsDoneTitle => '今天的训练已完成';
+
+  @override
+  String get notificationsDoneBody => '进入自律模式。';
+
+  @override
+  String get notificationsDoneTime => '1天前';
+
+  @override
+  String get notificationsWeeklyTitle => '你已接近每周目标！';
+
+  @override
+  String get notificationsWeeklyBody => '已完成75%。';
+
+  @override
+  String get notificationsWeeklyTime => '1天前';
 }
