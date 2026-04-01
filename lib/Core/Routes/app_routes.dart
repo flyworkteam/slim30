@@ -21,6 +21,10 @@ import 'package:slim30/View/QuestionView/question_weight_view.dart';
 import 'package:slim30/View/SplashView/splash_view.dart';
 import 'package:slim30/View/HomeView/home_view.dart';
 import 'package:slim30/View/ProfileView/profile_view.dart';
+import 'package:slim30/View/ProfileView/edit_profile_view.dart';
+import 'package:slim30/View/ProfileView/language_preferences_view.dart';
+import 'package:slim30/View/ProfileView/faq_view.dart';
+import 'package:slim30/View/ProfileView/share_app_view.dart';
 
 class AppRoutes {
   static const String splash = '/splash';
@@ -45,6 +49,10 @@ class AppRoutes {
   static const String loading = '/loading';
   static const String home = '/home';
   static const String profile = '/profile';
+  static const String editProfile = '/edit-profile';
+  static const String languagePreferences = '/language-preferences';
+  static const String faq = '/faq';
+  static const String shareApp = '/share-app';
 
   static final Map<String, Widget Function(BuildContext)> routes = {
     splash: (_) => const SplashView(),
@@ -69,5 +77,9 @@ class AppRoutes {
     loading: (_) => const LoadingView(),
     home: (_) => const HomeView(),
     profile: (_) => const ProfileView(),
+    editProfile: (_) => const EditProfileView(),
+    languagePreferences: (_) => const LanguagePreferencesView(),
+    faq: (_) => const FaqView(),
+    shareApp: (_) => const ShareAppView(),
   };
 }

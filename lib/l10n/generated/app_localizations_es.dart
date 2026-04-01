@@ -422,4 +422,159 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get profileLogout => 'Cerrar sesión';
+
+  @override
+  String get editProfileTitle => 'Edit Profile';
+
+  @override
+  String get editProfileNameLabel => 'Your Name';
+
+  @override
+  String get editProfileBodyTypeLabel => 'Your Body Type';
+
+  @override
+  String get editProfileAgeLabel => 'Your Age';
+
+  @override
+  String get editProfileHeightLabel => 'Your Height';
+
+  @override
+  String get editProfileWeightLabel => 'Your Weight';
+
+  @override
+  String get editProfileSaveButton => 'Save Changes';
+
+  @override
+  String get editProfileDeleteAccount => 'Delete Account';
+
+  @override
+  String get editProfileDeleteTitle => 'Delete Account';
+
+  @override
+  String get editProfileDeleteMessage =>
+      'This is a preview action only. Deletion will be enabled when backend is connected.';
+
+  @override
+  String get editProfileCancel => 'Cancel';
+
+  @override
+  String get editProfileConfirm => 'Confirm';
+
+  @override
+  String get editProfileSaveMessage =>
+      'Changes prepared. They will be saved when backend connection is added.';
+
+  @override
+  String get editProfileDeletePendingMessage =>
+      'Backend connection is pending. Action not applied.';
+
+  @override
+  String get bodyTypeSlim => 'Slim';
+
+  @override
+  String get bodyTypeNormal => 'Normal';
+
+  @override
+  String get bodyTypeOverweight => 'Overweight';
+
+  @override
+  String get bodyTypeObese => 'Obese';
+
+  @override
+  String get languagePreferencesSaveButton => 'Save';
+
+  @override
+  String get faqQuestion1 => 'What is Slim30?';
+
+  @override
+  String get faqAnswer1 =>
+      'Slim30 is a mobile app that helps users follow a 30-day weight management and healthy lifestyle program. Daily goals, progress tracking, and reminders make it easier to build consistent and sustainable habits.';
+
+  @override
+  String get faqQuestion2 => 'How do I use Slim30?';
+
+  @override
+  String get faqAnswer2 =>
+      'The app offers a step-by-step healthy lifestyle program for 30 days. Users can track daily goals, record progress, and monitor improvement by completing the plan consistently.';
+
+  @override
+  String get faqQuestion3 => 'Is Slim30 suitable for beginners?';
+
+  @override
+  String get faqAnswer3 =>
+      'Yes. Slim30 is designed for users at different levels. It builds healthy habits gradually and is beginner-friendly.';
+
+  @override
+  String get faqQuestion4 =>
+      'Do I need special equipment to follow the program?';
+
+  @override
+  String get faqAnswer4 =>
+      'No. Slim30 focuses on simple daily habits and goals that can be done in everyday life, so special equipment is usually not required.';
+
+  @override
+  String get faqQuestion5 => 'What features are available in the free version?';
+
+  @override
+  String get faqAnswer5 =>
+      'Free usage may include access to a limited set of program content, basic progress tracking, and daily goal reminders. Some advanced features can be limited.';
+
+  @override
+  String get faqQuestion6 => 'What changes with Premium?';
+
+  @override
+  String get faqAnswer6 =>
+      'Premium users can access all program content, advanced plans, ad-free use, more detailed progress and goal tracking, and early access to newly added programs.';
+
+  @override
+  String get faqQuestion7 => 'Can I see my past progress and records?';
+
+  @override
+  String get faqAnswer7 =>
+      'Yes. Slim30 helps you track your saved progress throughout the program. Premium users can access past records in more detail.';
+
+  @override
+  String get faqQuestion8 =>
+      'What should I pay attention to while following the program?';
+
+  @override
+  String get faqAnswer8 =>
+      'You should apply the program according to your physical condition and health status. If you have any medical issues, consult a health professional before starting.';
+
+  @override
+  String get faqQuestion9 => 'How can I cancel my subscription?';
+
+  @override
+  String get faqAnswer9 =>
+      'Subscriptions can be managed in App Store or Google Play account settings and can be canceled at any time.';
+
+  @override
+  String get shareAppTitle => 'Compartir la app';
+
+  @override
+  String get shareAppHeroTitle => 'Comparte con tus amigos';
+
+  @override
+  String get shareAppHeroSubtitle => 'Alcancen su meta juntos.';
+
+  @override
+  String get shareAppLinkLabel => 'Enlace para compartir';
+
+  @override
+  String get shareAppCopyButton => 'Copiar';
+
+  @override
+  String get shareAppCopiedMessage => 'Enlace copiado al portapapeles.';
+
+  @override
+  String get shareAppInstagram => 'Instagram';
+
+  @override
+  String get shareAppLinkedIn => 'LinkedIn';
+
+  @override
+  String get shareAppWhatsApp => 'WhatsApp';
+
+  @override
+  String get shareAppTwitter => 'Twitter';
 }

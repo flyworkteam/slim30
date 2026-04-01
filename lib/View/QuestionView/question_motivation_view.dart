@@ -37,6 +37,25 @@ class QuestionMotivationView extends StatelessWidget {
                 ),
               ),
 
+              Positioned(
+                right: 24.w,
+                top: 87.h,
+                child: GestureDetector(
+                  onTap: () => Navigator.of(
+                    context,
+                  ).pushNamedAndRemoveUntil(AppRoutes.home, (route) => false),
+                  child: Text(
+                    l10n.questionSkip,
+                    style: GoogleFonts.leagueSpartan(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                      height: 15 / 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+
               // ── Text block (top: 529) ────────────────────────────
               Positioned(
                 left: 24.w,

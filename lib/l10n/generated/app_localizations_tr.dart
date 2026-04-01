@@ -421,4 +421,159 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get profileLogout => 'Çıkış Yap';
+
+  @override
+  String get editProfileTitle => 'Profili Duzenle';
+
+  @override
+  String get editProfileNameLabel => 'Adiniz';
+
+  @override
+  String get editProfileBodyTypeLabel => 'Vucut Tipiniz';
+
+  @override
+  String get editProfileAgeLabel => 'Yasiniz';
+
+  @override
+  String get editProfileHeightLabel => 'Boyunuz';
+
+  @override
+  String get editProfileWeightLabel => 'Kilonuz';
+
+  @override
+  String get editProfileSaveButton => 'Degisiklikleri Kaydet';
+
+  @override
+  String get editProfileDeleteAccount => 'Hesabi Sil';
+
+  @override
+  String get editProfileDeleteTitle => 'Hesabi Sil';
+
+  @override
+  String get editProfileDeleteMessage =>
+      'Bu sadece onizleme aksiyonudur. Gercek silme backend baglandiginda eklenecek.';
+
+  @override
+  String get editProfileCancel => 'Iptal';
+
+  @override
+  String get editProfileConfirm => 'Tamam';
+
+  @override
+  String get editProfileSaveMessage =>
+      'Degisiklikler hazirlandi. Backend baglantisi eklendiginde kaydedilecek.';
+
+  @override
+  String get editProfileDeletePendingMessage =>
+      'Backend baglantisi bekleniyor. Islem uygulanmadi.';
+
+  @override
+  String get bodyTypeSlim => 'Zayif';
+
+  @override
+  String get bodyTypeNormal => 'Normal';
+
+  @override
+  String get bodyTypeOverweight => 'Kilolu';
+
+  @override
+  String get bodyTypeObese => 'Cok Kilolu';
+
+  @override
+  String get languagePreferencesSaveButton => 'Kaydet';
+
+  @override
+  String get faqQuestion1 => 'Slim30 nedir?';
+
+  @override
+  String get faqAnswer1 =>
+      'Slim30, kullanicilarin 30 gunluk kilo yonetimi ve saglikli yasam programini takip etmelerine yardimci olan bir mobil uygulamadir. Gunluk hedefler, ilerleme takibi ve hatirlaticilar sayesinde duzenli ve surdurulebilir saglikli aliskanliklar gelistirmeyi kolaylastirir.';
+
+  @override
+  String get faqQuestion2 => 'Slim30 ile nasil calisirim?';
+
+  @override
+  String get faqAnswer2 =>
+      'Uygulama, 30 gun boyunca adim adim ilerleyen bir saglikli yasam programi sunar. Kullanicilar gunluk hedefleri takip edebilir, ilerlemelerini kaydedebilir ve program surecini duzenli olarak tamamlayarak gelisimlerini izleyebilir.';
+
+  @override
+  String get faqQuestion3 => 'Slim30 yeni baslayanlar icin uygun mu?';
+
+  @override
+  String get faqAnswer3 =>
+      'Evet. Slim30 programi farkli seviyelerdeki kullanicilar icin uygundur. Program, saglikli aliskanliklari adim adim gelistirecek sekilde planlanmistir ve yeni baslayan kullanicilar icin de erisilebilir bir yapi sunar.';
+
+  @override
+  String get faqQuestion4 =>
+      'Programi uygulamak icin ozel ekipman gerekiyor mu?';
+
+  @override
+  String get faqAnswer4 =>
+      'Hayir. Slim30 programlari gunluk yasam icinde uygulanabilecek basit aliskanliklar ve hedefler uzerine kuruludur. Programi uygulamak icin ozel bir ekipman gerekmeyebilir.';
+
+  @override
+  String get faqQuestion5 => 'Ucretsiz kullanimda hangi ozellikler sunulur?';
+
+  @override
+  String get faqAnswer5 =>
+      'Ucretsiz kullanim kapsaminda belirli sayida program icerigine erisim, temel ilerleme takibi ve gunluk hedef hatirlaticilari sunulabilir. Bazi gelismis ozellikler sinirli olabilir.';
+
+  @override
+  String get faqQuestion6 => 'Premium paket aldigimda ne degisir?';
+
+  @override
+  String get faqAnswer6 =>
+      'Premium kullanicilar tum program iceriklerine erisim, gelismis saglikli yasam planlari, reklamsiz kullanim, daha detayli ilerleme ve hedef takibi, yeni eklenen programlara erken erisim gibi avantajlardan yararlanabilir.';
+
+  @override
+  String get faqQuestion7 =>
+      'Gecmis ilerlememi ve kayitlarimi gorebilir miyim?';
+
+  @override
+  String get faqAnswer7 =>
+      'Evet. Slim30, program suresince kaydedilen ilerlemelerinizi ve gelisiminizi takip etmenize yardimci olur. Premium kullanicilar gecmis kayitlarina daha detayli sekilde erisebilir.';
+
+  @override
+  String get faqQuestion8 => 'Programi uygularken nelere dikkat etmeliyim?';
+
+  @override
+  String get faqAnswer8 =>
+      'Programi kendi fiziksel durumunuza ve saglik kosullariniza uygun sekilde uygulamaniz onerilir. Herhangi bir saglik sorununuz varsa programa baslamadan once bir saglik uzmanina danismaniz tavsiye edilir.';
+
+  @override
+  String get faqQuestion9 => 'Aboneligimi nasil iptal edebilirim?';
+
+  @override
+  String get faqAnswer9 =>
+      'Abonelikler App Store veya Google Play hesap ayarlari uzerinden yonetilebilir ve istenildigi zaman iptal edilebilir.';
+
+  @override
+  String get shareAppTitle => 'Uygulamayi Paylas';
+
+  @override
+  String get shareAppHeroTitle => 'Arkadaslarinla Paylas';
+
+  @override
+  String get shareAppHeroSubtitle => 'Hedefe birlikte ulasin.';
+
+  @override
+  String get shareAppLinkLabel => 'Paylasim Linki';
+
+  @override
+  String get shareAppCopyButton => 'Kopyala';
+
+  @override
+  String get shareAppCopiedMessage => 'Baglanti panoya kopyalandi.';
+
+  @override
+  String get shareAppInstagram => 'Instagram';
+
+  @override
+  String get shareAppLinkedIn => 'LinkedIn';
+
+  @override
+  String get shareAppWhatsApp => 'WhatsApp';
+
+  @override
+  String get shareAppTwitter => 'Twitter';
 }

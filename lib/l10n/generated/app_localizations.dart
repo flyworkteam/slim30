@@ -927,6 +927,288 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Log Out'**
   String get profileLogout;
+
+  /// No description provided for @editProfileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get editProfileTitle;
+
+  /// No description provided for @editProfileNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Name'**
+  String get editProfileNameLabel;
+
+  /// No description provided for @editProfileBodyTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Body Type'**
+  String get editProfileBodyTypeLabel;
+
+  /// No description provided for @editProfileAgeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Age'**
+  String get editProfileAgeLabel;
+
+  /// No description provided for @editProfileHeightLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Height'**
+  String get editProfileHeightLabel;
+
+  /// No description provided for @editProfileWeightLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Weight'**
+  String get editProfileWeightLabel;
+
+  /// No description provided for @editProfileSaveButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get editProfileSaveButton;
+
+  /// No description provided for @editProfileDeleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get editProfileDeleteAccount;
+
+  /// No description provided for @editProfileDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get editProfileDeleteTitle;
+
+  /// No description provided for @editProfileDeleteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a preview action only. Deletion will be enabled when backend is connected.'**
+  String get editProfileDeleteMessage;
+
+  /// No description provided for @editProfileCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get editProfileCancel;
+
+  /// No description provided for @editProfileConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get editProfileConfirm;
+
+  /// No description provided for @editProfileSaveMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes prepared. They will be saved when backend connection is added.'**
+  String get editProfileSaveMessage;
+
+  /// No description provided for @editProfileDeletePendingMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Backend connection is pending. Action not applied.'**
+  String get editProfileDeletePendingMessage;
+
+  /// No description provided for @bodyTypeSlim.
+  ///
+  /// In en, this message translates to:
+  /// **'Slim'**
+  String get bodyTypeSlim;
+
+  /// No description provided for @bodyTypeNormal.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get bodyTypeNormal;
+
+  /// No description provided for @bodyTypeOverweight.
+  ///
+  /// In en, this message translates to:
+  /// **'Overweight'**
+  String get bodyTypeOverweight;
+
+  /// No description provided for @bodyTypeObese.
+  ///
+  /// In en, this message translates to:
+  /// **'Obese'**
+  String get bodyTypeObese;
+
+  /// No description provided for @languagePreferencesSaveButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get languagePreferencesSaveButton;
+
+  /// No description provided for @faqQuestion1.
+  ///
+  /// In en, this message translates to:
+  /// **'What is Slim30?'**
+  String get faqQuestion1;
+
+  /// No description provided for @faqAnswer1.
+  ///
+  /// In en, this message translates to:
+  /// **'Slim30 is a mobile app that helps users follow a 30-day weight management and healthy lifestyle program. Daily goals, progress tracking, and reminders make it easier to build consistent and sustainable habits.'**
+  String get faqAnswer1;
+
+  /// No description provided for @faqQuestion2.
+  ///
+  /// In en, this message translates to:
+  /// **'How do I use Slim30?'**
+  String get faqQuestion2;
+
+  /// No description provided for @faqAnswer2.
+  ///
+  /// In en, this message translates to:
+  /// **'The app offers a step-by-step healthy lifestyle program for 30 days. Users can track daily goals, record progress, and monitor improvement by completing the plan consistently.'**
+  String get faqAnswer2;
+
+  /// No description provided for @faqQuestion3.
+  ///
+  /// In en, this message translates to:
+  /// **'Is Slim30 suitable for beginners?'**
+  String get faqQuestion3;
+
+  /// No description provided for @faqAnswer3.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes. Slim30 is designed for users at different levels. It builds healthy habits gradually and is beginner-friendly.'**
+  String get faqAnswer3;
+
+  /// No description provided for @faqQuestion4.
+  ///
+  /// In en, this message translates to:
+  /// **'Do I need special equipment to follow the program?'**
+  String get faqQuestion4;
+
+  /// No description provided for @faqAnswer4.
+  ///
+  /// In en, this message translates to:
+  /// **'No. Slim30 focuses on simple daily habits and goals that can be done in everyday life, so special equipment is usually not required.'**
+  String get faqAnswer4;
+
+  /// No description provided for @faqQuestion5.
+  ///
+  /// In en, this message translates to:
+  /// **'What features are available in the free version?'**
+  String get faqQuestion5;
+
+  /// No description provided for @faqAnswer5.
+  ///
+  /// In en, this message translates to:
+  /// **'Free usage may include access to a limited set of program content, basic progress tracking, and daily goal reminders. Some advanced features can be limited.'**
+  String get faqAnswer5;
+
+  /// No description provided for @faqQuestion6.
+  ///
+  /// In en, this message translates to:
+  /// **'What changes with Premium?'**
+  String get faqQuestion6;
+
+  /// No description provided for @faqAnswer6.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium users can access all program content, advanced plans, ad-free use, more detailed progress and goal tracking, and early access to newly added programs.'**
+  String get faqAnswer6;
+
+  /// No description provided for @faqQuestion7.
+  ///
+  /// In en, this message translates to:
+  /// **'Can I see my past progress and records?'**
+  String get faqQuestion7;
+
+  /// No description provided for @faqAnswer7.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes. Slim30 helps you track your saved progress throughout the program. Premium users can access past records in more detail.'**
+  String get faqAnswer7;
+
+  /// No description provided for @faqQuestion8.
+  ///
+  /// In en, this message translates to:
+  /// **'What should I pay attention to while following the program?'**
+  String get faqQuestion8;
+
+  /// No description provided for @faqAnswer8.
+  ///
+  /// In en, this message translates to:
+  /// **'You should apply the program according to your physical condition and health status. If you have any medical issues, consult a health professional before starting.'**
+  String get faqAnswer8;
+
+  /// No description provided for @faqQuestion9.
+  ///
+  /// In en, this message translates to:
+  /// **'How can I cancel my subscription?'**
+  String get faqQuestion9;
+
+  /// No description provided for @faqAnswer9.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscriptions can be managed in App Store or Google Play account settings and can be canceled at any time.'**
+  String get faqAnswer9;
+
+  /// No description provided for @shareAppTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share the App'**
+  String get shareAppTitle;
+
+  /// No description provided for @shareAppHeroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share with your friends'**
+  String get shareAppHeroTitle;
+
+  /// No description provided for @shareAppHeroSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reach your goal together.'**
+  String get shareAppHeroSubtitle;
+
+  /// No description provided for @shareAppLinkLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Share Link'**
+  String get shareAppLinkLabel;
+
+  /// No description provided for @shareAppCopyButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get shareAppCopyButton;
+
+  /// No description provided for @shareAppCopiedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Link copied to clipboard.'**
+  String get shareAppCopiedMessage;
+
+  /// No description provided for @shareAppInstagram.
+  ///
+  /// In en, this message translates to:
+  /// **'Instagram'**
+  String get shareAppInstagram;
+
+  /// No description provided for @shareAppLinkedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'LinkedIn'**
+  String get shareAppLinkedIn;
+
+  /// No description provided for @shareAppWhatsApp.
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp'**
+  String get shareAppWhatsApp;
+
+  /// No description provided for @shareAppTwitter.
+  ///
+  /// In en, this message translates to:
+  /// **'Twitter'**
+  String get shareAppTwitter;
 }
 
 class _AppLocalizationsDelegate

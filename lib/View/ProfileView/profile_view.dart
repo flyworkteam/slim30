@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
 
@@ -38,7 +39,7 @@ class _ProfileViewState extends State<ProfileView> {
                       children: [
                         const _TopHeader(),
                         SizedBox(height: 33.h),
-                        const _ProfileIdentity(),
+                        const Center(child: _ProfileIdentity()),
                         SizedBox(height: 30.h),
                         const _StatsStrip(),
                         SizedBox(height: 30.h),
@@ -82,7 +83,7 @@ class _TopHeader extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Semantics(
           label: l10n.questionBack,
@@ -114,6 +115,8 @@ class _TopHeader extends StatelessWidget {
           child: Center(
             child: Text(
               l10n.profileTitle,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
               style: GoogleFonts.leagueSpartan(
                 fontSize: 18.sp,
@@ -210,20 +213,20 @@ class _StatsStrip extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _StatItem(
-          iconPath: '${ProfileView._profileIconBase}/🕑.svg',
-          value: '2 s',
+          iconData: Iconsax.clock,
+          value: '2',
           label: l10n.profileDoneTimeLabel,
         ),
         SizedBox(width: 40.w),
         _StatItem(
-          iconPath: '${ProfileView._profileIconBase}/💪🏻.svg',
+          iconData: Iconsax.activity,
           value: '10',
           label: l10n.profileCompletedActivityLabel,
         ),
         SizedBox(width: 40.w),
         _StatItem(
-          iconPath: '${ProfileView._profileIconBase}/🔥.svg',
-          value: '3 gün',
+          iconData: Iconsax.flash_1,
+          value: '3',
           label: l10n.profileStreaksLabel,
         ),
       ],
@@ -233,12 +236,12 @@ class _StatsStrip extends StatelessWidget {
 
 class _StatItem extends StatelessWidget {
   const _StatItem({
-    required this.iconPath,
+    required this.iconData,
     required this.value,
     required this.label,
   });
 
-  final String iconPath;
+  final IconData iconData;
   final String value;
   final String label;
 
@@ -256,7 +259,7 @@ class _StatItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(22.r),
             ),
             alignment: Alignment.center,
-            child: SvgPicture.asset(iconPath, width: 16.w, height: 16.w),
+            child: Icon(iconData, size: 16.w, color: Colors.black),
           ),
           SizedBox(height: 6.h),
           Text(
@@ -317,7 +320,8 @@ class _SettingsSection extends StatelessWidget {
               iconPath: '${ProfileView._profileIconBase}/iconsax-user.svg',
               title: l10n.profileEditProfile,
               trailing: _Chevron(),
-              onTap: () {},
+              onTap: () =>
+                  Navigator.of(context).pushNamed(AppRoutes.editProfile),
             ),
             _SettingRow(
               iconPath:
@@ -383,14 +387,16 @@ class _SupportSection extends StatelessWidget {
               iconPath: '${ProfileView._profileIconBase}/iconsax-translate.svg',
               title: l10n.profileLanguagePreferences,
               trailing: _Chevron(),
-              onTap: () {},
+              onTap: () => Navigator.of(
+                context,
+              ).pushNamed(AppRoutes.languagePreferences),
             ),
             _SettingRow(
               iconPath:
                   '${ProfileView._profileIconBase}/iconsax-message-question.svg',
               title: l10n.profileFaq,
               trailing: _Chevron(),
-              onTap: () {},
+              onTap: () => Navigator.of(context).pushNamed(AppRoutes.faq),
             ),
             _SettingRow(
               iconPath:
@@ -404,7 +410,7 @@ class _SupportSection extends StatelessWidget {
                   '${ProfileView._profileIconBase}/iconsax-export-arrow-02.svg',
               title: l10n.profileShareApp,
               trailing: _Chevron(),
-              onTap: () {},
+              onTap: () => Navigator.of(context).pushNamed(AppRoutes.shareApp),
             ),
             _SettingRow(
               iconPath: '${ProfileView._profileIconBase}/iconsax-logout-01.svg',
@@ -560,7 +566,7 @@ class _SwitchPill extends StatelessWidget {
           onChanged: onChanged,
           activeTrackColor: const Color(0xFF64E6C4),
           inactiveTrackColor: const Color(0xFFD5D5D5),
-          activeColor: Colors.white,
+          activeThumbColor: Colors.white,
           inactiveThumbColor: Colors.white,
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
