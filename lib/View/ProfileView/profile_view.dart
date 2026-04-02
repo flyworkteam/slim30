@@ -620,7 +620,8 @@ class _BottomBar extends StatelessWidget {
           _BottomItem(
             iconPath: '$iconBase/iconsax-chart-square.svg',
             label: l10n.homeTabProgress,
-            onTap: () {},
+            onTap: () =>
+                Navigator.of(context).pushReplacementNamed(AppRoutes.progress),
           ),
           SizedBox(width: 4.w),
           _BottomItem(

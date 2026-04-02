@@ -1335,6 +1335,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'1 day ago'**
   String get notificationsWeeklyTime;
+
+  /// No description provided for @progressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress'**
+  String get progressTitle;
+
+  /// No description provided for @progressDailyWorkoutSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Workout Summary'**
+  String get progressDailyWorkoutSummary;
+
+  /// No description provided for @progressCompletedActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed Activity'**
+  String get progressCompletedActivity;
+
+  /// No description provided for @progressCaloriesBurnedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Burned Calories'**
+  String get progressCaloriesBurnedLabel;
+
+  /// No description provided for @progressMuscleGainLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Muscle Mass Gain'**
+  String get progressMuscleGainLabel;
+
+  /// No description provided for @progressWaistChangeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Waist Change'**
+  String get progressWaistChangeLabel;
+
+  /// No description provided for @progressBodyFatLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Body Fat'**
+  String get progressBodyFatLabel;
+
+  /// No description provided for @progressMovementCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Movement Count'**
+  String get progressMovementCountLabel;
+
+  /// No description provided for @progressDurationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration'**
+  String get progressDurationLabel;
+
+  /// No description provided for @progressSuccessPercentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Success Rate'**
+  String get progressSuccessPercentLabel;
+
+  /// No description provided for @progressGeneralStatusTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'General Progress Status'**
+  String get progressGeneralStatusTitle;
+
+  /// No description provided for @progressWeightLostLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight Lost'**
+  String get progressWeightLostLabel;
+
+  /// No description provided for @progressHeartRateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Heart Rate'**
+  String get progressHeartRateLabel;
+
+  /// No description provided for @progressTotalCompletedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Completed Activities'**
+  String get progressTotalCompletedLabel;
+
+  /// No description provided for @progressHydrationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hydration Rate'**
+  String get progressHydrationLabel;
+
+  /// No description provided for @progressSleepLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep Duration'**
+  String get progressSleepLabel;
+
+  /// No description provided for @progressRewardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t forget to reward yourself'**
+  String get progressRewardTitle;
+
+  /// No description provided for @progressRewardSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re doing great, celebrate your success 💪🏻'**
+  String get progressRewardSubtitle;
+
+  /// No description provided for @progressOverallPerformanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Overall Performance'**
+  String get progressOverallPerformanceTitle;
+
+  /// No description provided for @progressOverallPerformanceSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'See how close you are to your goals.'**
+  String get progressOverallPerformanceSubtitle;
+
+  /// No description provided for @progressStepsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Steps'**
+  String get progressStepsTitle;
+
+  /// No description provided for @progressStepsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remember 10k per day'**
+  String get progressStepsSubtitle;
+
+  /// No description provided for @progressWaterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Drink Water'**
+  String get progressWaterTitle;
+
+  /// No description provided for @progressWaterSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'At least 8 glasses/day'**
+  String get progressWaterSubtitle;
 }
 
 class _AppLocalizationsDelegate

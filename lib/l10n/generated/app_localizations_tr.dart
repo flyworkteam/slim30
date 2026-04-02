@@ -639,4 +639,78 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get notificationsWeeklyTime => '1 gun once';
+
+  @override
+  String get progressTitle => 'Ilerleme';
+
+  @override
+  String get progressDailyWorkoutSummary => 'Gunluk Antrenman Ozeti';
+
+  @override
+  String get progressCompletedActivity => 'Tamamlanan Aktivite';
+
+  @override
+  String get progressCaloriesBurnedLabel => 'Yakilan Kalori';
+
+  @override
+  String get progressMuscleGainLabel => 'Kas Kutle Artisi';
+
+  @override
+  String get progressWaistChangeLabel => 'Bel Cevresi Degisimi';
+
+  @override
+  String get progressBodyFatLabel => 'Yag Orani';
+
+  @override
+  String get progressMovementCountLabel => 'Hareket Sayisi';
+
+  @override
+  String get progressDurationLabel => 'Sure';
+
+  @override
+  String get progressSuccessPercentLabel => 'Basari Yuzdesi';
+
+  @override
+  String get progressGeneralStatusTitle => 'Genel Ilerleme Durumu';
+
+  @override
+  String get progressWeightLostLabel => 'Verilen Kilo';
+
+  @override
+  String get progressHeartRateLabel => 'Kalp Atis Hizi';
+
+  @override
+  String get progressTotalCompletedLabel => 'Toplam Tamamlanan Aktivite';
+
+  @override
+  String get progressHydrationLabel => 'Su Icme Orani';
+
+  @override
+  String get progressSleepLabel => 'Uykuda Gecirilen Sure';
+
+  @override
+  String get progressRewardTitle => 'Kendini Odullendirmeyi Unutma';
+
+  @override
+  String get progressRewardSubtitle =>
+      'Cok iyi gidiyorsun, basarini kutla 💪🏻';
+
+  @override
+  String get progressOverallPerformanceTitle => 'Genel Performans Yuzdesi';
+
+  @override
+  String get progressOverallPerformanceSubtitle =>
+      'Hedeflerine ne kadar yaklastigini gor.';
+
+  @override
+  String get progressStepsTitle => 'Adimlarin';
+
+  @override
+  String get progressStepsSubtitle => 'Gunde 10 Bin';
+
+  @override
+  String get progressWaterTitle => 'Su Ic';
+
+  @override
+  String get progressWaterSubtitle => 'Gunde en az 8 bardak';
 }

@@ -645,4 +645,78 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get notificationsWeeklyTime => '1 giorno fa';
+
+  @override
+  String get progressTitle => 'Progress';
+
+  @override
+  String get progressDailyWorkoutSummary => 'Daily Workout Summary';
+
+  @override
+  String get progressCompletedActivity => 'Completed Activity';
+
+  @override
+  String get progressCaloriesBurnedLabel => 'Burned Calories';
+
+  @override
+  String get progressMuscleGainLabel => 'Muscle Mass Gain';
+
+  @override
+  String get progressWaistChangeLabel => 'Waist Change';
+
+  @override
+  String get progressBodyFatLabel => 'Body Fat';
+
+  @override
+  String get progressMovementCountLabel => 'Movement Count';
+
+  @override
+  String get progressDurationLabel => 'Duration';
+
+  @override
+  String get progressSuccessPercentLabel => 'Success Rate';
+
+  @override
+  String get progressGeneralStatusTitle => 'General Progress Status';
+
+  @override
+  String get progressWeightLostLabel => 'Weight Lost';
+
+  @override
+  String get progressHeartRateLabel => 'Heart Rate';
+
+  @override
+  String get progressTotalCompletedLabel => 'Total Completed Activities';
+
+  @override
+  String get progressHydrationLabel => 'Hydration Rate';
+
+  @override
+  String get progressSleepLabel => 'Sleep Duration';
+
+  @override
+  String get progressRewardTitle => 'Don\'t forget to reward yourself';
+
+  @override
+  String get progressRewardSubtitle =>
+      'You\'re doing great, celebrate your success 💪🏻';
+
+  @override
+  String get progressOverallPerformanceTitle => 'Overall Performance';
+
+  @override
+  String get progressOverallPerformanceSubtitle =>
+      'See how close you are to your goals.';
+
+  @override
+  String get progressStepsTitle => 'Your Steps';
+
+  @override
+  String get progressStepsSubtitle => 'Remember 10k per day';
+
+  @override
+  String get progressWaterTitle => 'Drink Water';
+
+  @override
+  String get progressWaterSubtitle => 'At least 8 glasses/day';
 }

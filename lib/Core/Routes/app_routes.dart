@@ -26,6 +26,7 @@ import 'package:slim30/View/ProfileView/language_preferences_view.dart';
 import 'package:slim30/View/ProfileView/faq_view.dart';
 import 'package:slim30/View/ProfileView/share_app_view.dart';
 import 'package:slim30/View/ProfileView/notifications_view.dart';
+import 'package:slim30/View/ProgressView/progress_view.dart';
 
 class AppRoutes {
   static const String splash = '/splash';
@@ -55,6 +56,7 @@ class AppRoutes {
   static const String faq = '/faq';
   static const String shareApp = '/share-app';
   static const String notifications = '/notifications';
+  static const String progress = '/progress';
 
   static final Map<String, Widget Function(BuildContext)> routes = {
     splash: (_) => const SplashView(),
@@ -84,5 +86,6 @@ class AppRoutes {
     faq: (_) => const FaqView(),
     shareApp: (_) => const ShareAppView(),
     notifications: (_) => const NotificationsView(),
+    progress: (_) => const ProgressView(),
   };
 }
