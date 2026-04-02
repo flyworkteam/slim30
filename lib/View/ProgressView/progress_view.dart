@@ -255,7 +255,7 @@ class _TodayWorkoutCard extends StatelessWidget {
           ),
           SizedBox(height: 8.h),
           Container(
-            width: 240.w,
+            width: double.infinity,
             padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 18.w),
             decoration: BoxDecoration(
               color: const Color(0xFF84ECFF),
@@ -264,11 +264,11 @@ class _TodayWorkoutCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _WorkoutStat(text: moves),
+                Expanded(child: _WorkoutStat(text: moves)),
                 _DividerDot(),
-                _WorkoutStat(text: calories),
+                Expanded(child: _WorkoutStat(text: calories)),
                 _DividerDot(),
-                _WorkoutStat(text: duration),
+                Expanded(child: _WorkoutStat(text: duration)),
               ],
             ),
           ),
@@ -305,6 +305,9 @@ class _WorkoutStat extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      textAlign: TextAlign.center,
       style: GoogleFonts.leagueSpartan(
         fontSize: 14.sp,
         fontWeight: FontWeight.w600,
@@ -317,7 +320,7 @@ class _DividerDot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10.w),
+      margin: EdgeInsets.symmetric(horizontal: 6.w),
       width: 4.w,
       height: 4.w,
       decoration: const BoxDecoration(
@@ -728,7 +731,7 @@ class _SummaryMiniCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 86.h,
+      height: 96.h,
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(10.r),
@@ -739,6 +742,8 @@ class _SummaryMiniCard extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: GoogleFonts.leagueSpartan(
               fontSize: 12.sp,
               fontWeight: FontWeight.w600,
@@ -904,7 +909,7 @@ class _GoalInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 82.h,
+      height: 92.h,
       padding: EdgeInsets.all(10.w),
       decoration: BoxDecoration(
         color: const Color(0xFFD3FFE1),
@@ -921,6 +926,8 @@ class _GoalInfoCard extends StatelessWidget {
               children: [
                 Text(
                   title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.leagueSpartan(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
@@ -929,6 +936,8 @@ class _GoalInfoCard extends StatelessWidget {
                 SizedBox(height: 6.h),
                 Text(
                   subtitle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.leagueSpartan(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w300,
@@ -963,7 +972,7 @@ class _WaterCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 82.h,
+      height: 92.h,
       padding: EdgeInsets.all(10.w),
       decoration: BoxDecoration(
         color: const Color(0xFFE1FBFF),
@@ -982,6 +991,8 @@ class _WaterCard extends StatelessWidget {
                   children: [
                     Text(
                       title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.leagueSpartan(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
@@ -989,6 +1000,8 @@ class _WaterCard extends StatelessWidget {
                     ),
                     Text(
                       subtitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.leagueSpartan(
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w300,
