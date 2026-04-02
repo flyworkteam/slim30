@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -542,50 +544,74 @@ class _DailySummaryCard extends StatelessWidget {
           children: [
             Container(
               width: 131.w,
-              constraints: BoxConstraints(minHeight: 123.h),
-              padding: EdgeInsets.fromLTRB(13.w, 14.h, 13.w, 10.h),
+              height: 123.h,
               decoration: BoxDecoration(
                 color: const Color(0xFF97F1FF),
                 borderRadius: BorderRadius.circular(6.r),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Stack(
+                clipBehavior: Clip.none,
                 children: [
-                  Text(
-                    completedTitle,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.leagueSpartan(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
-                      height: 1,
+                  Positioned(
+                    left: 13.w,
+                    top: 14.h,
+                    width: 114.w,
+                    child: Text(
+                      completedTitle,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.leagueSpartan(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                        height: 1,
+                        letterSpacing: -0.011,
+                      ),
                     ),
                   ),
-                  SizedBox(height: 6.h),
-                  Center(
-                    child: SizedBox(
-                      width: 84.w,
-                      height: 84.w,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          CircularProgressIndicator(
-                            value: 6 / 8,
-                            strokeWidth: 9.w,
-                            backgroundColor: Colors.white,
-                            valueColor: const AlwaysStoppedAnimation<Color>(
-                              Color(0xFF181818),
-                            ),
-                          ),
-                          Text(
-                            completedValue,
-                            style: GoogleFonts.leagueSpartan(
-                              fontSize: 26.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
+                  Positioned(
+                    top: 41.h,
+                    left: 2.w,
+                    child: _CompletedActivityRingGauge(value: 6 / 8),
+                  ),
+                  Positioned(
+                    left: 2.w,
+                    top: 70.h,
+                    width: 87.w,
+                    child: Text(
+                      completedValue,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      softWrap: false,
+                      overflow: TextOverflow.visible,
+                      style: GoogleFonts.leagueSpartan(
+                        fontSize: 24.709.sp,
+                        fontWeight: FontWeight.w500,
+                        height: 23 / 24.709,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    right: 9.w,
+                    top: 28.h,
+                    child: Transform.rotate(
+                      angle: 16.37 * math.pi / 180,
+                      child: Container(
+                        width: 9.13.w,
+                        height: 106.43.h,
+                        color: const Color.fromRGBO(255, 218, 223, 0.17),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    right: 2.w,
+                    top: 71.6.h,
+                    child: Transform.rotate(
+                      angle: 13.42 * math.pi / 180,
+                      child: Container(
+                        width: 10.w,
+                        height: 63.72.h,
+                        color: const Color.fromRGBO(255, 218, 223, 0.17),
                       ),
                     ),
                   ),
@@ -749,6 +775,80 @@ class _MiniMetricRow extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class _CompletedActivityRingGauge extends StatelessWidget {
+  const _CompletedActivityRingGauge({required this.value});
+
+  final double value;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 87.w,
+      height: 87.h,
+      child: CustomPaint(
+        painter: _CompletedActivityRingPainter(
+          progress: value.clamp(0.0, 1.0),
+          backgroundColor: Colors.white,
+          progressColor: const Color(0xFF181818),
+          strokeWidth: 10.w,
+        ),
+      ),
+    );
+  }
+}
+
+class _CompletedActivityRingPainter extends CustomPainter {
+  _CompletedActivityRingPainter({
+    required this.progress,
+    required this.backgroundColor,
+    required this.progressColor,
+    required this.strokeWidth,
+  });
+
+  final double progress;
+  final Color backgroundColor;
+  final Color progressColor;
+  final double strokeWidth;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final radius = (81.75.w / 2) - strokeWidth / 2;
+    final center = Offset(size.width / 2, size.height / 2);
+    final rect = Rect.fromCircle(center: center, radius: radius);
+
+    final backgroundPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..strokeWidth = strokeWidth
+      ..color = backgroundColor;
+
+    final progressPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..strokeWidth = strokeWidth
+      ..color = progressColor;
+
+    const startAngle = 145 * math.pi / 180;
+    const totalSweep = 250 * math.pi / 180;
+    canvas.drawArc(rect, startAngle, totalSweep, false, backgroundPaint);
+    canvas.drawArc(
+      rect,
+      startAngle,
+      totalSweep * progress,
+      false,
+      progressPaint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _CompletedActivityRingPainter oldDelegate) {
+    return oldDelegate.progress != progress ||
+        oldDelegate.backgroundColor != backgroundColor ||
+        oldDelegate.progressColor != progressColor ||
+        oldDelegate.strokeWidth != strokeWidth;
   }
 }
 
