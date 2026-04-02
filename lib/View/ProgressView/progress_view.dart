@@ -69,7 +69,7 @@ class _ProgressViewState extends State<ProgressView> {
                           completedTitle: l10n.progressCompletedActivity,
                           completedValue: '6/8',
                           caloriesTitle: l10n.progressCaloriesBurnedLabel,
-                          caloriesValue: '140 kcal',
+                          caloriesValue: '140 ${l10n.progressUnitKcal}',
                           muscleLabel: l10n.progressMuscleGainLabel,
                           muscleValue: '+2.1',
                           waistLabel: l10n.progressWaistChangeLabel,
@@ -79,25 +79,39 @@ class _ProgressViewState extends State<ProgressView> {
                           movementLabel: l10n.progressMovementCountLabel,
                           movementValue: '20',
                           durationLabel: l10n.progressDurationLabel,
-                          durationValue:
-                              '40 ${l10n.homeWorkoutDuration.split(' ').last}',
+                          durationValue: '40 ${l10n.progressUnitMinute}',
                           successLabel: l10n.progressSuccessPercentLabel,
                           successValue: '%69',
                         ),
                         SizedBox(height: 24.h),
                         _SectionTitle(text: l10n.progressGeneralStatusTitle),
                         SizedBox(height: 15.h),
+                        _GeneralCaloriesTrendCard(
+                          iconPath: '$_progressIconBase/iconsax-weight.svg',
+                          title: l10n.progressCaloriesBurnedLabel,
+                          value: '140 ${l10n.progressUnitKcal}',
+                        ),
+                        SizedBox(height: 15.h),
+                        _GeneralBodyMetricsCard(
+                          muscleLabel: l10n.progressMuscleGainLabel,
+                          muscleValue: '+2.1',
+                          waistLabel: l10n.progressWaistChangeLabel,
+                          waistValue: '-3.2',
+                          fatLabel: l10n.progressBodyFatLabel,
+                          fatValue: '-4%',
+                        ),
+                        SizedBox(height: 10.h),
                         _StatTile(
                           iconPath: '$_progressIconBase/iconsax-weight.svg',
                           label: l10n.progressWeightLostLabel,
-                          value: '-3.4 kg',
+                          value: '-3.4 ${l10n.progressUnitKg}',
                         ),
                         SizedBox(height: 10.h),
                         _StatTile(
                           iconPath:
                               '$_progressIconBase/iconsax-activity (1).svg',
                           label: l10n.progressHeartRateLabel,
-                          value: '80 BPM',
+                          value: '80 ${l10n.progressUnitBpm}',
                         ),
                         SizedBox(height: 10.h),
                         _StatTile(
@@ -115,8 +129,7 @@ class _ProgressViewState extends State<ProgressView> {
                         _StatTile(
                           iconPath: '$_progressIconBase/iconsax-moon.svg',
                           label: l10n.progressSleepLabel,
-                          value:
-                              '8 ${l10n.homeWorkoutDuration.split(' ').last}',
+                          value: '8 ${l10n.progressUnitHour}',
                         ),
                         SizedBox(height: 24.h),
                         _RewardCard(
@@ -847,6 +860,271 @@ class _StatTile extends StatelessWidget {
   }
 }
 
+class _GeneralCaloriesTrendCard extends StatelessWidget {
+  const _GeneralCaloriesTrendCard({
+    required this.iconPath,
+    required this.title,
+    required this.value,
+  });
+
+  final String iconPath;
+
+  final String title;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    const fillHeights = <double>[
+      39,
+      46,
+      29,
+      36,
+      44,
+      42,
+      30,
+      48,
+      41,
+      23,
+      37,
+      18,
+      36,
+      46,
+    ];
+
+    return Container(
+      width: 342.w,
+      height: 112.h,
+      padding: EdgeInsets.fromLTRB(15.w, 7.h, 15.w, 7.h),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: const Color(0xFFF1F1F1)),
+        borderRadius: BorderRadius.circular(20.r),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(iconPath, width: 14.w, height: 14.w),
+              SizedBox(width: 3.w),
+              Flexible(
+                child: Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.leagueSpartan(
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w500,
+                    height: 11 / 12,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 3.h),
+          Text(
+            value,
+            style: GoogleFonts.leagueSpartan(
+              fontSize: 20.sp,
+              fontWeight: FontWeight.w500,
+              height: 18 / 20,
+            ),
+          ),
+          SizedBox(height: 7.h),
+          SizedBox(
+            width: 231.w,
+            height: 53.h,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: fillHeights.asMap().entries.map((entry) {
+                final index = entry.key;
+                final fillHeight = entry.value;
+                return Padding(
+                  padding: EdgeInsets.only(
+                    right: index == fillHeights.length - 1 ? 0 : 7.w,
+                  ),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      width: 10.w,
+                      height: 53.h,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFD3FFE1),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20.r),
+                          topRight: Radius.circular(20.r),
+                        ),
+                      ),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          width: 10.w,
+                          height: fillHeight.h,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF32EA6E),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20.r),
+                              topRight: Radius.circular(20.r),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _GeneralBodyMetricsCard extends StatelessWidget {
+  const _GeneralBodyMetricsCard({
+    required this.muscleLabel,
+    required this.muscleValue,
+    required this.waistLabel,
+    required this.waistValue,
+    required this.fatLabel,
+    required this.fatValue,
+  });
+
+  final String muscleLabel;
+  final String muscleValue;
+  final String waistLabel;
+  final String waistValue;
+  final String fatLabel;
+  final String fatValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 342.w,
+      height: 112.h,
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: const Color(0xFFF1F1F1)),
+        borderRadius: BorderRadius.circular(20.r),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _GeneralCircleMetric(
+            label: muscleLabel,
+            value: muscleValue,
+            width: 97.w,
+            progress: 0.86,
+          ),
+          _GeneralCircleMetric(
+            label: waistLabel,
+            value: waistValue,
+            width: 105.w,
+            progress: 0.84,
+          ),
+          _GeneralCircleMetric(
+            label: fatLabel,
+            value: fatValue,
+            width: 97.w,
+            progress: 0.82,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _GeneralCircleMetric extends StatelessWidget {
+  const _GeneralCircleMetric({
+    required this.label,
+    required this.value,
+    required this.width,
+    required this.progress,
+  });
+
+  final String label;
+  final String value;
+  final double width;
+  final double progress;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          const labelBlockHeightFactor = 22.0;
+          const gapFactor = 3.0;
+          final baseRingDiameter = (constraints.maxWidth * 0.66)
+              .clamp(58.w, 72.w)
+              .toDouble();
+          final maxRingByHeight = constraints.hasBoundedHeight
+              ? (constraints.maxHeight - labelBlockHeightFactor.h - gapFactor.h)
+                    .clamp(44.w, 200.w)
+                    .toDouble()
+              : baseRingDiameter;
+          final ringDiameter = baseRingDiameter > maxRingByHeight
+              ? maxRingByHeight
+              : baseRingDiameter;
+          final ringStroke = (ringDiameter * 0.075).clamp(4.w, 6.w).toDouble();
+
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: ringDiameter,
+                height: ringDiameter,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    CircularProgressIndicator(
+                      value: progress,
+                      strokeWidth: ringStroke,
+                      strokeCap: StrokeCap.round,
+                      backgroundColor: const Color(0xFFD3FFE1),
+                      valueColor: const AlwaysStoppedAnimation<Color>(
+                        Color(0xFF32EA6E),
+                      ),
+                    ),
+                    Text(
+                      value,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.leagueSpartan(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                        height: 1,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 3.h),
+              SizedBox(
+                height: 22.h,
+                child: Center(
+                  child: Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.leagueSpartan(
+                      fontSize: 10.sp,
+                      fontWeight: FontWeight.w500,
+                      height: 1,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
 class _RewardCard extends StatelessWidget {
   const _RewardCard({required this.title, required this.subtitle});
 
@@ -1004,21 +1282,32 @@ class _GoalInfoCard extends StatelessWidget {
                 return;
               }
 
-              final buttonBox = editContext.findRenderObject() as RenderBox;
-              final overlayBox =
-                  Overlay.of(context).context.findRenderObject() as RenderBox;
-              final buttonTopLeft = buttonBox.localToGlobal(
+              final buttonRenderObject = editContext.findRenderObject();
+              if (buttonRenderObject is! RenderBox) {
+                return;
+              }
+
+              final overlayRenderObject = Overlay.of(
+                context,
+              ).context.findRenderObject();
+              if (overlayRenderObject is! RenderBox) {
+                return;
+              }
+
+              final overlayBox = overlayRenderObject;
+              final buttonTopLeft = buttonRenderObject.localToGlobal(
                 Offset.zero,
                 ancestor: overlayBox,
               );
-              final buttonSize = buttonBox.size;
+              final buttonSize = buttonRenderObject.size;
 
               final popupWidth = 85.w;
               final popupHeight = 82.h;
-              final left = (buttonTopLeft.dx + buttonSize.width - popupWidth)
-                  .clamp(8.0, overlayBox.size.width - popupWidth - 8.0)
-                  .toDouble();
-              final top = (buttonTopLeft.dy - popupHeight - 8.h)
+              final left =
+                  (buttonTopLeft.dx + buttonSize.width + 14.w - popupWidth)
+                      .clamp(8.0, overlayBox.size.width - popupWidth - 8.0)
+                      .toDouble();
+              final top = (buttonTopLeft.dy + buttonSize.height - 1.h)
                   .clamp(8.0, overlayBox.size.height - popupHeight - 8.0)
                   .toDouble();
 
@@ -1048,26 +1337,31 @@ class _GoalInfoCard extends StatelessWidget {
                   final index = entry.key;
                   final goal = entry.value;
                   final highlighted = index == selectedGoalIndex;
+                  final rowHeights = [20.h, 19.h, 20.h, 23.h];
+                  final rowHeight = rowHeights[index];
                   return PopupMenuItem<String>(
                     value: goal,
-                    height: 19.h,
+                    height: rowHeight,
                     padding: EdgeInsets.zero,
-                    child: Container(
-                      alignment: Alignment.center,
-                      color: highlighted
-                          ? const Color(0xFF32EA6E)
-                          : Colors.transparent,
-                      child: Text(
-                        goal,
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.leagueSpartan(
-                          fontSize: 10.sp,
-                          fontWeight: FontWeight.w400,
-                          height: 0.9,
-                          letterSpacing: -0.11,
-                          color: highlighted
-                              ? Colors.white
-                              : const Color(0xFF302F2F),
+                    child: SizedBox(
+                      height: rowHeight,
+                      child: Container(
+                        alignment: Alignment.center,
+                        color: highlighted
+                            ? const Color(0xFF32EA6E)
+                            : Colors.transparent,
+                        child: Text(
+                          goal,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.leagueSpartan(
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.w400,
+                            height: 1,
+                            letterSpacing: -0.11,
+                            color: highlighted
+                                ? Colors.white
+                                : const Color(0xFF302F2F),
+                          ),
                         ),
                       ),
                     ),

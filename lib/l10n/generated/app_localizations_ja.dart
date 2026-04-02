@@ -708,6 +708,21 @@ class AppLocalizationsJa extends AppLocalizations {
   String get progressWaterSubtitle => '1日少なくとも8杯';
 
   @override
+  String get progressUnitKcal => 'kcal';
+
+  @override
+  String get progressUnitKg => 'kg';
+
+  @override
+  String get progressUnitBpm => 'BPM';
+
+  @override
+  String get progressUnitMinute => '分';
+
+  @override
+  String get progressUnitHour => '時間';
+
+  @override
   String get progressGoalDaily5k => '毎日 5k';
 
   @override

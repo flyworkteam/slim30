@@ -708,6 +708,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get progressWaterSubtitle => '每天至少8杯';
 
   @override
+  String get progressUnitKcal => 'kcal';
+
+  @override
+  String get progressUnitKg => 'kg';
+
+  @override
+  String get progressUnitBpm => 'BPM';
+
+  @override
+  String get progressUnitMinute => '分钟';
+
+  @override
+  String get progressUnitHour => '小时';
+
+  @override
   String get progressGoalDaily5k => '每日 5k';
 
   @override

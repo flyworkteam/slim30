@@ -715,6 +715,21 @@ class AppLocalizationsTr extends AppLocalizations {
   String get progressWaterSubtitle => 'Günde en az 8 bardak';
 
   @override
+  String get progressUnitKcal => 'kcal';
+
+  @override
+  String get progressUnitKg => 'kg';
+
+  @override
+  String get progressUnitBpm => 'BPM';
+
+  @override
+  String get progressUnitMinute => 'dk';
+
+  @override
+  String get progressUnitHour => 'saat';
+
+  @override
   String get progressGoalDaily5k => 'Günde 5 Bin';
 
   @override

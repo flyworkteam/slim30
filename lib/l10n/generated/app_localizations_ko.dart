@@ -708,6 +708,21 @@ class AppLocalizationsKo extends AppLocalizations {
   String get progressWaterSubtitle => '하루 최소 8잔';
 
   @override
+  String get progressUnitKcal => 'kcal';
+
+  @override
+  String get progressUnitKg => 'kg';
+
+  @override
+  String get progressUnitBpm => 'BPM';
+
+  @override
+  String get progressUnitMinute => '분';
+
+  @override
+  String get progressUnitHour => '시간';
+
+  @override
   String get progressGoalDaily5k => '매일 5k';
 
   @override

@@ -715,6 +715,21 @@ class AppLocalizationsHi extends AppLocalizations {
   String get progressWaterSubtitle => 'कम से कम 8 गिलास/दिन';
 
   @override
+  String get progressUnitKcal => 'kcal';
+
+  @override
+  String get progressUnitKg => 'kg';
+
+  @override
+  String get progressUnitBpm => 'BPM';
+
+  @override
+  String get progressUnitMinute => 'मिनट';
+
+  @override
+  String get progressUnitHour => 'घंटे';
+
+  @override
   String get progressGoalDaily5k => 'रोज़ 5k';
 
   @override

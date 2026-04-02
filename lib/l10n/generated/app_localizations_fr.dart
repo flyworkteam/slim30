@@ -724,6 +724,21 @@ class AppLocalizationsFr extends AppLocalizations {
   String get progressWaterSubtitle => 'Au moins 8 verres/jour';
 
   @override
+  String get progressUnitKcal => 'kcal';
+
+  @override
+  String get progressUnitKg => 'kg';
+
+  @override
+  String get progressUnitBpm => 'BPM';
+
+  @override
+  String get progressUnitMinute => 'min';
+
+  @override
+  String get progressUnitHour => 'h';
+
+  @override
   String get progressGoalDaily5k => 'Quotidien 5k';
 
   @override

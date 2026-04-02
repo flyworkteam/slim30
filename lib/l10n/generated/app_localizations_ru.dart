@@ -712,6 +712,21 @@ class AppLocalizationsRu extends AppLocalizations {
   String get progressWaterSubtitle => 'Не менее 8 стаканов/день';
 
   @override
+  String get progressUnitKcal => 'kcal';
+
+  @override
+  String get progressUnitKg => 'kg';
+
+  @override
+  String get progressUnitBpm => 'BPM';
+
+  @override
+  String get progressUnitMinute => 'мин';
+
+  @override
+  String get progressUnitHour => 'ч';
+
+  @override
   String get progressGoalDaily5k => 'Ежедневно 5k';
 
   @override

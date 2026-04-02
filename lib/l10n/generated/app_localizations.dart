@@ -1480,6 +1480,36 @@ abstract class AppLocalizations {
   /// **'At least 8 glasses/day'**
   String get progressWaterSubtitle;
 
+  /// No description provided for @progressUnitKcal.
+  ///
+  /// In en, this message translates to:
+  /// **'kcal'**
+  String get progressUnitKcal;
+
+  /// No description provided for @progressUnitKg.
+  ///
+  /// In en, this message translates to:
+  /// **'kg'**
+  String get progressUnitKg;
+
+  /// No description provided for @progressUnitBpm.
+  ///
+  /// In en, this message translates to:
+  /// **'BPM'**
+  String get progressUnitBpm;
+
+  /// No description provided for @progressUnitMinute.
+  ///
+  /// In en, this message translates to:
+  /// **'min'**
+  String get progressUnitMinute;
+
+  /// No description provided for @progressUnitHour.
+  ///
+  /// In en, this message translates to:
+  /// **'h'**
+  String get progressUnitHour;
+
   /// No description provided for @progressGoalDaily5k.
   ///
   /// In en, this message translates to:
