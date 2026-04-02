@@ -35,7 +35,9 @@ class _ProgressViewState extends State<ProgressView> {
               height: 82.h,
               decoration: BoxDecoration(
                 color: const Color(0xFFD3FFE1),
-                border: Border.all(color: const Color.fromRGBO(235, 235, 235, 0.11)),
+                border: Border.all(
+                  color: const Color.fromRGBO(235, 235, 235, 0.11),
+                ),
                 borderRadius: BorderRadius.circular(6.r),
               ),
               child: Column(
@@ -48,17 +50,20 @@ class _ProgressViewState extends State<ProgressView> {
                   _GoalRow(
                     text: 'Gunde 10 Bin',
                     highlighted: true,
-                    onTap: () => Navigator.of(dialogContext).pop('Gunde 10 Bin'),
+                    onTap: () =>
+                        Navigator.of(dialogContext).pop('Gunde 10 Bin'),
                   ),
                   _GoalRow(
                     text: 'Haftada 40 Bin',
                     highlighted: false,
-                    onTap: () => Navigator.of(dialogContext).pop('Haftada 40 Bin'),
+                    onTap: () =>
+                        Navigator.of(dialogContext).pop('Haftada 40 Bin'),
                   ),
                   _GoalRow(
                     text: 'Haftada 50 Bin',
                     highlighted: false,
-                    onTap: () => Navigator.of(dialogContext).pop('Haftada 50 Bin'),
+                    onTap: () =>
+                        Navigator.of(dialogContext).pop('Haftada 50 Bin'),
                   ),
                 ],
               ),
@@ -181,7 +186,8 @@ class _ProgressViewState extends State<ProgressView> {
                               iconPath: '$_progressIconBase/Group 277.svg',
                               title: l10n.progressStepsTitle,
                               subtitle: _stepsGoal,
-                              editIconPath: '$_progressIconBase/Clip path group.svg',
+                              editIconPath:
+                                  '$_progressIconBase/Clip path group.svg',
                               onEditTap: () => _openStepsGoalPicker(context),
                             ),
                             SizedBox(height: 10.h),
