@@ -706,4 +706,16 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get progressWaterSubtitle => '1日少なくとも8杯';
+
+  @override
+  String get progressGoalDaily5k => '毎日 5k';
+
+  @override
+  String get progressGoalDaily10k => '毎日 10k';
+
+  @override
+  String get progressGoalWeekly40k => '毎週 40k';
+
+  @override
+  String get progressGoalWeekly50k => '毎週 50k';
 }

@@ -713,4 +713,16 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get progressWaterSubtitle => 'Günde en az 8 bardak';
+
+  @override
+  String get progressGoalDaily5k => 'Günde 5 Bin';
+
+  @override
+  String get progressGoalDaily10k => 'Günde 10 Bin';
+
+  @override
+  String get progressGoalWeekly40k => 'Haftada 40 Bin';
+
+  @override
+  String get progressGoalWeekly50k => 'Haftada 50 Bin';
 }

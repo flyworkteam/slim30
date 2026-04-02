@@ -1479,6 +1479,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'At least 8 glasses/day'**
   String get progressWaterSubtitle;
+
+  /// No description provided for @progressGoalDaily5k.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily 5k'**
+  String get progressGoalDaily5k;
+
+  /// No description provided for @progressGoalDaily10k.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily 10k'**
+  String get progressGoalDaily10k;
+
+  /// No description provided for @progressGoalWeekly40k.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly 40k'**
+  String get progressGoalWeekly40k;
+
+  /// No description provided for @progressGoalWeekly50k.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly 50k'**
+  String get progressGoalWeekly50k;
 }
 
 class _AppLocalizationsDelegate

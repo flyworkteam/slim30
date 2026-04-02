@@ -706,4 +706,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get progressWaterSubtitle => '每天至少8杯';
+
+  @override
+  String get progressGoalDaily5k => '每日 5k';
+
+  @override
+  String get progressGoalDaily10k => '每日 10k';
+
+  @override
+  String get progressGoalWeekly40k => '每周 40k';
+
+  @override
+  String get progressGoalWeekly50k => '每周 50k';
 }

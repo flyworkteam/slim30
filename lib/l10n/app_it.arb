@@ -227,4 +227,8 @@
   ,"progressStepsSubtitle": "Ricorda 10k al giorno"
   ,"progressWaterTitle": "Bevi acqua"
   ,"progressWaterSubtitle": "Almeno 8 bicchieri/giorno"
+  ,"progressGoalDaily5k": "Giornaliero 5k"
+  ,"progressGoalDaily10k": "Giornaliero 10k"
+  ,"progressGoalWeekly40k": "Settimanale 40k"
+  ,"progressGoalWeekly50k": "Settimanale 50k"
 }

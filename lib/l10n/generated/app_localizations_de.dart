@@ -717,4 +717,16 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get progressWaterSubtitle => 'Mindestens 8 Gläser/Tag';
+
+  @override
+  String get progressGoalDaily5k => 'Täglich 5k';
+
+  @override
+  String get progressGoalDaily10k => 'Täglich 10k';
+
+  @override
+  String get progressGoalWeekly40k => 'Wöchentlich 40k';
+
+  @override
+  String get progressGoalWeekly50k => 'Wöchentlich 50k';
 }

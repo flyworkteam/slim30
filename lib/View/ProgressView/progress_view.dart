@@ -17,72 +17,17 @@ class _ProgressViewState extends State<ProgressView> {
   static const _progressIconBase = 'assets/images/icons/progress_icon';
 
   int _waterCount = 1;
-  String _stepsGoal = 'Gunde 10 Bin';
-
-  Future<void> _openStepsGoalPicker(BuildContext context) async {
-    final selected = await showDialog<String>(
-      context: context,
-      barrierColor: Colors.black.withValues(alpha: 0.08),
-      builder: (dialogContext) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          insetPadding: EdgeInsets.symmetric(horizontal: 20.w),
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: Container(
-              width: 85.w,
-              height: 82.h,
-              decoration: BoxDecoration(
-                color: const Color(0xFFD3FFE1),
-                border: Border.all(
-                  color: const Color.fromRGBO(235, 235, 235, 0.11),
-                ),
-                borderRadius: BorderRadius.circular(6.r),
-              ),
-              child: Column(
-                children: [
-                  _GoalRow(
-                    text: 'Gunde 5 Bin',
-                    highlighted: false,
-                    onTap: () => Navigator.of(dialogContext).pop('Gunde 5 Bin'),
-                  ),
-                  _GoalRow(
-                    text: 'Gunde 10 Bin',
-                    highlighted: true,
-                    onTap: () =>
-                        Navigator.of(dialogContext).pop('Gunde 10 Bin'),
-                  ),
-                  _GoalRow(
-                    text: 'Haftada 40 Bin',
-                    highlighted: false,
-                    onTap: () =>
-                        Navigator.of(dialogContext).pop('Haftada 40 Bin'),
-                  ),
-                  _GoalRow(
-                    text: 'Haftada 50 Bin',
-                    highlighted: false,
-                    onTap: () =>
-                        Navigator.of(dialogContext).pop('Haftada 50 Bin'),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-
-    if (selected != null && mounted) {
-      setState(() {
-        _stepsGoal = selected;
-      });
-    }
-  }
+  int _selectedGoalIndex = 1;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final goalOptions = [
+      l10n.progressGoalDaily5k,
+      l10n.progressGoalDaily10k,
+      l10n.progressGoalWeekly40k,
+      l10n.progressGoalWeekly50k,
+    ];
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -185,10 +130,16 @@ class _ProgressViewState extends State<ProgressView> {
                             _GoalInfoCard(
                               iconPath: '$_progressIconBase/Group 277.svg',
                               title: l10n.progressStepsTitle,
-                              subtitle: _stepsGoal,
+                              subtitle: goalOptions[_selectedGoalIndex],
+                              selectedGoalIndex: _selectedGoalIndex,
+                              goalOptions: goalOptions,
                               editIconPath:
                                   '$_progressIconBase/Clip path group.svg',
-                              onEditTap: () => _openStepsGoalPicker(context),
+                              onGoalChanged: (newIndex) {
+                                setState(() {
+                                  _selectedGoalIndex = newIndex;
+                                });
+                              },
                             ),
                             SizedBox(height: 10.h),
                             _WaterCard(
@@ -979,23 +930,30 @@ class _GoalInfoCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.editIconPath,
-    this.onEditTap,
+    required this.selectedGoalIndex,
+    required this.goalOptions,
+    required this.onGoalChanged,
   });
 
   final String iconPath;
   final String title;
   final String subtitle;
   final String editIconPath;
-  final VoidCallback? onEditTap;
+  final int selectedGoalIndex;
+  final List<String> goalOptions;
+  final ValueChanged<int> onGoalChanged;
 
   @override
   Widget build(BuildContext context) {
+    final editButtonKey = GlobalKey();
+
     return Container(
       width: 342.w,
       constraints: BoxConstraints(minHeight: 92.h),
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
       decoration: BoxDecoration(
-        color: const Color(0xFFD3FFE1),
+        color: Colors.white,
+        border: Border.all(color: const Color(0xFFEDEDED)),
         borderRadius: BorderRadius.circular(6.r),
       ),
       child: Row(
@@ -1040,16 +998,105 @@ class _GoalInfoCard extends StatelessWidget {
           ),
           SizedBox(width: 10.w),
           InkWell(
-            onTap: onEditTap,
+            onTap: () async {
+              final editContext = editButtonKey.currentContext;
+              if (editContext == null) {
+                return;
+              }
+
+              final buttonBox = editContext.findRenderObject() as RenderBox;
+              final overlayBox =
+                  Overlay.of(context).context.findRenderObject() as RenderBox;
+              final buttonTopLeft = buttonBox.localToGlobal(
+                Offset.zero,
+                ancestor: overlayBox,
+              );
+              final buttonSize = buttonBox.size;
+
+              final popupWidth = 85.w;
+              final popupHeight = 82.h;
+              final left = (buttonTopLeft.dx + buttonSize.width - popupWidth)
+                  .clamp(8.0, overlayBox.size.width - popupWidth - 8.0)
+                  .toDouble();
+              final top = (buttonTopLeft.dy - popupHeight - 8.h)
+                  .clamp(8.0, overlayBox.size.height - popupHeight - 8.0)
+                  .toDouble();
+
+              final selected = await showMenu<String>(
+                context: context,
+                color: const Color(0xFFD3FFE1),
+                elevation: 0,
+                shadowColor: Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6.r),
+                  side: const BorderSide(
+                    color: Color.fromRGBO(235, 235, 235, 0.11),
+                  ),
+                ),
+                menuPadding: EdgeInsets.zero,
+                constraints: BoxConstraints.tightFor(
+                  width: popupWidth,
+                  height: popupHeight,
+                ),
+                position: RelativeRect.fromLTRB(
+                  left,
+                  top,
+                  overlayBox.size.width - left - popupWidth,
+                  overlayBox.size.height - top - popupHeight,
+                ),
+                items: goalOptions.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final goal = entry.value;
+                  final highlighted = index == selectedGoalIndex;
+                  return PopupMenuItem<String>(
+                    value: goal,
+                    height: 19.h,
+                    padding: EdgeInsets.zero,
+                    child: Container(
+                      alignment: Alignment.center,
+                      color: highlighted
+                          ? const Color(0xFF32EA6E)
+                          : Colors.transparent,
+                      child: Text(
+                        goal,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.leagueSpartan(
+                          fontSize: 10.sp,
+                          fontWeight: FontWeight.w400,
+                          height: 0.9,
+                          letterSpacing: -0.11,
+                          color: highlighted
+                              ? Colors.white
+                              : const Color(0xFF302F2F),
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              );
+
+              if (selected != null) {
+                final newIndex = goalOptions.indexOf(selected);
+                if (newIndex != -1) {
+                  onGoalChanged(newIndex);
+                }
+              }
+            },
             borderRadius: BorderRadius.circular(14.r),
             child: Container(
+              key: editButtonKey,
               width: 28.w,
               height: 28.w,
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [Color(0xFF4BFE84), Color(0xFF5AE3F7)],
+                  colors: [
+                    Color(0xFF4BFE84),
+                    Color(0xFF88F3CF),
+                    Color(0xFF5AE3F7),
+                  ],
+                  stops: [0.0553, 0.7147, 1.0],
                 ),
                 borderRadius: BorderRadius.circular(14.r),
               ),
@@ -1063,42 +1110,6 @@ class _GoalInfoCard extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _GoalRow extends StatelessWidget {
-  const _GoalRow({
-    required this.text,
-    required this.highlighted,
-    required this.onTap,
-  });
-
-  final String text;
-  final bool highlighted;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        width: 85.w,
-        height: 19.h,
-        alignment: Alignment.center,
-        color: highlighted ? const Color(0xFF32EA6E) : Colors.transparent,
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: GoogleFonts.leagueSpartan(
-            fontSize: 10.sp,
-            fontWeight: FontWeight.w400,
-            height: 0.9,
-            letterSpacing: -0.11,
-            color: highlighted ? Colors.white : const Color(0xFF302F2F),
-          ),
-        ),
       ),
     );
   }
@@ -1128,7 +1139,8 @@ class _WaterCard extends StatelessWidget {
       constraints: BoxConstraints(minHeight: 92.h),
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
       decoration: BoxDecoration(
-        color: const Color(0xFFE1FBFF),
+        color: Colors.white,
+        border: Border.all(color: const Color(0xFFEDEDED)),
         borderRadius: BorderRadius.circular(6.r),
       ),
       child: Row(

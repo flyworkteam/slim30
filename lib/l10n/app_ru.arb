@@ -227,4 +227,8 @@
   ,"progressStepsSubtitle": "Помни о 10k в день"
   ,"progressWaterTitle": "Пей воду"
   ,"progressWaterSubtitle": "Не менее 8 стаканов/день"
+  ,"progressGoalDaily5k": "Ежедневно 5k"
+  ,"progressGoalDaily10k": "Ежедневно 10k"
+  ,"progressGoalWeekly40k": "Еженедельно 40k"
+  ,"progressGoalWeekly50k": "Еженедельно 50k"
 }

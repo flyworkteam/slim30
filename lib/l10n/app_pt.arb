@@ -227,4 +227,8 @@
   ,"progressStepsSubtitle": "Lembre-se de 10k por dia"
   ,"progressWaterTitle": "Beba agua"
   ,"progressWaterSubtitle": "Pelo menos 8 copos/dia"
+  ,"progressGoalDaily5k": "Diario 5k"
+  ,"progressGoalDaily10k": "Diario 10k"
+  ,"progressGoalWeekly40k": "Semanal 40k"
+  ,"progressGoalWeekly50k": "Semanal 50k"
 }

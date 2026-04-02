@@ -706,4 +706,16 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get progressWaterSubtitle => '하루 최소 8잔';
+
+  @override
+  String get progressGoalDaily5k => '매일 5k';
+
+  @override
+  String get progressGoalDaily10k => '매일 10k';
+
+  @override
+  String get progressGoalWeekly40k => '주간 40k';
+
+  @override
+  String get progressGoalWeekly50k => '주간 50k';
 }

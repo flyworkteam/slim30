@@ -710,4 +710,16 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get progressWaterSubtitle => 'Не менее 8 стаканов/день';
+
+  @override
+  String get progressGoalDaily5k => 'Ежедневно 5k';
+
+  @override
+  String get progressGoalDaily10k => 'Ежедневно 10k';
+
+  @override
+  String get progressGoalWeekly40k => 'Еженедельно 40k';
+
+  @override
+  String get progressGoalWeekly50k => 'Еженедельно 50k';
 }

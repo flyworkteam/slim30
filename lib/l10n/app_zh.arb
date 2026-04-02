@@ -227,4 +227,8 @@
   ,"progressStepsSubtitle": "记得每天10k"
   ,"progressWaterTitle": "喝水"
   ,"progressWaterSubtitle": "每天至少8杯"
+  ,"progressGoalDaily5k": "每日 5k"
+  ,"progressGoalDaily10k": "每日 10k"
+  ,"progressGoalWeekly40k": "每周 40k"
+  ,"progressGoalWeekly50k": "每周 50k"
 }

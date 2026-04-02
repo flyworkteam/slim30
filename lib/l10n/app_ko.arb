@@ -227,4 +227,8 @@
   ,"progressStepsSubtitle": "하루 10k를 기억하세요"
   ,"progressWaterTitle": "물 마시기"
   ,"progressWaterSubtitle": "하루 최소 8잔"
+  ,"progressGoalDaily5k": "매일 5k"
+  ,"progressGoalDaily10k": "매일 10k"
+  ,"progressGoalWeekly40k": "주간 40k"
+  ,"progressGoalWeekly50k": "주간 50k"
 }

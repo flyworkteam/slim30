@@ -227,4 +227,8 @@
   ,"progressStepsSubtitle": "1日10kを忘れずに"
   ,"progressWaterTitle": "水を飲む"
   ,"progressWaterSubtitle": "1日少なくとも8杯"
+  ,"progressGoalDaily5k": "毎日 5k"
+  ,"progressGoalDaily10k": "毎日 10k"
+  ,"progressGoalWeekly40k": "毎週 40k"
+  ,"progressGoalWeekly50k": "毎週 50k"
 }
