@@ -638,76 +638,76 @@ class AppLocalizationsRu extends AppLocalizations {
   String get notificationsWeeklyTime => '1 день назад';
 
   @override
-  String get progressTitle => 'Progress';
+  String get progressTitle => 'Прогресс';
 
   @override
-  String get progressDailyWorkoutSummary => 'Daily Workout Summary';
+  String get progressDailyWorkoutSummary => 'Ежедневная сводка тренировок';
 
   @override
-  String get progressCompletedActivity => 'Completed Activity';
+  String get progressCompletedActivity => 'Завершенная активность';
 
   @override
-  String get progressCaloriesBurnedLabel => 'Burned Calories';
+  String get progressCaloriesBurnedLabel => 'Сожженные калории';
 
   @override
-  String get progressMuscleGainLabel => 'Muscle Mass Gain';
+  String get progressMuscleGainLabel => 'Прирост мышечной массы';
 
   @override
-  String get progressWaistChangeLabel => 'Waist Change';
+  String get progressWaistChangeLabel => 'Изменение талии';
 
   @override
-  String get progressBodyFatLabel => 'Body Fat';
+  String get progressBodyFatLabel => 'Жир в организме';
 
   @override
-  String get progressMovementCountLabel => 'Movement Count';
+  String get progressMovementCountLabel => 'Количество движений';
 
   @override
-  String get progressDurationLabel => 'Duration';
+  String get progressDurationLabel => 'Длительность';
 
   @override
-  String get progressSuccessPercentLabel => 'Success Rate';
+  String get progressSuccessPercentLabel => 'Процент успеха';
 
   @override
-  String get progressGeneralStatusTitle => 'General Progress Status';
+  String get progressGeneralStatusTitle => 'Общий статус прогресса';
 
   @override
-  String get progressWeightLostLabel => 'Weight Lost';
+  String get progressWeightLostLabel => 'Потерянный вес';
 
   @override
-  String get progressHeartRateLabel => 'Heart Rate';
+  String get progressHeartRateLabel => 'Частота сердцебиения';
 
   @override
-  String get progressTotalCompletedLabel => 'Total Completed Activities';
+  String get progressTotalCompletedLabel => 'Всего завершенных активностей';
 
   @override
-  String get progressHydrationLabel => 'Hydration Rate';
+  String get progressHydrationLabel => 'Уровень гидратации';
 
   @override
-  String get progressSleepLabel => 'Sleep Duration';
+  String get progressSleepLabel => 'Продолжительность сна';
 
   @override
-  String get progressRewardTitle => 'Don\'t forget to reward yourself';
+  String get progressRewardTitle => 'Не забудь наградить себя';
 
   @override
   String get progressRewardSubtitle =>
-      'You\'re doing great, celebrate your success 💪🏻';
+      'У тебя отлично получается, отпразднуй свой успех 💪🏻';
 
   @override
-  String get progressOverallPerformanceTitle => 'Overall Performance';
+  String get progressOverallPerformanceTitle => 'Общая эффективность';
 
   @override
   String get progressOverallPerformanceSubtitle =>
-      'See how close you are to your goals.';
+      'Посмотри, насколько ты близок к своим целям.';
 
   @override
-  String get progressStepsTitle => 'Your Steps';
+  String get progressStepsTitle => 'Твои шаги';
 
   @override
-  String get progressStepsSubtitle => 'Remember 10k per day';
+  String get progressStepsSubtitle => 'Помни о 10k в день';
 
   @override
-  String get progressWaterTitle => 'Drink Water';
+  String get progressWaterTitle => 'Пей воду';
 
   @override
-  String get progressWaterSubtitle => 'At least 8 glasses/day';
+  String get progressWaterSubtitle => 'Не менее 8 стаканов/день';
 }

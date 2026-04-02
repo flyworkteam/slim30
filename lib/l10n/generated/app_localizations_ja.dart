@@ -636,76 +636,74 @@ class AppLocalizationsJa extends AppLocalizations {
   String get notificationsWeeklyTime => '1日前';
 
   @override
-  String get progressTitle => 'Progress';
+  String get progressTitle => '進捗';
 
   @override
-  String get progressDailyWorkoutSummary => 'Daily Workout Summary';
+  String get progressDailyWorkoutSummary => '今日のワークアウト概要';
 
   @override
-  String get progressCompletedActivity => 'Completed Activity';
+  String get progressCompletedActivity => '完了したアクティビティ';
 
   @override
-  String get progressCaloriesBurnedLabel => 'Burned Calories';
+  String get progressCaloriesBurnedLabel => '消費カロリー';
 
   @override
-  String get progressMuscleGainLabel => 'Muscle Mass Gain';
+  String get progressMuscleGainLabel => '筋肉量の増加';
 
   @override
-  String get progressWaistChangeLabel => 'Waist Change';
+  String get progressWaistChangeLabel => 'ウエストの変化';
 
   @override
-  String get progressBodyFatLabel => 'Body Fat';
+  String get progressBodyFatLabel => '体脂肪';
 
   @override
-  String get progressMovementCountLabel => 'Movement Count';
+  String get progressMovementCountLabel => '動作回数';
 
   @override
-  String get progressDurationLabel => 'Duration';
+  String get progressDurationLabel => '時間';
 
   @override
-  String get progressSuccessPercentLabel => 'Success Rate';
+  String get progressSuccessPercentLabel => '達成率';
 
   @override
-  String get progressGeneralStatusTitle => 'General Progress Status';
+  String get progressGeneralStatusTitle => '全体の進捗状況';
 
   @override
-  String get progressWeightLostLabel => 'Weight Lost';
+  String get progressWeightLostLabel => '減った体重';
 
   @override
-  String get progressHeartRateLabel => 'Heart Rate';
+  String get progressHeartRateLabel => '心拍数';
 
   @override
-  String get progressTotalCompletedLabel => 'Total Completed Activities';
+  String get progressTotalCompletedLabel => '完了したアクティビティ合計';
 
   @override
-  String get progressHydrationLabel => 'Hydration Rate';
+  String get progressHydrationLabel => '水分補給率';
 
   @override
-  String get progressSleepLabel => 'Sleep Duration';
+  String get progressSleepLabel => '睡眠時間';
 
   @override
-  String get progressRewardTitle => 'Don\'t forget to reward yourself';
+  String get progressRewardTitle => '自分へのご褒美を忘れずに';
 
   @override
-  String get progressRewardSubtitle =>
-      'You\'re doing great, celebrate your success 💪🏻';
+  String get progressRewardSubtitle => 'とても順調です、成果をお祝いしましょう 💪🏻';
 
   @override
-  String get progressOverallPerformanceTitle => 'Overall Performance';
+  String get progressOverallPerformanceTitle => '総合パフォーマンス';
 
   @override
-  String get progressOverallPerformanceSubtitle =>
-      'See how close you are to your goals.';
+  String get progressOverallPerformanceSubtitle => '目標にどれだけ近いか確認しましょう。';
 
   @override
-  String get progressStepsTitle => 'Your Steps';
+  String get progressStepsTitle => 'あなたの歩数';
 
   @override
-  String get progressStepsSubtitle => 'Remember 10k per day';
+  String get progressStepsSubtitle => '1日10kを忘れずに';
 
   @override
-  String get progressWaterTitle => 'Drink Water';
+  String get progressWaterTitle => '水を飲む';
 
   @override
-  String get progressWaterSubtitle => 'At least 8 glasses/day';
+  String get progressWaterSubtitle => '1日少なくとも8杯';
 }

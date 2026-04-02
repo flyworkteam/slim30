@@ -636,76 +636,74 @@ class AppLocalizationsKo extends AppLocalizations {
   String get notificationsWeeklyTime => '1일 전';
 
   @override
-  String get progressTitle => 'Progress';
+  String get progressTitle => '진행 상황';
 
   @override
-  String get progressDailyWorkoutSummary => 'Daily Workout Summary';
+  String get progressDailyWorkoutSummary => '오늘의 운동 요약';
 
   @override
-  String get progressCompletedActivity => 'Completed Activity';
+  String get progressCompletedActivity => '완료한 활동';
 
   @override
-  String get progressCaloriesBurnedLabel => 'Burned Calories';
+  String get progressCaloriesBurnedLabel => '소모 칼로리';
 
   @override
-  String get progressMuscleGainLabel => 'Muscle Mass Gain';
+  String get progressMuscleGainLabel => '근육량 증가';
 
   @override
-  String get progressWaistChangeLabel => 'Waist Change';
+  String get progressWaistChangeLabel => '허리 변화';
 
   @override
-  String get progressBodyFatLabel => 'Body Fat';
+  String get progressBodyFatLabel => '체지방';
 
   @override
-  String get progressMovementCountLabel => 'Movement Count';
+  String get progressMovementCountLabel => '움직임 횟수';
 
   @override
-  String get progressDurationLabel => 'Duration';
+  String get progressDurationLabel => '시간';
 
   @override
-  String get progressSuccessPercentLabel => 'Success Rate';
+  String get progressSuccessPercentLabel => '성공률';
 
   @override
-  String get progressGeneralStatusTitle => 'General Progress Status';
+  String get progressGeneralStatusTitle => '전체 진행 상태';
 
   @override
-  String get progressWeightLostLabel => 'Weight Lost';
+  String get progressWeightLostLabel => '감량 체중';
 
   @override
-  String get progressHeartRateLabel => 'Heart Rate';
+  String get progressHeartRateLabel => '심박수';
 
   @override
-  String get progressTotalCompletedLabel => 'Total Completed Activities';
+  String get progressTotalCompletedLabel => '총 완료 활동';
 
   @override
-  String get progressHydrationLabel => 'Hydration Rate';
+  String get progressHydrationLabel => '수분 섭취율';
 
   @override
-  String get progressSleepLabel => 'Sleep Duration';
+  String get progressSleepLabel => '수면 시간';
 
   @override
-  String get progressRewardTitle => 'Don\'t forget to reward yourself';
+  String get progressRewardTitle => '스스로에게 보상을 잊지 마세요';
 
   @override
-  String get progressRewardSubtitle =>
-      'You\'re doing great, celebrate your success 💪🏻';
+  String get progressRewardSubtitle => '아주 잘하고 있어요, 당신의 성공을 축하하세요 💪🏻';
 
   @override
-  String get progressOverallPerformanceTitle => 'Overall Performance';
+  String get progressOverallPerformanceTitle => '전체 퍼포먼스';
 
   @override
-  String get progressOverallPerformanceSubtitle =>
-      'See how close you are to your goals.';
+  String get progressOverallPerformanceSubtitle => '목표에 얼마나 가까운지 확인하세요.';
 
   @override
-  String get progressStepsTitle => 'Your Steps';
+  String get progressStepsTitle => '당신의 걸음 수';
 
   @override
-  String get progressStepsSubtitle => 'Remember 10k per day';
+  String get progressStepsSubtitle => '하루 10k를 기억하세요';
 
   @override
-  String get progressWaterTitle => 'Drink Water';
+  String get progressWaterTitle => '물 마시기';
 
   @override
-  String get progressWaterSubtitle => 'At least 8 glasses/day';
+  String get progressWaterSubtitle => '하루 최소 8잔';
 }

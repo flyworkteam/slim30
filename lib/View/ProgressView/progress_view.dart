@@ -181,10 +181,8 @@ class _Header extends StatelessWidget {
           label: l10n.questionBack,
           button: true,
           child: InkWell(
-            onTap: () => Navigator.pushReplacementNamed(
-              context,
-              AppRoutes.home,
-            ),
+            onTap: () =>
+                Navigator.pushReplacementNamed(context, AppRoutes.home),
             borderRadius: BorderRadius.circular(14.r),
             child: Container(
               width: 28.w,
