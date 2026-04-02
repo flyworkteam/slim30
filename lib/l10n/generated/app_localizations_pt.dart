@@ -648,10 +648,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get progressTitle => 'Progresso';
 
   @override
-  String get progressDailyWorkoutSummary => 'Resumo diario de treino';
+  String get progressDailyWorkoutSummary => 'Resumo diário de treino';
 
   @override
-  String get progressCompletedActivity => 'Atividade concluida';
+  String get progressCompletedActivity => 'Atividade concluída';
 
   @override
   String get progressCaloriesBurnedLabel => 'Calorias queimadas';
@@ -660,7 +660,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get progressMuscleGainLabel => 'Ganho de massa muscular';
 
   @override
-  String get progressWaistChangeLabel => 'Mudanca de cintura';
+  String get progressWaistChangeLabel => 'Mudança de cintura';
 
   @override
   String get progressBodyFatLabel => 'Gordura corporal';
@@ -669,7 +669,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get progressMovementCountLabel => 'Contagem de movimentos';
 
   @override
-  String get progressDurationLabel => 'Duracao';
+  String get progressDurationLabel => 'Duração';
 
   @override
   String get progressSuccessPercentLabel => 'Taxa de sucesso';
@@ -681,30 +681,30 @@ class AppLocalizationsPt extends AppLocalizations {
   String get progressWeightLostLabel => 'Peso perdido';
 
   @override
-  String get progressHeartRateLabel => 'Frequencia cardiaca';
+  String get progressHeartRateLabel => 'Frequência cardíaca';
 
   @override
   String get progressTotalCompletedLabel => 'Total de atividades concluidas';
 
   @override
-  String get progressHydrationLabel => 'Taxa de hidratacao';
+  String get progressHydrationLabel => 'Taxa de hidratação';
 
   @override
-  String get progressSleepLabel => 'Duracao do sono';
+  String get progressSleepLabel => 'Duração do sono';
 
   @override
-  String get progressRewardTitle => 'Nao se esqueca de se recompensar';
+  String get progressRewardTitle => 'Não se esqueça de se recompensar';
 
   @override
   String get progressRewardSubtitle =>
-      'Voce esta indo muito bem, celebre seu sucesso 💪🏻';
+      'Você está indo muito bem, celebre seu sucesso 💪🏻';
 
   @override
   String get progressOverallPerformanceTitle => 'Desempenho geral';
 
   @override
   String get progressOverallPerformanceSubtitle =>
-      'Veja o quao perto voce esta dos seus objetivos.';
+      'Veja o quão perto você está dos seus objetivos.';
 
   @override
   String get progressStepsTitle => 'Seus passos';

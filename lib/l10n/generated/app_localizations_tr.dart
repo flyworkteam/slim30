@@ -641,76 +641,76 @@ class AppLocalizationsTr extends AppLocalizations {
   String get notificationsWeeklyTime => '1 gun once';
 
   @override
-  String get progressTitle => 'Ilerleme';
+  String get progressTitle => 'İlerleme';
 
   @override
-  String get progressDailyWorkoutSummary => 'Gunluk Antrenman Ozeti';
+  String get progressDailyWorkoutSummary => 'Günlük Antrenman Özeti';
 
   @override
   String get progressCompletedActivity => 'Tamamlanan Aktivite';
 
   @override
-  String get progressCaloriesBurnedLabel => 'Yakilan Kalori';
+  String get progressCaloriesBurnedLabel => 'Yakılan Kalori';
 
   @override
-  String get progressMuscleGainLabel => 'Kas Kutle Artisi';
+  String get progressMuscleGainLabel => 'Kas Kütle Artışı';
 
   @override
-  String get progressWaistChangeLabel => 'Bel Cevresi Degisimi';
+  String get progressWaistChangeLabel => 'Bel Çevresi Değişimi';
 
   @override
-  String get progressBodyFatLabel => 'Yag Orani';
+  String get progressBodyFatLabel => 'Yağ Oranı';
 
   @override
-  String get progressMovementCountLabel => 'Hareket Sayisi';
+  String get progressMovementCountLabel => 'Hareket Sayısı';
 
   @override
-  String get progressDurationLabel => 'Sure';
+  String get progressDurationLabel => 'Süre';
 
   @override
-  String get progressSuccessPercentLabel => 'Basari Yuzdesi';
+  String get progressSuccessPercentLabel => 'Başarı Yüzdesi';
 
   @override
-  String get progressGeneralStatusTitle => 'Genel Ilerleme Durumu';
+  String get progressGeneralStatusTitle => 'Genel İlerleme Durumu';
 
   @override
   String get progressWeightLostLabel => 'Verilen Kilo';
 
   @override
-  String get progressHeartRateLabel => 'Kalp Atis Hizi';
+  String get progressHeartRateLabel => 'Kalp Atış Hızı';
 
   @override
   String get progressTotalCompletedLabel => 'Toplam Tamamlanan Aktivite';
 
   @override
-  String get progressHydrationLabel => 'Su Icme Orani';
+  String get progressHydrationLabel => 'Su İçme Oranı';
 
   @override
-  String get progressSleepLabel => 'Uykuda Gecirilen Sure';
+  String get progressSleepLabel => 'Uykuda Geçirilen Süre';
 
   @override
-  String get progressRewardTitle => 'Kendini Odullendirmeyi Unutma';
+  String get progressRewardTitle => 'Kendini Ödüllendirmeyi Unutma';
 
   @override
   String get progressRewardSubtitle =>
-      'Cok iyi gidiyorsun, basarini kutla 💪🏻';
+      'Çok iyi gidiyorsun, başarını kutla 💪🏻';
 
   @override
-  String get progressOverallPerformanceTitle => 'Genel Performans Yuzdesi';
+  String get progressOverallPerformanceTitle => 'Genel Performans Yüzdesi';
 
   @override
   String get progressOverallPerformanceSubtitle =>
-      'Hedeflerine ne kadar yaklastigini gor.';
+      'Hedeflerine ne kadar yaklaştığını gör.';
 
   @override
-  String get progressStepsTitle => 'Adimlarin';
+  String get progressStepsTitle => 'Adımların';
 
   @override
-  String get progressStepsSubtitle => 'Gunde 10 Bin';
+  String get progressStepsSubtitle => 'Günde 10 Bin';
 
   @override
-  String get progressWaterTitle => 'Su Ic';
+  String get progressWaterTitle => 'Su İç';
 
   @override
-  String get progressWaterSubtitle => 'Gunde en az 8 bardak';
+  String get progressWaterSubtitle => 'Günde en az 8 bardak';
 }

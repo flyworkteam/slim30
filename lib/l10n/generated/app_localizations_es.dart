@@ -653,7 +653,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get progressCompletedActivity => 'Actividad completada';
 
   @override
-  String get progressCaloriesBurnedLabel => 'Calorias quemadas';
+  String get progressCaloriesBurnedLabel => 'Calorías quemadas';
 
   @override
   String get progressMuscleGainLabel => 'Ganancia de masa muscular';
@@ -668,10 +668,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get progressMovementCountLabel => 'Cantidad de movimientos';
 
   @override
-  String get progressDurationLabel => 'Duracion';
+  String get progressDurationLabel => 'Duración';
 
   @override
-  String get progressSuccessPercentLabel => 'Tasa de exito';
+  String get progressSuccessPercentLabel => 'Tasa de éxito';
 
   @override
   String get progressGeneralStatusTitle => 'Estado general del progreso';
@@ -686,10 +686,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get progressTotalCompletedLabel => 'Actividades completadas totales';
 
   @override
-  String get progressHydrationLabel => 'Nivel de hidratacion';
+  String get progressHydrationLabel => 'Nivel de hidratación';
 
   @override
-  String get progressSleepLabel => 'Duracion del sueno';
+  String get progressSleepLabel => 'Duración del sueño';
 
   @override
   String get progressRewardTitle => 'No olvides recompensarte';
@@ -703,13 +703,13 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get progressOverallPerformanceSubtitle =>
-      'Mira que tan cerca estas de tus metas.';
+      'Mira qué tan cerca estás de tus metas.';
 
   @override
   String get progressStepsTitle => 'Tus pasos';
 
   @override
-  String get progressStepsSubtitle => 'Recuerda 10k por dia';
+  String get progressStepsSubtitle => 'Recuerda 10k por día';
 
   @override
   String get progressWaterTitle => 'Bebe agua';

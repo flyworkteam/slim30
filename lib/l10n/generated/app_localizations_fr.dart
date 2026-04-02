@@ -650,16 +650,16 @@ class AppLocalizationsFr extends AppLocalizations {
   String get notificationsWeeklyTime => 'il y a 1 jour';
 
   @override
-  String get progressTitle => 'Progres';
+  String get progressTitle => 'Progrès';
 
   @override
-  String get progressDailyWorkoutSummary => 'Resume quotidien d\'entrainement';
+  String get progressDailyWorkoutSummary => 'Résumé quotidien d\'entraînement';
 
   @override
-  String get progressCompletedActivity => 'Activite terminee';
+  String get progressCompletedActivity => 'Activité terminée';
 
   @override
-  String get progressCaloriesBurnedLabel => 'Calories brulees';
+  String get progressCaloriesBurnedLabel => 'Calories brûlées';
 
   @override
   String get progressMuscleGainLabel => 'Gain de masse musculaire';
@@ -674,35 +674,35 @@ class AppLocalizationsFr extends AppLocalizations {
   String get progressMovementCountLabel => 'Nombre de mouvements';
 
   @override
-  String get progressDurationLabel => 'Duree';
+  String get progressDurationLabel => 'Durée';
 
   @override
-  String get progressSuccessPercentLabel => 'Taux de reussite';
+  String get progressSuccessPercentLabel => 'Taux de réussite';
 
   @override
-  String get progressGeneralStatusTitle => 'Statut general de progression';
+  String get progressGeneralStatusTitle => 'Statut général de progression';
 
   @override
   String get progressWeightLostLabel => 'Poids perdu';
 
   @override
-  String get progressHeartRateLabel => 'Frequence cardiaque';
+  String get progressHeartRateLabel => 'Fréquence cardiaque';
 
   @override
-  String get progressTotalCompletedLabel => 'Activites completes totales';
+  String get progressTotalCompletedLabel => 'Activités terminées au total';
 
   @override
   String get progressHydrationLabel => 'Taux d\'hydratation';
 
   @override
-  String get progressSleepLabel => 'Duree du sommeil';
+  String get progressSleepLabel => 'Durée du sommeil';
 
   @override
   String get progressRewardTitle => 'N\'oublie pas de te recompenser';
 
   @override
   String get progressRewardSubtitle =>
-      'Tu te debrouilles tres bien, celebre ton succes 💪🏻';
+      'Tu te débrouilles très bien, célèbre ton succès 💪🏻';
 
   @override
   String get progressOverallPerformanceTitle => 'Performance globale';

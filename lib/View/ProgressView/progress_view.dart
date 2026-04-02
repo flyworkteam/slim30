@@ -17,6 +17,63 @@ class _ProgressViewState extends State<ProgressView> {
   static const _progressIconBase = 'assets/images/icons/progress_icon';
 
   int _waterCount = 1;
+  String _stepsGoal = 'Gunde 10 Bin';
+
+  Future<void> _openStepsGoalPicker(BuildContext context) async {
+    final selected = await showDialog<String>(
+      context: context,
+      barrierColor: Colors.black.withValues(alpha: 0.08),
+      builder: (dialogContext) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          insetPadding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Container(
+              width: 85.w,
+              height: 82.h,
+              decoration: BoxDecoration(
+                color: const Color(0xFFD3FFE1),
+                border: Border.all(color: const Color.fromRGBO(235, 235, 235, 0.11)),
+                borderRadius: BorderRadius.circular(6.r),
+              ),
+              child: Column(
+                children: [
+                  _GoalRow(
+                    text: 'Gunde 5 Bin',
+                    highlighted: false,
+                    onTap: () => Navigator.of(dialogContext).pop('Gunde 5 Bin'),
+                  ),
+                  _GoalRow(
+                    text: 'Gunde 10 Bin',
+                    highlighted: true,
+                    onTap: () => Navigator.of(dialogContext).pop('Gunde 10 Bin'),
+                  ),
+                  _GoalRow(
+                    text: 'Haftada 40 Bin',
+                    highlighted: false,
+                    onTap: () => Navigator.of(dialogContext).pop('Haftada 40 Bin'),
+                  ),
+                  _GoalRow(
+                    text: 'Haftada 50 Bin',
+                    highlighted: false,
+                    onTap: () => Navigator.of(dialogContext).pop('Haftada 50 Bin'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+
+    if (selected != null && mounted) {
+      setState(() {
+        _stepsGoal = selected;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,33 +174,32 @@ class _ProgressViewState extends State<ProgressView> {
                           subtitle: l10n.progressRewardSubtitle,
                         ),
                         SizedBox(height: 18.h),
-                        Row(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Expanded(
-                              child: _GoalInfoCard(
-                                iconPath: '$_progressIconBase/Group 277.svg',
-                                title: l10n.progressStepsTitle,
-                                subtitle: l10n.progressStepsSubtitle,
-                              ),
+                            _GoalInfoCard(
+                              iconPath: '$_progressIconBase/Group 277.svg',
+                              title: l10n.progressStepsTitle,
+                              subtitle: _stepsGoal,
+                              editIconPath: '$_progressIconBase/Clip path group.svg',
+                              onEditTap: () => _openStepsGoalPicker(context),
                             ),
-                            SizedBox(width: 12.w),
-                            Expanded(
-                              child: _WaterCard(
-                                iconPath: '$_progressIconBase/Group 278.svg',
-                                title: l10n.progressWaterTitle,
-                                subtitle: l10n.progressWaterSubtitle,
-                                count: _waterCount,
-                                onMinus: () {
-                                  setState(() {
-                                    _waterCount = (_waterCount - 1).clamp(0, 9);
-                                  });
-                                },
-                                onPlus: () {
-                                  setState(() {
-                                    _waterCount = (_waterCount + 1).clamp(0, 9);
-                                  });
-                                },
-                              ),
+                            SizedBox(height: 10.h),
+                            _WaterCard(
+                              iconPath: '$_progressIconBase/Group 278.svg',
+                              title: l10n.progressWaterTitle,
+                              subtitle: l10n.progressWaterSubtitle,
+                              count: _waterCount,
+                              onMinus: () {
+                                setState(() {
+                                  _waterCount = (_waterCount - 1).clamp(0, 9);
+                                });
+                              },
+                              onPlus: () {
+                                setState(() {
+                                  _waterCount = (_waterCount + 1).clamp(0, 9);
+                                });
+                              },
                             ),
                           ],
                         ),
@@ -243,6 +299,7 @@ class _TodayWorkoutCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20.r),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
@@ -366,7 +423,7 @@ class _StreakAndPerformanceRow extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '$streakDays Gun',
+                        streakDays,
                         style: GoogleFonts.leagueSpartan(
                           fontSize: 20.sp,
                           fontWeight: FontWeight.w500,
@@ -422,14 +479,14 @@ class _StreakAndPerformanceRow extends StatelessWidget {
               ),
               SizedBox(height: 6.h),
               SizedBox(
-                width: 64.w,
-                height: 64.w,
+                width: 74.w,
+                height: 74.w,
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
                     CircularProgressIndicator(
                       value: percentage / 100,
-                      strokeWidth: 7.w,
+                      strokeWidth: 8.w,
                       backgroundColor: const Color(0xFFD3FFE1),
                       valueColor: const AlwaysStoppedAnimation<Color>(
                         Color(0xFF32EA6E),
@@ -438,8 +495,8 @@ class _StreakAndPerformanceRow extends StatelessWidget {
                     Text(
                       '%$percentage',
                       style: GoogleFonts.leagueSpartan(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 22.sp,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],
@@ -515,34 +572,37 @@ class _DailySummaryCard extends StatelessWidget {
           children: [
             Container(
               width: 131.w,
-              height: 123.h,
+              constraints: BoxConstraints(minHeight: 123.h),
               padding: EdgeInsets.fromLTRB(13.w, 14.h, 13.w, 10.h),
               decoration: BoxDecoration(
                 color: const Color(0xFF97F1FF),
                 borderRadius: BorderRadius.circular(6.r),
               ),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     completedTitle,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.leagueSpartan(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
                       height: 1,
                     ),
                   ),
-                  const Spacer(),
+                  SizedBox(height: 6.h),
                   Center(
                     child: SizedBox(
-                      width: 78.w,
-                      height: 78.w,
+                      width: 84.w,
+                      height: 84.w,
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
                           CircularProgressIndicator(
                             value: 6 / 8,
-                            strokeWidth: 8.w,
+                            strokeWidth: 9.w,
                             backgroundColor: Colors.white,
                             valueColor: const AlwaysStoppedAnimation<Color>(
                               Color(0xFF181818),
@@ -551,8 +611,8 @@ class _DailySummaryCard extends StatelessWidget {
                           Text(
                             completedValue,
                             style: GoogleFonts.leagueSpartan(
-                              fontSize: 24.sp,
-                              fontWeight: FontWeight.w500,
+                              fontSize: 26.sp,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ],
@@ -565,13 +625,15 @@ class _DailySummaryCard extends StatelessWidget {
             SizedBox(width: 7.w),
             Expanded(
               child: Container(
-                height: 123.h,
+                constraints: BoxConstraints(minHeight: 123.h),
                 padding: EdgeInsets.fromLTRB(12.w, 11.h, 12.w, 11.h),
                 decoration: BoxDecoration(
                   color: const Color(0xFFE1FBFF),
                   borderRadius: BorderRadius.circular(6.r),
                 ),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
@@ -590,16 +652,20 @@ class _DailySummaryCard extends StatelessWidget {
                           ),
                         ),
                         SizedBox(width: 5.w),
-                        Text(
-                          caloriesTitle,
-                          style: GoogleFonts.leagueSpartan(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w600,
+                        Expanded(
+                          child: Text(
+                            caloriesTitle,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.leagueSpartan(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 8.h),
+                    SizedBox(height: 6.h),
                     Text(
                       caloriesValue,
                       style: GoogleFonts.leagueSpartan(
@@ -608,21 +674,21 @@ class _DailySummaryCard extends StatelessWidget {
                         color: const Color(0xFF1DCEE9),
                       ),
                     ),
-                    SizedBox(height: 8.h),
+                    SizedBox(height: 6.h),
                     _MiniMetricRow(
                       iconPath:
                           'assets/images/icons/progress_icon/iconsax-activity.svg',
                       label: muscleLabel,
                       value: muscleValue,
                     ),
-                    SizedBox(height: 3.h),
+                    SizedBox(height: 2.h),
                     _MiniMetricRow(
                       iconPath:
                           'assets/images/icons/progress_icon/iconsax-paragraphspacing.svg',
                       label: waistLabel,
                       value: waistValue,
                     ),
-                    SizedBox(height: 3.h),
+                    SizedBox(height: 2.h),
                     _MiniMetricRow(
                       iconPath:
                           'assets/images/icons/progress_icon/iconsax-weight (1).svg',
@@ -693,6 +759,7 @@ class _MiniMetricRow extends StatelessWidget {
         Expanded(
           child: Text(
             label,
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: GoogleFonts.leagueSpartan(
               fontSize: 10.sp,
@@ -731,7 +798,7 @@ class _SummaryMiniCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 96.h,
+      constraints: BoxConstraints(minHeight: 96.h),
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(10.r),
@@ -835,19 +902,22 @@ class _RewardCard extends StatelessWidget {
       children: [
         Container(
           width: 338.w,
-          height: 62.h,
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+          constraints: BoxConstraints(minHeight: 62.h),
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
           decoration: BoxDecoration(
             color: const Color(0xFFFFFEFE),
             border: Border.all(color: const Color(0xFFF1F1F1)),
             borderRadius: BorderRadius.circular(10.r),
           ),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 title,
                 textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.leagueSpartan(
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w600,
@@ -857,6 +927,8 @@ class _RewardCard extends StatelessWidget {
               Text(
                 subtitle,
                 textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.leagueSpartan(
                   fontSize: 10.sp,
                   fontWeight: FontWeight.w400,
@@ -900,25 +972,39 @@ class _GoalInfoCard extends StatelessWidget {
     required this.iconPath,
     required this.title,
     required this.subtitle,
+    required this.editIconPath,
+    this.onEditTap,
   });
 
   final String iconPath;
   final String title;
   final String subtitle;
+  final String editIconPath;
+  final VoidCallback? onEditTap;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 92.h,
-      padding: EdgeInsets.all(10.w),
+      width: 342.w,
+      constraints: BoxConstraints(minHeight: 92.h),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
       decoration: BoxDecoration(
         color: const Color(0xFFD3FFE1),
         borderRadius: BorderRadius.circular(6.r),
       ),
       child: Row(
         children: [
-          SvgPicture.asset(iconPath, width: 44.w, height: 52.h),
-          SizedBox(width: 10.w),
+          SizedBox(
+            width: 60.w,
+            height: 52.h,
+            child: SvgPicture.asset(
+              iconPath,
+              fit: BoxFit.contain,
+              alignment: Alignment.centerLeft,
+              clipBehavior: Clip.none,
+            ),
+          ),
+          SizedBox(width: 12.w),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -936,17 +1022,77 @@ class _GoalInfoCard extends StatelessWidget {
                 SizedBox(height: 6.h),
                 Text(
                   subtitle,
-                  maxLines: 1,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.leagueSpartan(
-                    fontSize: 12.sp,
+                    fontSize: 13.sp,
                     fontWeight: FontWeight.w300,
                   ),
                 ),
               ],
             ),
           ),
+          SizedBox(width: 10.w),
+          InkWell(
+            onTap: onEditTap,
+            borderRadius: BorderRadius.circular(14.r),
+            child: Container(
+              width: 28.w,
+              height: 28.w,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Color(0xFF4BFE84), Color(0xFF5AE3F7)],
+                ),
+                borderRadius: BorderRadius.circular(14.r),
+              ),
+              alignment: Alignment.center,
+              child: SvgPicture.asset(
+                editIconPath,
+                width: 16.w,
+                height: 16.w,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
         ],
+      ),
+    );
+  }
+}
+
+class _GoalRow extends StatelessWidget {
+  const _GoalRow({
+    required this.text,
+    required this.highlighted,
+    required this.onTap,
+  });
+
+  final String text;
+  final bool highlighted;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: 85.w,
+        height: 19.h,
+        alignment: Alignment.center,
+        color: highlighted ? const Color(0xFF32EA6E) : Colors.transparent,
+        child: Text(
+          text,
+          textAlign: TextAlign.center,
+          style: GoogleFonts.leagueSpartan(
+            fontSize: 10.sp,
+            fontWeight: FontWeight.w400,
+            height: 0.9,
+            letterSpacing: -0.11,
+            color: highlighted ? Colors.white : const Color(0xFF302F2F),
+          ),
+        ),
       ),
     );
   }
@@ -972,49 +1118,55 @@ class _WaterCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 92.h,
-      padding: EdgeInsets.all(10.w),
+      width: 342.w,
+      constraints: BoxConstraints(minHeight: 92.h),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
       decoration: BoxDecoration(
         color: const Color(0xFFE1FBFF),
         borderRadius: BorderRadius.circular(6.r),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            children: [
-              SvgPicture.asset(iconPath, width: 36.w, height: 40.h),
-              SizedBox(width: 8.w),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.leagueSpartan(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w500,
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SvgPicture.asset(iconPath, width: 44.w, height: 52.h),
+                SizedBox(width: 10.w),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.leagueSpartan(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                    ),
-                    Text(
-                      subtitle,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.leagueSpartan(
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w300,
+                      SizedBox(height: 6.h),
+                      Text(
+                        subtitle,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.leagueSpartan(
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w300,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-          const Spacer(),
+          SizedBox(width: 10.w),
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
             children: [
               _CounterButton(icon: Icons.remove, onTap: onMinus),
               SizedBox(width: 6.w),
