@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
+import 'package:slim30/View/WorkoutView/workout_program_view.dart';
 
 class WorkoutView extends StatelessWidget {
   const WorkoutView({super.key});
@@ -76,9 +77,121 @@ class WorkoutView extends StatelessWidget {
     'Final Challenge',
   ];
 
+  static const Map<String, List<String>> _dayTitlesByLanguage = {
+    'tr': _dayTitlesTr,
+    'en': _dayTitlesEn,
+    'de': _dayTitlesEn,
+    'es': _dayTitlesEn,
+    'fr': _dayTitlesEn,
+    'hi': _dayTitlesEn,
+    'it': _dayTitlesEn,
+    'ja': _dayTitlesEn,
+    'ko': _dayTitlesEn,
+    'pt': _dayTitlesEn,
+    'ru': _dayTitlesEn,
+    'zh': _dayTitlesEn,
+  };
+
+  static const Map<String, _WorkoutLocaleText> _localeTextByLanguage = {
+    'tr': _WorkoutLocaleText(
+      headerTitle: '30 Gunde Kilo Verme',
+      completedLabel: 'Tamamlandi',
+      dayPrefix: '',
+      daySuffix: '.Gun',
+    ),
+    'en': _WorkoutLocaleText(
+      headerTitle: '30-Day Weight Loss',
+      completedLabel: 'Completed',
+      dayPrefix: 'Day ',
+      daySuffix: '',
+    ),
+    'de': _WorkoutLocaleText(
+      headerTitle: '30-Tage Gewichtsverlust',
+      completedLabel: 'Abgeschlossen',
+      dayPrefix: 'Tag ',
+      daySuffix: '',
+    ),
+    'es': _WorkoutLocaleText(
+      headerTitle: 'Perdida de peso en 30 dias',
+      completedLabel: 'Completado',
+      dayPrefix: 'Dia ',
+      daySuffix: '',
+    ),
+    'fr': _WorkoutLocaleText(
+      headerTitle: 'Perte de poids en 30 jours',
+      completedLabel: 'Termine',
+      dayPrefix: 'Jour ',
+      daySuffix: '',
+    ),
+    'hi': _WorkoutLocaleText(
+      headerTitle: '30-day Weight Loss',
+      completedLabel: 'Completed',
+      dayPrefix: 'Day ',
+      daySuffix: '',
+    ),
+    'it': _WorkoutLocaleText(
+      headerTitle: 'Perdita di peso in 30 giorni',
+      completedLabel: 'Completato',
+      dayPrefix: 'Giorno ',
+      daySuffix: '',
+    ),
+    'ja': _WorkoutLocaleText(
+      headerTitle: '30日間減量プラン',
+      completedLabel: '完了',
+      dayPrefix: 'Day ',
+      daySuffix: '',
+    ),
+    'ko': _WorkoutLocaleText(
+      headerTitle: '30일 체중 감량',
+      completedLabel: '완료',
+      dayPrefix: 'Day ',
+      daySuffix: '',
+    ),
+    'pt': _WorkoutLocaleText(
+      headerTitle: 'Perda de peso em 30 dias',
+      completedLabel: 'Concluido',
+      dayPrefix: 'Dia ',
+      daySuffix: '',
+    ),
+    'ru': _WorkoutLocaleText(
+      headerTitle: 'Похудение за 30 дней',
+      completedLabel: 'Завершено',
+      dayPrefix: 'День ',
+      daySuffix: '',
+    ),
+    'zh': _WorkoutLocaleText(
+      headerTitle: '30天减重计划',
+      completedLabel: '已完成',
+      dayPrefix: 'Day ',
+      daySuffix: '',
+    ),
+  };
+
+  static String _languageCode(BuildContext context) {
+    return Localizations.localeOf(context).languageCode;
+  }
+
+  static _WorkoutLocaleText _localeText(BuildContext context) {
+    final languageCode = _languageCode(context);
+    return _localeTextByLanguage[languageCode] ?? _localeTextByLanguage['en']!;
+  }
+
+  static List<String> _localizedDayTitles(BuildContext context) {
+    final languageCode = _languageCode(context);
+    return _dayTitlesByLanguage[languageCode] ?? _dayTitlesEn;
+  }
+
+  static String dayLabel(BuildContext context, int dayNumber) {
+    final text = _localeText(context);
+    if (text.dayPrefix.isNotEmpty) {
+      return '${text.dayPrefix}$dayNumber${text.daySuffix}';
+    }
+
+    return '$dayNumber${text.daySuffix}';
+  }
+
   List<_WorkoutDayItem> _items(BuildContext context) {
-    final isTurkish = Localizations.localeOf(context).languageCode == 'tr';
-    final dayTitles = isTurkish ? _dayTitlesTr : _dayTitlesEn;
+    final dayTitles = _localizedDayTitles(context);
 
     return List<_WorkoutDayItem>.generate(30, (index) {
       final day = index + 1;
@@ -172,7 +285,7 @@ class _WorkoutHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isTurkish = Localizations.localeOf(context).languageCode == 'tr';
+    final localeText = WorkoutView._localeText(context);
 
     return SizedBox(
       width: 342.w,
@@ -199,7 +312,7 @@ class _WorkoutHeader extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              isTurkish ? '30 Gunde Kilo Verme' : '30-Day Weight Loss',
+              localeText.headerTitle,
               textAlign: TextAlign.center,
               style: GoogleFonts.leagueSpartan(
                 fontSize: 20.sp,
@@ -236,133 +349,168 @@ class _WorkoutDayCard extends StatelessWidget {
 
   final _WorkoutDayItem item;
 
-  @override
-  Widget build(BuildContext context) {
-    final isTurkish = Localizations.localeOf(context).languageCode == 'tr';
-    final isCompleted = item.state == _WorkoutCardState.completed;
-    final isLocked = item.state == _WorkoutCardState.locked;
-
-    return Container(
-      width: 164.w,
-      height: 196.h,
-      decoration: BoxDecoration(
-        color: const Color(0xFFF7F7F7),
-        borderRadius: BorderRadius.circular(10.r),
-        border: Border.all(color: const Color(0xFFECECEC)),
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            top: 6.h,
-            left: 7.w,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10.r),
-              child: Stack(
-                children: [
-                  Image.asset(
-                    item.imagePath,
-                    width: 150.w,
-                    height: 125.h,
-                    fit: BoxFit.cover,
-                  ),
-                  Container(
-                    width: 150.w,
-                    height: 125.h,
-                    color: const Color.fromRGBO(0, 0, 0, 0.2),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          if (isLocked)
-            Positioned(
-              top: 9.h,
-              right: 24.w,
-              child: Icon(
-                Icons.lock_rounded,
-                size: 12.w,
-                color: const Color(0xFFC1C1C1),
-              ),
-            ),
-          Positioned(
-            top: 138.h,
-            left: 12.w,
-            child: SizedBox(
-              width: 140.w,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 140.w,
-                    height: 9.h,
-                    child: Text(
-                      isTurkish
-                          ? '${item.dayNumber}.Gun'
-                          : 'Day ${item.dayNumber}',
-                      style: GoogleFonts.leagueSpartan(
-                        fontSize: 10.sp,
-                        fontWeight: FontWeight.w500,
-                        height: 9 / 10,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 4.h),
-                  SizedBox(
-                    width: 140.w,
-                    height: 14.h,
-                    child: Text(
-                      item.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.leagueSpartan(
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w500,
-                        height: 11 / 12,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 6.h),
-                  SizedBox(
-                    width: 140.w,
-                    height: 15.h,
-                    child: isCompleted
-                        ? Container(
-                            width: 140.w,
-                            height: 15.h,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF1CD659),
-                              borderRadius: BorderRadius.circular(10.r),
-                            ),
-                            child: Text(
-                              isTurkish ? 'Tamamlandi' : 'Completed',
-                              style: GoogleFonts.leagueSpartan(
-                                fontSize: 10.sp,
-                                fontWeight: FontWeight.w400,
-                                height: 9 / 10,
-                                color: Colors.white,
-                              ),
-                            ),
-                          )
-                        : Align(
-                            alignment: Alignment.centerRight,
-                            child: Icon(
-                              Icons.play_circle_fill_rounded,
-                              size: 18.w,
-                              color: const Color(0xFF2F2C2C),
-                            ),
-                          ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+  void _openWorkoutProgram(BuildContext context) {
+    Navigator.of(context).pushNamed(
+      AppRoutes.workoutProgram,
+      arguments: WorkoutProgramArgs(
+        dayNumber: item.dayNumber,
+        programTitle: item.title,
       ),
     );
   }
+
+  @override
+  Widget build(BuildContext context) {
+    final localeText = WorkoutView._localeText(context);
+    final isCompleted = item.state == _WorkoutCardState.completed;
+    final isLocked = item.state == _WorkoutCardState.locked;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: isLocked ? null : () => _openWorkoutProgram(context),
+        borderRadius: BorderRadius.circular(10.r),
+        child: Container(
+          width: 164.w,
+          height: 196.h,
+          decoration: BoxDecoration(
+            color: const Color(0xFFF7F7F7),
+            borderRadius: BorderRadius.circular(10.r),
+            border: Border.all(color: const Color(0xFFECECEC)),
+          ),
+          child: Stack(
+            children: [
+              Positioned(
+                top: 6.h,
+                left: 7.w,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.r),
+                  child: Stack(
+                    children: [
+                      Image.asset(
+                        item.imagePath,
+                        width: 150.w,
+                        height: 125.h,
+                        fit: BoxFit.cover,
+                      ),
+                      Container(
+                        width: 150.w,
+                        height: 125.h,
+                        color: const Color.fromRGBO(0, 0, 0, 0.2),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              if (isLocked)
+                Positioned(
+                  top: 9.h,
+                  right: 24.w,
+                  child: Icon(
+                    Icons.lock_rounded,
+                    size: 12.w,
+                    color: const Color(0xFFC1C1C1),
+                  ),
+                ),
+              Positioned(
+                top: 138.h,
+                left: 12.w,
+                child: SizedBox(
+                  width: 140.w,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 140.w,
+                        height: 9.h,
+                        child: Text(
+                          WorkoutView.dayLabel(context, item.dayNumber),
+                          style: GoogleFonts.leagueSpartan(
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.w500,
+                            height: 9 / 10,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 4.h),
+                      SizedBox(
+                        width: 140.w,
+                        height: 14.h,
+                        child: Text(
+                          item.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.leagueSpartan(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w500,
+                            height: 11 / 12,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 6.h),
+                      SizedBox(
+                        width: 140.w,
+                        height: 15.h,
+                        child: isCompleted
+                            ? Container(
+                                width: 140.w,
+                                height: 15.h,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF1CD659),
+                                  borderRadius: BorderRadius.circular(10.r),
+                                ),
+                                child: Text(
+                                  localeText.completedLabel,
+                                  style: GoogleFonts.leagueSpartan(
+                                    fontSize: 10.sp,
+                                    fontWeight: FontWeight.w400,
+                                    height: 9 / 10,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              )
+                            : (isLocked
+                                  ? const SizedBox.shrink()
+                                  : Align(
+                                      alignment: Alignment.centerRight,
+                                      child: InkWell(
+                                        onTap: () =>
+                                            _openWorkoutProgram(context),
+                                        child: SvgPicture.asset(
+                                          'assets/images/icons/iconsax-play-circle-1.svg',
+                                          width: 18.w,
+                                          height: 18.h,
+                                        ),
+                                      ),
+                                    )),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _WorkoutLocaleText {
+  const _WorkoutLocaleText({
+    required this.headerTitle,
+    required this.completedLabel,
+    required this.dayPrefix,
+    required this.daySuffix,
+  });
+
+  final String headerTitle;
+  final String completedLabel;
+  final String dayPrefix;
+  final String daySuffix;
 }
 
 class _BottomBar extends StatelessWidget {

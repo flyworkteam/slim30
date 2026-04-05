@@ -2,12 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:slim30/Core/Storage/user_prefs.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
 import 'package:slim30/Core/Theme/my_colors.dart';
 import 'package:slim30/View/QuestionView/widgets/question_bottom_actions.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
 
 enum _Gender { female, male, unspecified }
+
+extension on _Gender {
+  UserGender toUserGender() {
+    switch (this) {
+      case _Gender.female:
+        return UserGender.female;
+      case _Gender.male:
+        return UserGender.male;
+      case _Gender.unspecified:
+        return UserGender.unspecified;
+    }
+  }
+}
 
 class QuestionGenderView extends StatefulWidget {
   const QuestionGenderView({super.key});
@@ -39,9 +53,15 @@ class _QuestionGenderViewState extends State<QuestionGenderView> {
                 right: 24.w,
                 top: 87.h,
                 child: GestureDetector(
-                  onTap: () => Navigator.of(
-                    context,
-                  ).pushNamedAndRemoveUntil(AppRoutes.home, (route) => false),
+                  onTap: () async {
+                    final navigator = Navigator.of(context);
+                    await UserPrefs.setGender(UserGender.unspecified);
+                    if (!mounted) return;
+                    navigator.pushNamedAndRemoveUntil(
+                      AppRoutes.home,
+                      (route) => false,
+                    );
+                  },
                   child: Text(
                     l10n.questionSkip,
                     style: GoogleFonts.leagueSpartan(
@@ -128,16 +148,20 @@ class _QuestionGenderViewState extends State<QuestionGenderView> {
                             imagePath: 'assets/images/woman.jpg',
                             label: l10n.questionGenderFemale,
                             selected: _selected == _Gender.female,
-                            onTap: () =>
-                                setState(() => _selected = _Gender.female),
+                            onTap: () async {
+                              setState(() => _selected = _Gender.female);
+                              await UserPrefs.setGender(UserGender.female);
+                            },
                           ),
                           SizedBox(width: 16.w),
                           _GenderCard(
                             imagePath: 'assets/images/man.jpg',
                             label: l10n.questionGenderMale,
                             selected: _selected == _Gender.male,
-                            onTap: () =>
-                                setState(() => _selected = _Gender.male),
+                            onTap: () async {
+                              setState(() => _selected = _Gender.male);
+                              await UserPrefs.setGender(UserGender.male);
+                            },
                           ),
                         ],
                       ),
@@ -147,8 +171,10 @@ class _QuestionGenderViewState extends State<QuestionGenderView> {
                     _UnspecifiedOption(
                       label: l10n.questionGenderUnspecified,
                       selected: _selected == _Gender.unspecified,
-                      onTap: () =>
-                          setState(() => _selected = _Gender.unspecified),
+                      onTap: () async {
+                        setState(() => _selected = _Gender.unspecified);
+                        await UserPrefs.setGender(UserGender.unspecified);
+                      },
                     ),
                   ],
                 ),
@@ -162,6 +188,8 @@ class _QuestionGenderViewState extends State<QuestionGenderView> {
                 child: QuestionBottomActions(
                   onBack: () => Navigator.pop(context),
                   onNext: () {
+                    final selected = _selected ?? _Gender.unspecified;
+                    UserPrefs.setGender(selected.toUserGender());
                     Navigator.pushNamed(context, AppRoutes.questionAge);
                   },
                 ),
