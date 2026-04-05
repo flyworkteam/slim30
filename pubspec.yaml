@@ -36,6 +36,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/antrenman/
     - assets/images/icons/
     - assets/images/icons/homePage/
     - assets/images/icons/profilePage/

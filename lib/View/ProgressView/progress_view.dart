@@ -285,59 +285,164 @@ class _TodayWorkoutCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 342.w,
-      padding: EdgeInsets.all(15.w),
-      decoration: BoxDecoration(
-        color: const Color(0xFF97F1FF),
+      height: 154.h,
+      child: ClipRRect(
         borderRadius: BorderRadius.circular(20.r),
+        child: Stack(
+          children: [
+            Container(color: const Color(0xFF97F1FF)),
+            Positioned(
+              right: 0,
+              bottom: 0,
+              child: SvgPicture.asset(
+                'assets/images/icons/progress_icon/Vector.svg',
+                width: 82.w,
+                height: 89.h,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Positioned(
+              left: 15.w,
+              top: (154.h - 117.h) / 2,
+              child: SizedBox(
+                width: 260.w,
+                height: 117.h,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 260.w,
+                      height: 21.h,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.center,
+                        child: Text(
+                          title,
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          style: GoogleFonts.leagueSpartan(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                            height: 1.5,
+                            letterSpacing: -0.011,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 5.h),
+                    SizedBox(
+                      width: 240.w,
+                      height: 54.h,
+                      child: Center(
+                        child: SizedBox(
+                          width: 204.w,
+                          height: 26.h,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              _WorkoutStat(text: moves, width: 45.w),
+                              SizedBox(width: 20.w),
+                              _WorkoutLineDivider(),
+                              SizedBox(width: 20.w),
+                              _WorkoutStat(text: calories, width: 24.w),
+                              SizedBox(width: 20.w),
+                              _WorkoutLineDivider(),
+                              SizedBox(width: 20.w),
+                              _WorkoutStat(text: duration, width: 39.w),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 5.h),
+                    Container(
+                      width: 116.w,
+                      height: 32.h,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5.r),
+                      ),
+                      child: Text(
+                        cta,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.leagueSpartan(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                          height: 13 / 14,
+                          letterSpacing: -0.011,
+                          color: const Color(0xFF171717),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
+    );
+  }
+}
+
+class _WorkoutStat extends StatelessWidget {
+  const _WorkoutStat({required this.text, required this.width});
+
+  final String text;
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    final parts = text.trim().split(RegExp(r'\s+'));
+    final firstLine = parts.isNotEmpty ? parts.first : text;
+    final secondLine = parts.length > 1 ? parts.skip(1).join(' ') : '';
+
+    return SizedBox(
+      width: width,
+      height: 26.h,
       child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            title,
-            style: GoogleFonts.leagueSpartan(
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w600,
-              height: 1.5,
+          SizedBox(
+            width: width,
+            height: 13.h,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.center,
+              child: Text(
+                firstLine,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                style: GoogleFonts.leagueSpartan(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                  height: 13 / 14,
+                  letterSpacing: -0.011,
+                ),
+              ),
             ),
           ),
-          SizedBox(height: 8.h),
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 18.w),
-            decoration: BoxDecoration(
-              color: const Color(0xFF84ECFF),
-              borderRadius: BorderRadius.circular(8.r),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(child: _WorkoutStat(text: moves)),
-                _DividerDot(),
-                Expanded(child: _WorkoutStat(text: calories)),
-                _DividerDot(),
-                Expanded(child: _WorkoutStat(text: duration)),
-              ],
-            ),
-          ),
-          SizedBox(height: 8.h),
-          Container(
-            width: 116.w,
-            height: 32.h,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(5.r),
-            ),
-            child: Text(
-              cta,
-              style: GoogleFonts.leagueSpartan(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w600,
-                color: const Color(0xFF171717),
+          SizedBox(
+            width: width,
+            height: 13.h,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.center,
+              child: Text(
+                secondLine,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                style: GoogleFonts.leagueSpartan(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                  height: 13 / 14,
+                  letterSpacing: -0.011,
+                ),
               ),
             ),
           ),
@@ -347,38 +452,10 @@ class _TodayWorkoutCard extends StatelessWidget {
   }
 }
 
-class _WorkoutStat extends StatelessWidget {
-  const _WorkoutStat({required this.text});
-
-  final String text;
-
+class _WorkoutLineDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      textAlign: TextAlign.center,
-      style: GoogleFonts.leagueSpartan(
-        fontSize: 14.sp,
-        fontWeight: FontWeight.w600,
-      ),
-    );
-  }
-}
-
-class _DividerDot extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 6.w),
-      width: 4.w,
-      height: 4.w,
-      decoration: const BoxDecoration(
-        color: Colors.black,
-        shape: BoxShape.circle,
-      ),
-    );
+    return Container(width: 1.w, height: 23.h, color: Colors.black);
   }
 }
 
@@ -1949,7 +2026,8 @@ class _BottomBar extends StatelessWidget {
           _BottomItem(
             iconPath: '$iconBase/iconsax-health.svg',
             label: l10n.homeTabWorkout,
-            onTap: () {},
+            onTap: () =>
+                Navigator.of(context).pushReplacementNamed(AppRoutes.workout),
           ),
           SizedBox(width: 4.w),
           _BottomItem(
