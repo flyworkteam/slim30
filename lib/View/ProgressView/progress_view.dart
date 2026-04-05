@@ -56,13 +56,28 @@ class _ProgressViewState extends State<ProgressView> {
                           cta: l10n.homeStartNow,
                         ),
                         SizedBox(height: 16.h),
-                        _StreakAndPerformanceRow(
-                          streakDays: '7',
+                        _StreakRow(
+                          streakDays: '7 Gün',
                           streakLabel: l10n.homeDontBreakChain,
-                          overallTitle: l10n.progressOverallPerformanceTitle,
-                          overallSubtitle:
-                              l10n.progressOverallPerformanceSubtitle,
-                          percentage: 82,
+                          dayShortLabels: [
+                            l10n.homeDayMonShort,
+                            l10n.homeDayTueShort,
+                            l10n.homeDayWedShort,
+                            l10n.homeDayThuShort,
+                            l10n.homeDayFriShort,
+                            l10n.homeDaySatShort,
+                            l10n.homeDaySunShort,
+                          ],
+                          dayNumbers: const [
+                            '22',
+                            '23',
+                            '24',
+                            '25',
+                            '26',
+                            '27',
+                            '28',
+                          ],
+                          completedCount: 3,
                         ),
                         SizedBox(height: 24.h),
                         _SectionTitle(text: l10n.progressDailyWorkoutSummary),
@@ -84,6 +99,13 @@ class _ProgressViewState extends State<ProgressView> {
                           durationValue: '40 ${l10n.progressUnitMinute}',
                           successLabel: l10n.progressSuccessPercentLabel,
                           successValue: '%69',
+                        ),
+                        SizedBox(height: 24.h),
+                        _OverallPerformanceRow(
+                          overallTitle: l10n.progressOverallPerformanceTitle,
+                          overallSubtitle:
+                              l10n.progressOverallPerformanceSubtitle,
+                          percentage: 82,
                         ),
                         SizedBox(height: 24.h),
                         _SectionTitle(text: l10n.progressGeneralStatusTitle),
@@ -360,124 +382,290 @@ class _DividerDot extends StatelessWidget {
   }
 }
 
-class _StreakAndPerformanceRow extends StatelessWidget {
-  const _StreakAndPerformanceRow({
+class _StreakRow extends StatelessWidget {
+  const _StreakRow({
     required this.streakDays,
     required this.streakLabel,
-    required this.overallTitle,
-    required this.overallSubtitle,
-    required this.percentage,
+    required this.dayShortLabels,
+    required this.dayNumbers,
+    required this.completedCount,
   });
 
   final String streakDays;
   final String streakLabel;
-  final String overallTitle;
-  final String overallSubtitle;
-  final int percentage;
+  final List<String> dayShortLabels;
+  final List<String> dayNumbers;
+  final int completedCount;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  SvgPicture.asset(
-                    'assets/images/icons/progress_icon/iconsax-fire.svg',
-                    width: 40.w,
-                    height: 40.w,
-                  ),
-                  SizedBox(width: 8.w),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+    assert(dayShortLabels.length == dayNumbers.length);
+    final safeLength = math.min(dayShortLabels.length, dayNumbers.length);
+    final clampedCompletedCount = completedCount.clamp(0, safeLength);
+
+    return SizedBox(
+      width: 342.w,
+      height: 88.h,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 75.w,
+            height: 88.h,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SvgPicture.asset(
+                  'assets/images/icons/progress_icon/iconsax-fire.svg',
+                  width: 40.w,
+                  height: 40.w,
+                ),
+                SizedBox(height: 6.h),
+                SizedBox(
+                  width: 75.w,
+                  child: Column(
                     children: [
-                      Text(
-                        streakDays,
-                        style: GoogleFonts.leagueSpartan(
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.w500,
+                      SizedBox(
+                        height: 19.h,
+                        child: Center(
+                          child: Text(
+                            streakDays,
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.leagueSpartan(
+                              fontSize: 20.7.sp,
+                              fontWeight: FontWeight.w500,
+                              height: 19 / 20.7,
+                              color: Colors.black,
+                            ),
+                          ),
                         ),
                       ),
+                      SizedBox(height: 6.h),
                       Container(
-                        margin: EdgeInsets.only(top: 4.h),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 6.w,
-                          vertical: 4.h,
-                        ),
+                        width: 75.w,
+                        height: 17.h,
+                        alignment: Alignment.center,
                         decoration: BoxDecoration(
                           color: const Color(0xFFE9FFF3),
                           borderRadius: BorderRadius.circular(10.r),
                         ),
                         child: Text(
                           streakLabel,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.leagueSpartan(
                             fontSize: 10.sp,
                             fontWeight: FontWeight.w500,
+                            height: 9 / 10,
+                            color: Colors.black,
                           ),
                         ),
                       ),
                     ],
                   ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: 16.w),
+          SizedBox(
+            width: 251.w,
+            height: 87.h,
+            child: Row(
+              children: List.generate(safeLength, (index) {
+                final isCompleted = index < clampedCompletedCount;
+                return Padding(
+                  padding: EdgeInsets.only(
+                    right: index == safeLength - 1 ? 0 : 9.w,
+                  ),
+                  child: _StreakDayPill(
+                    label: dayShortLabels[index],
+                    value: dayNumbers[index],
+                    isCompleted: isCompleted,
+                  ),
+                );
+              }),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StreakDayPill extends StatelessWidget {
+  const _StreakDayPill({
+    required this.label,
+    required this.value,
+    required this.isCompleted,
+  });
+
+  final String label;
+  final String value;
+  final bool isCompleted;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 28.w,
+      height: 87.h,
+      decoration: BoxDecoration(
+        gradient: isCompleted
+            ? const LinearGradient(
+                begin: Alignment(-0.75, -1),
+                end: Alignment(0.9, 1),
+                colors: [
+                  Color(0xFF66F393),
+                  Color(0xFF88F3CF),
+                  Color(0xFFA3F3FF),
                 ],
-              ),
-            ],
+                stops: [0.0553, 0.7147, 1],
+              )
+            : null,
+        color: isCompleted ? null : const Color(0xFFF2FFF8),
+        boxShadow: [
+          BoxShadow(
+            color: Color.fromRGBO(253, 238, 238, 0.41),
+            blurRadius: 2,
+            offset: Offset.zero,
           ),
+        ],
+        borderRadius: BorderRadius.circular(20.r),
+      ),
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(4.w, 8.h, 4.w, 8.h),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.leagueSpartan(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w500,
+                height: 1.5,
+                letterSpacing: -0.011,
+                color: isCompleted ? Colors.white : Colors.black,
+              ),
+            ),
+            isCompleted
+                ? Container(
+                    width: 20.w,
+                    height: 20.w,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
+                    child: Icon(
+                      Icons.check_rounded,
+                      size: 14.w,
+                      color: const Color(0xFF32EA6E),
+                    ),
+                  )
+                : Text(
+                    value,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.leagueSpartan(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w500,
+                      height: 1.5,
+                      letterSpacing: -0.011,
+                      color: Colors.black,
+                    ),
+                  ),
+          ],
         ),
-        SizedBox(width: 12.w),
-        SizedBox(
-          width: 95.w,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                overallTitle,
-                textAlign: TextAlign.right,
-                style: GoogleFonts.leagueSpartan(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w600,
+      ),
+    );
+  }
+}
+
+class _OverallPerformanceRow extends StatelessWidget {
+  const _OverallPerformanceRow({
+    required this.overallTitle,
+    required this.overallSubtitle,
+    required this.percentage,
+  });
+
+  final String overallTitle;
+  final String overallSubtitle;
+  final int percentage;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 342.w,
+      height: 86.h,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: 219.w,
+            height: 38.h,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  overallTitle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.leagueSpartan(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w600,
+                    height: 17 / 18,
+                    letterSpacing: -0.011,
+                    color: Colors.black,
+                  ),
                 ),
-              ),
-              Text(
-                overallSubtitle,
-                textAlign: TextAlign.right,
-                style: GoogleFonts.leagueSpartan(
-                  fontSize: 10.sp,
-                  fontWeight: FontWeight.w300,
-                  color: const Color(0xFF646464),
+                SizedBox(height: 8.h),
+                Text(
+                  overallSubtitle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.leagueSpartan(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w300,
+                    height: 13 / 14,
+                    letterSpacing: -0.011,
+                    color: const Color(0xFF646464),
+                  ),
                 ),
-              ),
-              SizedBox(height: 6.h),
-              SizedBox(
-                width: 74.w,
-                height: 74.w,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    CircularProgressIndicator(
-                      value: percentage / 100,
-                      strokeWidth: 8.w,
-                      backgroundColor: const Color(0xFFD3FFE1),
-                      valueColor: const AlwaysStoppedAnimation<Color>(
-                        Color(0xFF32EA6E),
-                      ),
-                    ),
-                    Text(
-                      '%$percentage',
-                      style: GoogleFonts.leagueSpartan(
-                        fontSize: 22.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+          SizedBox(width: 15.w),
+          SizedBox(
+            width: 87.06.w,
+            height: 86.69.h,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                SizedBox(
+                  width: 81.75.w,
+                  height: 81.75.w,
+                  child: CircularProgressIndicator(
+                    value: percentage / 100,
+                    strokeWidth: 8.w,
+                    backgroundColor: const Color(0xFFD3FFE1),
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                      Color(0xFF32EA6E),
+                    ),
+                  ),
+                ),
+                Text(
+                  '%$percentage',
+                  style: GoogleFonts.leagueSpartan(
+                    fontSize: 24.sp,
+                    fontWeight: FontWeight.w500,
+                    height: 22 / 24,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -538,6 +726,12 @@ class _DailySummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final caloriesParts = caloriesValue.trim().split(RegExp(r'\s+'));
+    final caloriesAmount = caloriesParts.isNotEmpty ? caloriesParts.first : '';
+    final caloriesUnit = caloriesParts.length > 1
+        ? caloriesParts.skip(1).join(' ')
+        : '';
+
     return Column(
       children: [
         Row(
@@ -621,75 +815,148 @@ class _DailySummaryCard extends StatelessWidget {
             SizedBox(width: 7.w),
             Expanded(
               child: Container(
-                constraints: BoxConstraints(minHeight: 123.h),
+                height: 123.h,
                 padding: EdgeInsets.fromLTRB(12.w, 11.h, 12.w, 11.h),
                 decoration: BoxDecoration(
                   color: const Color(0xFFE1FBFF),
+                  border: Border.all(
+                    color: const Color.fromRGBO(254, 105, 129, 0.07),
+                  ),
                   borderRadius: BorderRadius.circular(6.r),
                 ),
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 24.w,
-                          height: 24.w,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFEEFDFF),
-                            borderRadius: BorderRadius.circular(12.r),
-                          ),
-                          alignment: Alignment.center,
-                          child: SvgPicture.asset(
-                            'assets/images/icons/progress_icon/iconsax-weight.svg',
-                            width: 14.w,
-                            height: 14.w,
-                          ),
-                        ),
-                        SizedBox(width: 5.w),
-                        Expanded(
-                          child: Text(
-                            caloriesTitle,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.leagueSpartan(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w600,
+                    SizedBox(
+                      height: 24.h,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 24.w,
+                            height: 24.w,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFEEFDFF),
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
+                            alignment: Alignment.center,
+                            child: SvgPicture.asset(
+                              'assets/images/icons/progress_icon/iconsax-weight.svg',
+                              width: 14.w,
+                              height: 14.w,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 6.h),
-                    Text(
-                      caloriesValue,
-                      style: GoogleFonts.leagueSpartan(
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xFF1DCEE9),
+                          SizedBox(width: 5.w),
+                          Expanded(
+                            child: Text(
+                              caloriesTitle,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.leagueSpartan(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w600,
+                                height: 13 / 14,
+                                letterSpacing: -0.011,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(height: 6.h),
-                    _MiniMetricRow(
-                      iconPath:
-                          'assets/images/icons/progress_icon/iconsax-activity.svg',
-                      label: muscleLabel,
-                      value: muscleValue,
-                    ),
                     SizedBox(height: 2.h),
-                    _MiniMetricRow(
-                      iconPath:
-                          'assets/images/icons/progress_icon/iconsax-paragraphspacing.svg',
-                      label: waistLabel,
-                      value: waistValue,
-                    ),
-                    SizedBox(height: 2.h),
-                    _MiniMetricRow(
-                      iconPath:
-                          'assets/images/icons/progress_icon/iconsax-weight (1).svg',
-                      label: fatLabel,
-                      value: fatValue,
+                    SizedBox(
+                      height: 73.h,
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 57.w,
+                            height: 57.w,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 53.52.w,
+                                  height: 53.52.w,
+                                  child: CircularProgressIndicator(
+                                    value: 0.72,
+                                    strokeWidth: 7.w,
+                                    backgroundColor: const Color(0xFFF3FDFF),
+                                    valueColor:
+                                        const AlwaysStoppedAnimation<Color>(
+                                          Color(0xFF2ED3EC),
+                                        ),
+                                  ),
+                                ),
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      caloriesAmount,
+                                      textAlign: TextAlign.center,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.leagueSpartan(
+                                        fontSize: 16.18.sp,
+                                        fontWeight: FontWeight.w500,
+                                        height: 15 / 16.18,
+                                        color: const Color(0xFF1DCEE9),
+                                      ),
+                                    ),
+                                    if (caloriesUnit.isNotEmpty)
+                                      Text(
+                                        caloriesUnit,
+                                        textAlign: TextAlign.center,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: GoogleFonts.leagueSpartan(
+                                          fontSize: 16.18.sp,
+                                          fontWeight: FontWeight.w500,
+                                          height: 15 / 16.18,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 14.w),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(
+                                  height: 21.h,
+                                  child: _MiniMetricRow(
+                                    iconPath:
+                                        'assets/images/icons/progress_icon/iconsax-activity.svg',
+                                    label: muscleLabel,
+                                    value: muscleValue,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 21.h,
+                                  child: _MiniMetricRow(
+                                    iconPath:
+                                        'assets/images/icons/progress_icon/iconsax-paragraphspacing.svg',
+                                    label: waistLabel,
+                                    value: waistValue,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 21.h,
+                                  child: _MiniMetricRow(
+                                    iconPath:
+                                        'assets/images/icons/progress_icon/iconsax-weight (1).svg',
+                                    label: fatLabel,
+                                    value: fatValue,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -749,28 +1016,38 @@ class _MiniMetricRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SvgPicture.asset(iconPath, width: 14.w, height: 14.w),
         SizedBox(width: 3.w),
         Expanded(
-          child: Text(
-            label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: GoogleFonts.leagueSpartan(
-              fontSize: 10.sp,
-              fontWeight: FontWeight.w400,
-              color: const Color(0xFF575353),
-            ),
-          ),
-        ),
-        SizedBox(width: 4.w),
-        Text(
-          value,
-          style: GoogleFonts.leagueSpartan(
-            fontSize: 10.sp,
-            fontWeight: FontWeight.w500,
-            color: const Color(0xFF1DCEE9),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.leagueSpartan(
+                  fontSize: 10.sp,
+                  fontWeight: FontWeight.w400,
+                  height: 0.9,
+                  color: const Color(0xFF575353),
+                ),
+              ),
+              Text(
+                value,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.leagueSpartan(
+                  fontSize: 10.sp,
+                  fontWeight: FontWeight.w500,
+                  height: 0.9,
+                  color: const Color(0xFF1DCEE9),
+                ),
+              ),
+            ],
           ),
         ),
       ],
