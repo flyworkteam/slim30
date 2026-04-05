@@ -197,7 +197,7 @@ class WorkoutView extends StatelessWidget {
       final day = index + 1;
       final state = day <= 6
           ? _WorkoutCardState.completed
-          : (day.isOdd ? _WorkoutCardState.unlocked : _WorkoutCardState.locked);
+          : _WorkoutCardState.unlocked;
 
       return _WorkoutDayItem(
         dayNumber: day,

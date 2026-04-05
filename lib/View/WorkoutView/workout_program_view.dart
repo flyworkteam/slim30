@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
 import 'package:slim30/Core/Storage/user_prefs.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
+import 'package:slim30/View/WorkoutView/workout_program_locale_data.dart';
 
 class WorkoutProgramArgs {
   const WorkoutProgramArgs({
@@ -43,9 +44,9 @@ class _WorkoutProgramViewState extends State<WorkoutProgramView> {
   String _languageCode(BuildContext context) =>
       Localizations.localeOf(context).languageCode;
 
-  _ProgramLocale _locale(BuildContext context) {
+  ProgramLocale _locale(BuildContext context) {
     final code = _languageCode(context);
-    return _localeByCode[code] ?? _localeByCode['en']!;
+    return workoutProgramLocaleByCode[code] ?? workoutProgramLocaleByCode['en']!;
   }
 
   String _folderByGender() {
@@ -63,11 +64,101 @@ class _WorkoutProgramViewState extends State<WorkoutProgramView> {
   _DayContent _dayContent(BuildContext context, int dayNumber) {
     final locale = _locale(context);
     final folder = _folderByGender();
-    final isTr = _languageCode(context) == 'tr';
+      final isTr = _languageCode(context) == 'tr';
+      final isEn = _languageCode(context) == 'en';
 
     String path(String name) => 'assets/images/$folder/$name';
     String fallbackPath(String name) =>
         'assets/images/$_defaultImageFolder/$name';
+
+    const recoveryLineTrToEn = {
+      'Bugun yogun yag yakim antrenmani yok.':
+          'No intense fat-burning workout today.',
+      '30-40 dakika tempolu yuruyus onerilir.':
+          'A 30-40 minute brisk walk is recommended.',
+      'Hafif esneme ve mobilite calismasi yapilir.':
+          'Do light stretching and mobility work.',
+      'Bol su icilir.': 'Drink plenty of water.',
+      '40 dakika tempolu yuruyus veya hafif bisiklet.':
+          '40 minutes brisk walk or light cycling.',
+      '10-15 dakika esneme.': '10-15 minutes of stretching.',
+      'Kalca, hamstring ve sirt mobilitesi.':
+          'Hip, hamstring and back mobility.',
+      'Bol su + protein agirlikli beslenme.':
+          'Plenty of water + protein-focused nutrition.',
+      '45 dakika tempolu yuruyus': '45 minutes brisk walk.',
+      'Hafif esneme': 'Light stretching.',
+      'Kalca - hamstring - omuz mobilitesi':
+          'Hip - hamstring - shoulder mobility.',
+      'Bol su + tuz dengesi': 'Plenty of water + electrolyte balance.',
+      '45-50 dakika tempolu yuruyus': '45-50 minutes brisk walk.',
+      'Derin esneme': 'Deep stretching.',
+      'Kalca fleksorleri + hamstring + omuz mobilitesi':
+          'Hip flexor + hamstring + shoulder mobility.',
+      'Su tuketimi artirilir': 'Increase water intake.',
+      'Uyku suresi 7-8 saat olmali': 'Sleep duration should be 7-8 hours.',
+      '45-60 dakika tempolu yuruyus': '45-60 minutes brisk walk.',
+      'Hafif mobilite': 'Light mobility work.',
+      'Kalca - hamstring - sirt acma':
+          'Open up hips - hamstrings - back.',
+      'Bol su': 'Drink plenty of water.',
+      'Yeterli protein': 'Get enough protein.',
+      'Kalca - sirt - omuz mobilitesi': 'Hip - back - shoulder mobility.',
+      'Uykuya dikkat': 'Pay attention to sleep quality.',
+      'Su tuketimi yuksek tutulur': 'Keep water intake high.',
+      'Mobilite': 'Mobility work.',
+      'Uyku': 'Sleep and recovery.',
+    };
+
+    String translateTextForNonTr(String text) {
+      var t = recoveryLineTrToEn[text] ?? text;
+      t = t
+          .replaceAll('Set arasi:', 'Rest:')
+          .replaceAll('set x', 'sets x')
+          .replaceAll('tekrar', 'reps')
+          .replaceAll('saniye', 'sec')
+          .replaceAll('sag + sol', 'right + left')
+          .replaceAll('toplam', 'total')
+          .replaceAll('maksimum tekrar', 'max reps')
+          .replaceAll('maksimum sure', 'max time')
+          .replaceAll('Devre:', 'Circuit:')
+          .replaceAll('Devre bitince:', 'After circuit:')
+          .replaceAll('Devre ici gecis', 'Transition')
+          .replaceAll('tur', 'rounds')
+          .replaceAll('Sonda:', 'Finish:')
+          .replaceAll('yuruyus', 'walk')
+          .replaceAll('derin nefes', 'deep breathing')
+          .replaceAll('kontrollu tempo', 'controlled pace')
+          .replaceAll('hizli tempo', 'fast pace')
+          .replaceAll('yuksek tempo', 'high pace')
+          .replaceAll('orta tempo', 'medium pace')
+          .replaceAll('maksimum tempo', 'max pace');
+      return t;
+    }
+
+    _DayContent finalizeDayContent(_DayContent content) {
+      if (isTr || !isEn) {
+        return content;
+      }
+
+      return _DayContent(
+        items: [
+          for (final item in content.items)
+            _ExerciseItem(
+              title: translateTextForNonTr(item.title),
+              sets: translateTextForNonTr(item.sets),
+              rest: translateTextForNonTr(item.rest),
+              imagePath: item.imagePath,
+              fallbackImagePath: item.fallbackImagePath,
+              cardHeight: item.cardHeight,
+              locked: item.locked,
+            ),
+        ],
+        recoveryLines: content.recoveryLines
+            ?.map(translateTextForNonTr)
+            .toList(growable: false),
+      );
+    }
 
     List<_ExerciseItem> defaultItems = [
       _ExerciseItem(
@@ -138,13 +229,9 @@ class _WorkoutProgramViewState extends State<WorkoutProgramView> {
       ),
     ];
 
-    if (!isTr) {
-      return _DayContent(items: defaultItems);
-    }
-
     switch (dayNumber) {
       case 2:
-        return _DayContent(
+        return finalizeDayContent(_DayContent(
           items: [
             _ExerciseItem(
               title: 'High Knees (kontrollu tempo)',
@@ -211,9 +298,9 @@ class _WorkoutProgramViewState extends State<WorkoutProgramView> {
               cardHeight: 91,
             ),
           ],
-        );
+        ));
       case 3:
-        return _DayContent(
+        return finalizeDayContent(_DayContent(
           items: [
             _ExerciseItem(
               title: 'Burpee (ziplamasiz yapilabilir)',
@@ -280,9 +367,9 @@ class _WorkoutProgramViewState extends State<WorkoutProgramView> {
               cardHeight: 108,
             ),
           ],
-        );
+        ));
       case 4:
-        return const _DayContent(
+        return finalizeDayContent(const _DayContent(
           items: [],
           recoveryLines: [
             'Bugun yogun yag yakim antrenmani yok.',
@@ -290,9 +377,9 @@ class _WorkoutProgramViewState extends State<WorkoutProgramView> {
             'Hafif esneme ve mobilite calismasi yapilir.',
             'Bol su icilir.',
           ],
-        );
+        ));
       case 5:
-        return _DayContent(
+        return finalizeDayContent(_DayContent(
           items: [
             _ExerciseItem(
               title: 'Jumping Jack',
@@ -359,9 +446,9 @@ class _WorkoutProgramViewState extends State<WorkoutProgramView> {
               cardHeight: 108,
             ),
           ],
-        );
+        ));
       case 6:
-        return _DayContent(
+        return finalizeDayContent(_DayContent(
           items: [
             _ExerciseItem(
               title: 'High Knees',
@@ -428,9 +515,9 @@ class _WorkoutProgramViewState extends State<WorkoutProgramView> {
               cardHeight: 91,
             ),
           ],
-        );
+        ));
       case 7:
-        return _DayContent(
+        return finalizeDayContent(_DayContent(
           items: [
             _ExerciseItem(
               title: 'Burpee',
@@ -497,9 +584,9 @@ class _WorkoutProgramViewState extends State<WorkoutProgramView> {
               cardHeight: 108,
             ),
           ],
-        );
+        ));
       case 8:
-        return const _DayContent(
+        return finalizeDayContent(const _DayContent(
           items: [],
           recoveryLines: [
             '40 dakika tempolu yuruyus veya hafif bisiklet.',
@@ -507,9 +594,1076 @@ class _WorkoutProgramViewState extends State<WorkoutProgramView> {
             'Kalca, hamstring ve sirt mobilitesi.',
             'Bol su + protein agirlikli beslenme.',
           ],
-        );
+        ));
+      case 9:
+        return finalizeDayContent(_DayContent(
+          items: [
+            _ExerciseItem(
+              title: 'Jump Rope',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Jump Rope.png'),
+              fallbackImagePath: fallbackPath('Jump Rope.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Bodyweight Squat',
+              sets: '3 set x 30 tekrar',
+              rest: 'Set arasi: 25 sn',
+              imagePath: path('Bodyweight Squat.png'),
+              fallbackImagePath: fallbackPath('Bodyweight Squat.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Push-Up',
+              sets: '3 set x 18 tekrar',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Modified Push-Up.png'),
+              fallbackImagePath: fallbackPath('Modified Push-Up.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Alternating Reverse Lunge',
+              sets: '3 set x 20 tekrar (sag + sol)',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Reverse Lunge.png'),
+              fallbackImagePath: fallbackPath('Reverse Lunge.png'),
+              cardHeight: 108,
+            ),
+            _ExerciseItem(
+              title: 'Glute Bridge March',
+              sets: '3 set x 30 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Glute Bridge March.png'),
+              fallbackImagePath: fallbackPath('Glute Bridge March.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Plank',
+              sets: '3 set x 50 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Plank.png'),
+              fallbackImagePath: fallbackPath('Plank.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Mountain Climber (hizli tempo)',
+              sets: '3 set x 50 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Mountain Climber.png'),
+              fallbackImagePath: fallbackPath('Mountain Climber.png'),
+              cardHeight: 108,
+            ),
+            _ExerciseItem(
+              title: 'Shadow Boxing (yuksek tempo)',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Shadow Boxing\u00A0.png'),
+              fallbackImagePath: fallbackPath('Shadow Boxing\u00A0.png'),
+              cardHeight: 108,
+            ),
+          ],
+        ));
+      case 10:
+        return finalizeDayContent(_DayContent(
+          items: [
+            _ExerciseItem(
+              title: 'High Knees',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 25 sn',
+              imagePath: path('High Knees\u00A0.png'),
+              fallbackImagePath: fallbackPath('High Knees\u00A0.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Jump Squat',
+              sets: '3 set x 20 tekrar',
+              rest: 'Set arasi: 35 sn',
+              imagePath: path('Jump Squat.png'),
+              fallbackImagePath: fallbackPath('Jump Squat.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Walking Lunge',
+              sets: '3 set x 20 tekrar (sag + sol)',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Walking Lunge.png'),
+              fallbackImagePath: fallbackPath('Walking Lunge.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Sumo Squat',
+              sets: '3 set x 30 tekrar',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Sumo Squat\u00A0.png'),
+              fallbackImagePath: fallbackPath('Sumo Squat\u00A0.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Wall Sit',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Wall Sit.png'),
+              fallbackImagePath: fallbackPath('Wall Sit.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Side Lunge',
+              sets: '3 set x 20 tekrar (sag + sol)',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Side Lunge.png'),
+              fallbackImagePath: fallbackPath('Side Lunge.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Fast Feet Shuffle',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 25 sn',
+              imagePath: path('Fast Feet Shuffle.png'),
+              fallbackImagePath: fallbackPath('Fast Feet Shuffle.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Butt Kicks',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 25 sn',
+              imagePath: path('Butt Kicks.png'),
+              fallbackImagePath: fallbackPath('Butt Kicks.png'),
+              cardHeight: 91,
+            ),
+          ],
+        ));
+      case 11:
+        return finalizeDayContent(_DayContent(
+          items: [
+            _ExerciseItem(
+              title: 'Burpee',
+              sets: '3 set x 18 tekrar',
+              rest: 'Set arasi: 40 sn',
+              imagePath: path('Burpee.png'),
+              fallbackImagePath: fallbackPath('Burpee.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Skater Jump',
+              sets: '3 set x 45 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Skater Jump.png'),
+              fallbackImagePath: fallbackPath('Skater Jump.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Mountain Climber',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Mountain Climber.png'),
+              fallbackImagePath: fallbackPath('Mountain Climber.png'),
+              cardHeight: 108,
+            ),
+            _ExerciseItem(
+              title: 'Squat Thrust',
+              sets: '3 set x 20 tekrar',
+              rest: 'Set arasi: 35 sn',
+              imagePath: path('Squat Thrust.png'),
+              fallbackImagePath: fallbackPath('Squat Thrust.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Plank Jack',
+              sets: '3 set x 45 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Plank Jack.png'),
+              fallbackImagePath: fallbackPath('Plank Jack.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Jumping Lunge',
+              sets: '3 set x 18 tekrar (sag + sol)',
+              rest: 'Set arasi: 40 sn',
+              imagePath: path('Walking Lunge.png'),
+              fallbackImagePath: fallbackPath('Walking Lunge.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'High Knees',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 25 sn',
+              imagePath: path('High Knees\u00A0.png'),
+              fallbackImagePath: fallbackPath('High Knees\u00A0.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Shadow Boxing (maksimum tempo)',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 25 sn',
+              imagePath: path('Shadow Boxing\u00A0.png'),
+              fallbackImagePath: fallbackPath('Shadow Boxing\u00A0.png'),
+              cardHeight: 108,
+            ),
+          ],
+        ));
+      case 12:
+        return finalizeDayContent(const _DayContent(
+          items: [],
+          recoveryLines: [
+            '45 dakika tempolu yuruyus',
+            'Hafif esneme',
+            'Kalca - hamstring - omuz mobilitesi',
+            'Bol su + tuz dengesi',
+          ],
+        ));
+      case 13:
+        return finalizeDayContent(_DayContent(
+          items: [
+            _ExerciseItem(
+              title: 'Jump Squat',
+              sets: 'Devre: 15 tekrar (3 tur)',
+              rest: 'Devre bitince: 60 sn',
+              imagePath: path('Jump Squat.png'),
+              fallbackImagePath: fallbackPath('Jump Squat.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Push-Up',
+              sets: 'Devre: 15 tekrar (3 tur)',
+              rest: 'Devre ici gecis',
+              imagePath: path('Modified Push-Up.png'),
+              fallbackImagePath: fallbackPath('Modified Push-Up.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Mountain Climber',
+              sets: 'Devre: 40 saniye (3 tur)',
+              rest: 'Devre ici gecis',
+              imagePath: path('Mountain Climber.png'),
+              fallbackImagePath: fallbackPath('Mountain Climber.png'),
+              cardHeight: 108,
+            ),
+            _ExerciseItem(
+              title: 'Reverse Lunge',
+              sets: 'Devre: 15 tekrar (sag + sol)',
+              rest: 'Devre ici gecis',
+              imagePath: path('Reverse Lunge.png'),
+              fallbackImagePath: fallbackPath('Reverse Lunge.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Plank',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Plank.png'),
+              fallbackImagePath: fallbackPath('Plank.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Shadow Boxing',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Shadow Boxing\u00A0.png'),
+              fallbackImagePath: fallbackPath('Shadow Boxing\u00A0.png'),
+              cardHeight: 108,
+            ),
+          ],
+        ));
+      case 14:
+        return finalizeDayContent(_DayContent(
+          items: [
+            _ExerciseItem(
+              title: 'Bodyweight Squat',
+              sets: 'Devre: 25 tekrar (4 tur)',
+              rest: 'Devre arasi: 45 sn',
+              imagePath: path('Bodyweight Squat.png'),
+              fallbackImagePath: fallbackPath('Bodyweight Squat.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Walking Lunge',
+              sets: 'Devre: 20 tekrar (sag + sol)',
+              rest: 'Devre ici gecis',
+              imagePath: path('Walking Lunge.png'),
+              fallbackImagePath: fallbackPath('Walking Lunge.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'High Knees',
+              sets: 'Devre: 45 saniye (4 tur)',
+              rest: 'Devre ici gecis',
+              imagePath: path('High Knees\u00A0.png'),
+              fallbackImagePath: fallbackPath('High Knees\u00A0.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Wall Sit',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Wall Sit.png'),
+              fallbackImagePath: fallbackPath('Wall Sit.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Glute Bridge',
+              sets: '3 set x 25 tekrar',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Glute Bridge.png'),
+              fallbackImagePath: fallbackPath('Glute Bridge.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Butt Kicks',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 25 sn',
+              imagePath: path('Butt Kicks.png'),
+              fallbackImagePath: fallbackPath('Butt Kicks.png'),
+              cardHeight: 91,
+            ),
+          ],
+        ));
+      case 15:
+        return finalizeDayContent(_DayContent(
+          items: [
+            _ExerciseItem(
+              title: 'Burpee',
+              sets: '3 set x 20 tekrar',
+              rest: 'Set arasi: 40 sn',
+              imagePath: path('Burpee.png'),
+              fallbackImagePath: fallbackPath('Burpee.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Skater Jump',
+              sets: '3 set x 50 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Skater Jump.png'),
+              fallbackImagePath: fallbackPath('Skater Jump.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Jumping Lunge',
+              sets: '3 set x 18 tekrar (sag + sol)',
+              rest: 'Set arasi: 40 sn',
+              imagePath: path('Walking Lunge.png'),
+              fallbackImagePath: fallbackPath('Walking Lunge.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Plank Jack',
+              sets: '3 set x 45 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Plank Jack.png'),
+              fallbackImagePath: fallbackPath('Plank Jack.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Fast Feet Shuffle',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 25 sn',
+              imagePath: path('Fast Feet Shuffle.png'),
+              fallbackImagePath: fallbackPath('Fast Feet Shuffle.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Mountain Climber (maksimum tempo)',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Mountain Climber.png'),
+              fallbackImagePath: fallbackPath('Mountain Climber.png'),
+              cardHeight: 108,
+            ),
+            _ExerciseItem(
+              title: 'Shadow Boxing',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 25 sn',
+              imagePath: path('Shadow Boxing\u00A0.png'),
+              fallbackImagePath: fallbackPath('Shadow Boxing\u00A0.png'),
+              cardHeight: 108,
+            ),
+          ],
+        ));
+      case 16:
+        return finalizeDayContent(const _DayContent(
+          items: [],
+          recoveryLines: [
+            '45-50 dakika tempolu yuruyus',
+            'Derin esneme',
+            'Kalca fleksorleri + hamstring + omuz mobilitesi',
+            'Su tuketimi artirilir',
+            'Uyku suresi 7-8 saat olmali',
+          ],
+        ));
+      case 17:
+        return finalizeDayContent(_DayContent(
+          items: [
+            _ExerciseItem(
+              title: 'Burpee',
+              sets: 'Devre: 15 tekrar (4 tur)',
+              rest: 'Devre bitince: 60 sn',
+              imagePath: path('Burpee.png'),
+              fallbackImagePath: fallbackPath('Burpee.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Bodyweight Squat',
+              sets: 'Devre: 30 tekrar (4 tur)',
+              rest: 'Devre ici gecis',
+              imagePath: path('Bodyweight Squat.png'),
+              fallbackImagePath: fallbackPath('Bodyweight Squat.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Push-Up',
+              sets: 'Devre: 20 tekrar (4 tur)',
+              rest: 'Devre ici gecis',
+              imagePath: path('Modified Push-Up.png'),
+              fallbackImagePath: fallbackPath('Modified Push-Up.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Mountain Climber',
+              sets: 'Devre: 50 saniye (4 tur)',
+              rest: 'Devre ici gecis',
+              imagePath: path('Mountain Climber.png'),
+              fallbackImagePath: fallbackPath('Mountain Climber.png'),
+              cardHeight: 108,
+            ),
+            _ExerciseItem(
+              title: 'Jumping Jack',
+              sets: 'Devre: 60 saniye (4 tur)',
+              rest: 'Devre ici gecis',
+              imagePath: path('Jumping Jack.png'),
+              fallbackImagePath: fallbackPath('Jumping Jack.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Plank',
+              sets: '3 set x 70 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Plank.png'),
+              fallbackImagePath: fallbackPath('Plank.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Shadow Boxing (yuksek tempo)',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 25 sn',
+              imagePath: path('Shadow Boxing\u00A0.png'),
+              fallbackImagePath: fallbackPath('Shadow Boxing\u00A0.png'),
+              cardHeight: 108,
+            ),
+          ],
+        ));
+      case 18:
+        return finalizeDayContent(_DayContent(
+          items: [
+            _ExerciseItem(
+              title: 'Jump Squat',
+              sets: '3 set x 20 tekrar',
+              rest: 'Set arasi: 35 sn',
+              imagePath: path('Jump Squat.png'),
+              fallbackImagePath: fallbackPath('Jump Squat.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Walking Lunge',
+              sets: '3 set x 22 tekrar (sag + sol)',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Walking Lunge.png'),
+              fallbackImagePath: fallbackPath('Walking Lunge.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Sumo Squat',
+              sets: '3 set x 30 tekrar',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Sumo Squat\u00A0.png'),
+              fallbackImagePath: fallbackPath('Sumo Squat\u00A0.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Wall Sit',
+              sets: '3 set x 70 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Wall Sit.png'),
+              fallbackImagePath: fallbackPath('Wall Sit.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'High Knees',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 25 sn',
+              imagePath: path('High Knees\u00A0.png'),
+              fallbackImagePath: fallbackPath('High Knees\u00A0.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Side Lunge',
+              sets: '3 set x 20 tekrar (sag + sol)',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Side Lunge.png'),
+              fallbackImagePath: fallbackPath('Side Lunge.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Butt Kicks',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 25 sn',
+              imagePath: path('Butt Kicks.png'),
+              fallbackImagePath: fallbackPath('Butt Kicks.png'),
+              cardHeight: 91,
+            ),
+          ],
+        ));
+      case 19:
+        return finalizeDayContent(_DayContent(
+          items: [
+            _ExerciseItem(
+              title: 'Burpee',
+              sets: '3 set x 22 tekrar',
+              rest: 'Set arasi: 40 sn',
+              imagePath: path('Burpee.png'),
+              fallbackImagePath: fallbackPath('Burpee.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Skater Jump',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Skater Jump.png'),
+              fallbackImagePath: fallbackPath('Skater Jump.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Jumping Lunge',
+              sets: '3 set x 20 tekrar (sag + sol)',
+              rest: 'Set arasi: 40 sn',
+              imagePath: path('Walking Lunge.png'),
+              fallbackImagePath: fallbackPath('Walking Lunge.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Plank Jack',
+              sets: '3 set x 50 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Plank Jack.png'),
+              fallbackImagePath: fallbackPath('Plank Jack.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Mountain Climber (maksimum tempo)',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Mountain Climber.png'),
+              fallbackImagePath: fallbackPath('Mountain Climber.png'),
+              cardHeight: 108,
+            ),
+            _ExerciseItem(
+              title: 'Fast Feet Shuffle',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 25 sn',
+              imagePath: path('Fast Feet Shuffle.png'),
+              fallbackImagePath: fallbackPath('Fast Feet Shuffle.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Shadow Boxing',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 25 sn',
+              imagePath: path('Shadow Boxing\u00A0.png'),
+              fallbackImagePath: fallbackPath('Shadow Boxing\u00A0.png'),
+              cardHeight: 108,
+            ),
+          ],
+        ));
+      case 20:
+        return finalizeDayContent(const _DayContent(
+          items: [],
+          recoveryLines: [
+            '45-60 dakika tempolu yuruyus',
+            'Hafif mobilite',
+            'Kalca - hamstring - sirt acma',
+            'Bol su',
+            'Yeterli protein',
+          ],
+        ));
+      case 21:
+        return finalizeDayContent(_DayContent(
+          items: [
+            _ExerciseItem(
+              title: 'Bodyweight Squat',
+              sets: 'Devre: 30 tekrar (4 tur)',
+              rest: 'Devre bitince: 60 sn',
+              imagePath: path('Bodyweight Squat.png'),
+              fallbackImagePath: fallbackPath('Bodyweight Squat.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Push-Up',
+              sets: 'Devre: 20 tekrar (4 tur)',
+              rest: 'Devre ici gecis',
+              imagePath: path('Modified Push-Up.png'),
+              fallbackImagePath: fallbackPath('Modified Push-Up.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'High Knees',
+              sets: 'Devre: 60 saniye (4 tur)',
+              rest: 'Devre ici gecis',
+              imagePath: path('High Knees\u00A0.png'),
+              fallbackImagePath: fallbackPath('High Knees\u00A0.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Reverse Lunge',
+              sets: 'Devre: 20 tekrar (sag + sol)',
+              rest: 'Devre ici gecis',
+              imagePath: path('Reverse Lunge.png'),
+              fallbackImagePath: fallbackPath('Reverse Lunge.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Plank Shoulder Tap',
+              sets: '3 set x 30 tekrar (toplam)',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Plank Shoulder Tap.png'),
+              fallbackImagePath: fallbackPath('Plank Shoulder Tap.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Jump Rope',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Jump Rope.png'),
+              fallbackImagePath: fallbackPath('Jump Rope.png'),
+              cardHeight: 91,
+            ),
+          ],
+        ));
+      case 22:
+        return finalizeDayContent(_DayContent(
+          items: [
+            _ExerciseItem(
+              title: 'Jump Squat',
+              sets: '3 set x 20 tekrar',
+              rest: 'Set arasi: 35 sn',
+              imagePath: path('Jump Squat.png'),
+              fallbackImagePath: fallbackPath('Jump Squat.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Walking Lunge',
+              sets: '3 set x 24 tekrar (sag + sol)',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Walking Lunge.png'),
+              fallbackImagePath: fallbackPath('Walking Lunge.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Sumo Squat Pulse',
+              sets: '3 set x 30 tekrar',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Sumo Squat\u00A0.png'),
+              fallbackImagePath: fallbackPath('Sumo Squat\u00A0.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Wall Sit',
+              sets: '3 set x 75 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Wall Sit.png'),
+              fallbackImagePath: fallbackPath('Wall Sit.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Glute Bridge March',
+              sets: '3 set x 40 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Glute Bridge March.png'),
+              fallbackImagePath: fallbackPath('Glute Bridge March.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Mountain Climber',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Mountain Climber.png'),
+              fallbackImagePath: fallbackPath('Mountain Climber.png'),
+              cardHeight: 108,
+            ),
+            _ExerciseItem(
+              title: 'Butt Kicks',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 25 sn',
+              imagePath: path('Butt Kicks.png'),
+              fallbackImagePath: fallbackPath('Butt Kicks.png'),
+              cardHeight: 91,
+            ),
+          ],
+        ));
+      case 23:
+        return finalizeDayContent(_DayContent(
+          items: [
+            _ExerciseItem(
+              title: 'Burpee',
+              sets: '3 set x 20 tekrar',
+              rest: 'Set arasi: 40 sn',
+              imagePath: path('Burpee.png'),
+              fallbackImagePath: fallbackPath('Burpee.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Skater Jump',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Skater Jump.png'),
+              fallbackImagePath: fallbackPath('Skater Jump.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Jumping Lunge',
+              sets: '3 set x 20 tekrar (sag + sol)',
+              rest: 'Set arasi: 40 sn',
+              imagePath: path('Walking Lunge.png'),
+              fallbackImagePath: fallbackPath('Walking Lunge.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Plank Jack',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Plank Jack.png'),
+              fallbackImagePath: fallbackPath('Plank Jack.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Fast Feet Shuffle',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 25 sn',
+              imagePath: path('Fast Feet Shuffle.png'),
+              fallbackImagePath: fallbackPath('Fast Feet Shuffle.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Mountain Climber (maksimum tempo)',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Mountain Climber.png'),
+              fallbackImagePath: fallbackPath('Mountain Climber.png'),
+              cardHeight: 108,
+            ),
+            _ExerciseItem(
+              title: 'Shadow Boxing',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 25 sn',
+              imagePath: path('Shadow Boxing\u00A0.png'),
+              fallbackImagePath: fallbackPath('Shadow Boxing\u00A0.png'),
+              cardHeight: 108,
+            ),
+          ],
+        ));
+      case 24:
+        return finalizeDayContent(const _DayContent(
+          items: [],
+          recoveryLines: [
+            '45-60 dakika tempolu yuruyus',
+            'Derin esneme',
+            'Kalca - sirt - omuz mobilitesi',
+            'Uykuya dikkat',
+            'Su tuketimi yuksek tutulur',
+          ],
+        ));
+      case 25:
+        return finalizeDayContent(_DayContent(
+          items: [
+            _ExerciseItem(
+              title: 'Jump Squat',
+              sets: 'Devre: 20 tekrar (4 tur)',
+              rest: 'Devre bitince: 60 sn',
+              imagePath: path('Jump Squat.png'),
+              fallbackImagePath: fallbackPath('Jump Squat.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Push-Up',
+              sets: 'Devre: 22 tekrar (4 tur)',
+              rest: 'Devre ici gecis',
+              imagePath: path('Modified Push-Up.png'),
+              fallbackImagePath: fallbackPath('Modified Push-Up.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Mountain Climber',
+              sets: 'Devre: 60 saniye (4 tur)',
+              rest: 'Devre ici gecis',
+              imagePath: path('Mountain Climber.png'),
+              fallbackImagePath: fallbackPath('Mountain Climber.png'),
+              cardHeight: 108,
+            ),
+            _ExerciseItem(
+              title: 'Walking Lunge',
+              sets: 'Devre: 24 tekrar (sag + sol)',
+              rest: 'Devre ici gecis',
+              imagePath: path('Walking Lunge.png'),
+              fallbackImagePath: fallbackPath('Walking Lunge.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Jumping Jack',
+              sets: 'Devre: 60 saniye (4 tur)',
+              rest: 'Devre ici gecis',
+              imagePath: path('Jumping Jack.png'),
+              fallbackImagePath: fallbackPath('Jumping Jack.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Plank',
+              sets: '3 set x 80 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Plank.png'),
+              fallbackImagePath: fallbackPath('Plank.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Shadow Boxing',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 25 sn',
+              imagePath: path('Shadow Boxing\u00A0.png'),
+              fallbackImagePath: fallbackPath('Shadow Boxing\u00A0.png'),
+              cardHeight: 108,
+            ),
+          ],
+        ));
+      case 26:
+        return finalizeDayContent(_DayContent(
+          items: [
+            _ExerciseItem(
+              title: 'Bodyweight Squat',
+              sets: '3 set x 35 tekrar',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Bodyweight Squat.png'),
+              fallbackImagePath: fallbackPath('Bodyweight Squat.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Jumping Lunge',
+              sets: '3 set x 22 tekrar (sag + sol)',
+              rest: 'Set arasi: 40 sn',
+              imagePath: path('Walking Lunge.png'),
+              fallbackImagePath: fallbackPath('Walking Lunge.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Sumo Squat',
+              sets: '3 set x 35 tekrar',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Sumo Squat\u00A0.png'),
+              fallbackImagePath: fallbackPath('Sumo Squat\u00A0.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Wall Sit',
+              sets: '3 set x 80 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Wall Sit.png'),
+              fallbackImagePath: fallbackPath('Wall Sit.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'High Knees',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 25 sn',
+              imagePath: path('High Knees\u00A0.png'),
+              fallbackImagePath: fallbackPath('High Knees\u00A0.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Glute Bridge',
+              sets: '3 set x 25 tekrar',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Glute Bridge.png'),
+              fallbackImagePath: fallbackPath('Glute Bridge.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Butt Kicks',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 25 sn',
+              imagePath: path('Butt Kicks.png'),
+              fallbackImagePath: fallbackPath('Butt Kicks.png'),
+              cardHeight: 91,
+            ),
+          ],
+        ));
+      case 27:
+        return finalizeDayContent(_DayContent(
+          items: [
+            _ExerciseItem(
+              title: 'Burpee',
+              sets: '3 set x 25 tekrar',
+              rest: 'Set arasi: 40 sn',
+              imagePath: path('Burpee.png'),
+              fallbackImagePath: fallbackPath('Burpee.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Skater Jump',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Skater Jump.png'),
+              fallbackImagePath: fallbackPath('Skater Jump.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Squat Thrust',
+              sets: '3 set x 22 tekrar',
+              rest: 'Set arasi: 35 sn',
+              imagePath: path('Squat Thrust.png'),
+              fallbackImagePath: fallbackPath('Squat Thrust.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Plank Jack',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Plank Jack.png'),
+              fallbackImagePath: fallbackPath('Plank Jack.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Mountain Climber (maksimum tempo)',
+              sets: '3 set x 70 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Mountain Climber.png'),
+              fallbackImagePath: fallbackPath('Mountain Climber.png'),
+              cardHeight: 108,
+            ),
+            _ExerciseItem(
+              title: 'Fast Feet Shuffle',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 25 sn',
+              imagePath: path('Fast Feet Shuffle.png'),
+              fallbackImagePath: fallbackPath('Fast Feet Shuffle.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Shadow Boxing',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 25 sn',
+              imagePath: path('Shadow Boxing\u00A0.png'),
+              fallbackImagePath: fallbackPath('Shadow Boxing\u00A0.png'),
+              cardHeight: 108,
+            ),
+          ],
+        ));
+      case 28:
+        return finalizeDayContent(const _DayContent(
+          items: [],
+          recoveryLines: [
+            '45-60 dakika tempolu yuruyus',
+            'Derin esneme',
+            'Mobilite',
+            'Bol su',
+            'Uyku',
+          ],
+        ));
+      case 29:
+        return finalizeDayContent(_DayContent(
+          items: [
+            _ExerciseItem(
+              title: 'Bodyweight Squat',
+              sets: 'Devre: 30 tekrar (4 tur)',
+              rest: 'Devre ici gecis',
+              imagePath: path('Bodyweight Squat.png'),
+              fallbackImagePath: fallbackPath('Bodyweight Squat.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Push-Up',
+              sets: 'Devre: 20 tekrar (4 tur)',
+              rest: 'Devre ici gecis',
+              imagePath: path('Modified Push-Up.png'),
+              fallbackImagePath: fallbackPath('Modified Push-Up.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'High Knees',
+              sets: 'Devre: 60 saniye (4 tur)',
+              rest: 'Devre ici gecis',
+              imagePath: path('High Knees\u00A0.png'),
+              fallbackImagePath: fallbackPath('High Knees\u00A0.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Reverse Lunge',
+              sets: 'Devre: 20 tekrar (sag + sol)',
+              rest: 'Devre ici gecis',
+              imagePath: path('Reverse Lunge.png'),
+              fallbackImagePath: fallbackPath('Reverse Lunge.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Plank Shoulder Tap',
+              sets: '3 set x 30 tekrar',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Plank Shoulder Tap.png'),
+              fallbackImagePath: fallbackPath('Plank Shoulder Tap.png'),
+              cardHeight: 91,
+            ),
+            _ExerciseItem(
+              title: 'Jump Rope',
+              sets: '3 set x 60 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Jump Rope.png'),
+              fallbackImagePath: fallbackPath('Jump Rope.png'),
+              cardHeight: 91,
+            ),
+          ],
+        ));
+      case 30:
+        return finalizeDayContent(_DayContent(
+          items: [
+            _ExerciseItem(
+              title: 'Burpee',
+              sets: '3 set x maksimum tekrar (60 sn)',
+              rest: 'Set arasi: 60 sn',
+              imagePath: path('Burpee.png'),
+              fallbackImagePath: fallbackPath('Burpee.png'),
+              cardHeight: 108,
+            ),
+            _ExerciseItem(
+              title: 'Jump Squat',
+              sets: '3 set x maksimum tekrar (45 sn)',
+              rest: 'Set arasi: 45 sn',
+              imagePath: path('Jump Squat.png'),
+              fallbackImagePath: fallbackPath('Jump Squat.png'),
+              cardHeight: 108,
+            ),
+            _ExerciseItem(
+              title: 'Mountain Climber',
+              sets: '3 set x 75 saniye',
+              rest: 'Set arasi: 30 sn',
+              imagePath: path('Mountain Climber.png'),
+              fallbackImagePath: fallbackPath('Mountain Climber.png'),
+              cardHeight: 108,
+            ),
+            _ExerciseItem(
+              title: 'Push-Up',
+              sets: '3 set x maksimum tekrar',
+              rest: 'Set arasi: 45 sn',
+              imagePath: path('Modified Push-Up.png'),
+              fallbackImagePath: fallbackPath('Modified Push-Up.png'),
+              cardHeight: 108,
+            ),
+            _ExerciseItem(
+              title: 'Plank',
+              sets: '1 set x maksimum sure',
+              rest: 'Sonda: 5-10 dk yuruyus + derin nefes',
+              imagePath: path('Plank.png'),
+              fallbackImagePath: fallbackPath('Plank.png'),
+              cardHeight: 108,
+            ),
+          ],
+        ));
       default:
-        return _DayContent(items: defaultItems);
+        return finalizeDayContent(_DayContent(items: defaultItems));
     }
   }
 
@@ -524,7 +1678,12 @@ class _WorkoutProgramViewState extends State<WorkoutProgramView> {
             programTitle: locale.defaultProgramTitle,
           );
 
-    final dayContent = _dayContent(context, data.dayNumber);
+    final safeDayNumber = data.dayNumber.clamp(1, 30).toInt();
+    final safeProgramTitle = (data.dayNumber >= 1 && data.dayNumber <= 30)
+        ? data.programTitle
+        : locale.defaultProgramTitle;
+
+    final dayContent = _dayContent(context, safeDayNumber);
     final items = dayContent.items;
 
     return Scaffold(
@@ -568,8 +1727,8 @@ class _WorkoutProgramViewState extends State<WorkoutProgramView> {
                               Expanded(
                                 child: Text(
                                   locale.dayTitle(
-                                    data.dayNumber,
-                                    data.programTitle,
+                                    safeDayNumber,
+                                    safeProgramTitle,
                                   ),
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.leagueSpartan(
@@ -843,294 +2002,6 @@ class _DayContent {
   final List<_ExerciseItem> items;
   final List<String>? recoveryLines;
 }
-
-class _ProgramLocale {
-  const _ProgramLocale({
-    required this.program,
-    required this.defaultProgramTitle,
-    required this.dayPrefix,
-    required this.dayConnector,
-    required this.jumpingJack,
-    required this.bodyweightSquat,
-    required this.modifiedPushUp,
-    required this.standingKneeDrive,
-    required this.gluteBridge,
-    required this.marchingPlank,
-    required this.lowImpactMountainClimber,
-    required this.shadowBoxingMedium,
-    required this.sets40Sec,
-    required this.sets20Reps,
-    required this.sets12Reps,
-    required this.sets20RepsPerSide,
-    required this.sets30Sec,
-    required this.rest30Sec,
-  });
-
-  final String program;
-  final String defaultProgramTitle;
-  final String dayPrefix;
-  final String dayConnector;
-  final String jumpingJack;
-  final String bodyweightSquat;
-  final String modifiedPushUp;
-  final String standingKneeDrive;
-  final String gluteBridge;
-  final String marchingPlank;
-  final String lowImpactMountainClimber;
-  final String shadowBoxingMedium;
-  final String sets40Sec;
-  final String sets20Reps;
-  final String sets12Reps;
-  final String sets20RepsPerSide;
-  final String sets30Sec;
-  final String rest30Sec;
-
-  String dayTitle(int dayNumber, String title) =>
-      '$dayPrefix$dayNumber$dayConnector$title';
-}
-
-const Map<String, _ProgramLocale> _localeByCode = {
-  'tr': _ProgramLocale(
-    program: 'Program',
-    defaultProgramTitle: 'Yag Yakim Aktivasyonu',
-    dayPrefix: 'Gun ',
-    dayConnector: ' : ',
-    jumpingJack: 'Jumping Jack',
-    bodyweightSquat: 'Bodyweight Squat',
-    modifiedPushUp: 'Modified Push-Up',
-    standingKneeDrive: 'Standing Knee Drive',
-    gluteBridge: 'Glute Bridge',
-    marchingPlank: 'Marching Plank',
-    lowImpactMountainClimber: 'Low Impact Mountain Climber',
-    shadowBoxingMedium: 'Shadow Boxing (orta tempo)',
-    sets40Sec: '3 set x 40 sn',
-    sets20Reps: '3 set x 20 tekrar',
-    sets12Reps: '3 set x 12 tekrar',
-    sets20RepsPerSide: '3 set x 20 tekrar (sag + sol)',
-    sets30Sec: '3 set x 30 sn',
-    rest30Sec: 'Set arasi: 30 sn',
-  ),
-  'en': _ProgramLocale(
-    program: 'Program',
-    defaultProgramTitle: 'Fat Burn Activation',
-    dayPrefix: 'Day ',
-    dayConnector: ': ',
-    jumpingJack: 'Jumping Jack',
-    bodyweightSquat: 'Bodyweight Squat',
-    modifiedPushUp: 'Modified Push-Up',
-    standingKneeDrive: 'Standing Knee Drive',
-    gluteBridge: 'Glute Bridge',
-    marchingPlank: 'Marching Plank',
-    lowImpactMountainClimber: 'Low Impact Mountain Climber',
-    shadowBoxingMedium: 'Shadow Boxing (medium pace)',
-    sets40Sec: '3 sets x 40 sec',
-    sets20Reps: '3 sets x 20 reps',
-    sets12Reps: '3 sets x 12 reps',
-    sets20RepsPerSide: '3 sets x 20 reps (right + left)',
-    sets30Sec: '3 sets x 30 sec',
-    rest30Sec: 'Rest between sets: 30 sec',
-  ),
-  'de': _ProgramLocale(
-    program: 'Programm',
-    defaultProgramTitle: 'Fettverbrennungs-Aktivierung',
-    dayPrefix: 'Tag ',
-    dayConnector: ': ',
-    jumpingJack: 'Hampelmann',
-    bodyweightSquat: 'Kniebeuge mit eigenem Körpergewicht',
-    modifiedPushUp: 'Modifizierter Liegestütz',
-    standingKneeDrive: 'Stehender Kniehub',
-    gluteBridge: 'Glute Bridge',
-    marchingPlank: 'Marchierende Planke',
-    lowImpactMountainClimber: 'Schonender Mountain Climber',
-    shadowBoxingMedium: 'Schattenboxen (mittleres Tempo)',
-    sets40Sec: '3 Sätze x 40 Sek.',
-    sets20Reps: '3 Sätze x 20 Wdh.',
-    sets12Reps: '3 Sätze x 12 Wdh.',
-    sets20RepsPerSide: '3 Sätze x 20 Wdh. (rechts + links)',
-    sets30Sec: '3 Sätze x 30 Sek.',
-    rest30Sec: 'Pause zwischen Sätzen: 30 Sek.',
-  ),
-  'es': _ProgramLocale(
-    program: 'Programa',
-    defaultProgramTitle: 'Activacion de quema de grasa',
-    dayPrefix: 'Día ',
-    dayConnector: ': ',
-    jumpingJack: 'Jumping Jack',
-    bodyweightSquat: 'Sentadilla con peso corporal',
-    modifiedPushUp: 'Flexión modificada',
-    standingKneeDrive: 'Elevación de rodilla de pie',
-    gluteBridge: 'Puente de glúteos',
-    marchingPlank: 'Plancha marchando',
-    lowImpactMountainClimber: 'Escalador de bajo impacto',
-    shadowBoxingMedium: 'Boxeo de sombra (ritmo medio)',
-    sets40Sec: '3 series x 40 s',
-    sets20Reps: '3 series x 20 rep.',
-    sets12Reps: '3 series x 12 rep.',
-    sets20RepsPerSide: '3 series x 20 rep. (derecha + izquierda)',
-    sets30Sec: '3 series x 30 s',
-    rest30Sec: 'Descanso entre series: 30 s',
-  ),
-  'fr': _ProgramLocale(
-    program: 'Programme',
-    defaultProgramTitle: 'Activation brule-graisse',
-    dayPrefix: 'Jour ',
-    dayConnector: ' : ',
-    jumpingJack: 'Jumping Jack',
-    bodyweightSquat: 'Squat au poids du corps',
-    modifiedPushUp: 'Pompe modifiée',
-    standingKneeDrive: 'Montée de genou debout',
-    gluteBridge: 'Pont fessier',
-    marchingPlank: 'Planche en marche',
-    lowImpactMountainClimber: 'Mountain climber faible impact',
-    shadowBoxingMedium: 'Shadow boxing (rythme moyen)',
-    sets40Sec: '3 series x 40 s',
-    sets20Reps: '3 series x 20 rep.',
-    sets12Reps: '3 series x 12 rep.',
-    sets20RepsPerSide: '3 series x 20 rep. (droite + gauche)',
-    sets30Sec: '3 series x 30 s',
-    rest30Sec: 'Repos entre les séries : 30 s',
-  ),
-  'hi': _ProgramLocale(
-    program: 'प्रोग्राम',
-    defaultProgramTitle: 'फैट बर्न एक्टिवेशन',
-    dayPrefix: 'दिन ',
-    dayConnector: ': ',
-    jumpingJack: 'जंपिंग जैक',
-    bodyweightSquat: 'बॉडीवेट स्क्वाट',
-    modifiedPushUp: 'संशोधित पुश-अप',
-    standingKneeDrive: 'खड़े होकर घुटना उठाना',
-    gluteBridge: 'ग्लूट ब्रिज',
-    marchingPlank: 'मार्चिंग प्लैंक',
-    lowImpactMountainClimber: 'लो इम्पैक्ट माउंटेन क्लाइंबर',
-    shadowBoxingMedium: 'शैडो बॉक्सिंग (मध्यम गति)',
-    sets40Sec: '3 सेट x 40 सेक',
-    sets20Reps: '3 सेट x 20 रेप्स',
-    sets12Reps: '3 सेट x 12 रेप्स',
-    sets20RepsPerSide: '3 सेट x 20 रेप्स (दायां + बायां)',
-    sets30Sec: '3 सेट x 30 सेक',
-    rest30Sec: 'सेट के बीच आराम: 30 सेक',
-  ),
-  'it': _ProgramLocale(
-    program: 'Programma',
-    defaultProgramTitle: 'Attivazione brucia grassi',
-    dayPrefix: 'Giorno ',
-    dayConnector: ': ',
-    jumpingJack: 'Jumping Jack',
-    bodyweightSquat: 'Squat a corpo libero',
-    modifiedPushUp: 'Push-up modificato',
-    standingKneeDrive: 'Slancio del ginocchio in piedi',
-    gluteBridge: 'Ponte per glutei',
-    marchingPlank: 'Plank marciato',
-    lowImpactMountainClimber: 'Mountain climber a basso impatto',
-    shadowBoxingMedium: 'Shadow boxing (ritmo medio)',
-    sets40Sec: '3 serie x 40 sec',
-    sets20Reps: '3 serie x 20 rip.',
-    sets12Reps: '3 serie x 12 rip.',
-    sets20RepsPerSide: '3 serie x 20 rip. (destra + sinistra)',
-    sets30Sec: '3 serie x 30 sec',
-    rest30Sec: 'Recupero tra le serie: 30 sec',
-  ),
-  'ja': _ProgramLocale(
-    program: 'プログラム',
-    defaultProgramTitle: '脂肪燃焼アクティベーション',
-    dayPrefix: '',
-    dayConnector: '日目: ',
-    jumpingJack: 'ジャンピングジャック',
-    bodyweightSquat: '自重スクワット',
-    modifiedPushUp: 'モディファイド・プッシュアップ',
-    standingKneeDrive: 'スタンディング・ニードライブ',
-    gluteBridge: 'グルートブリッジ',
-    marchingPlank: 'マーチングプランク',
-    lowImpactMountainClimber: '低衝撃マウンテンクライマー',
-    shadowBoxingMedium: 'シャドーボクシング（中強度）',
-    sets40Sec: '3セット x 40秒',
-    sets20Reps: '3セット x 20回',
-    sets12Reps: '3セット x 12回',
-    sets20RepsPerSide: '3セット x 20回（右 + 左）',
-    sets30Sec: '3セット x 30秒',
-    rest30Sec: 'セット間休憩: 30秒',
-  ),
-  'ko': _ProgramLocale(
-    program: '프로그램',
-    defaultProgramTitle: '지방 연소 활성화',
-    dayPrefix: '',
-    dayConnector: '일차: ',
-    jumpingJack: '점핑 잭',
-    bodyweightSquat: '맨몸 스쿼트',
-    modifiedPushUp: '수정 푸시업',
-    standingKneeDrive: '스탠딩 니 드라이브',
-    gluteBridge: '글루트 브리지',
-    marchingPlank: '마칭 플랭크',
-    lowImpactMountainClimber: '저강도 마운틴 클라이머',
-    shadowBoxingMedium: '쉐도우 복싱 (중간 강도)',
-    sets40Sec: '3세트 x 40초',
-    sets20Reps: '3세트 x 20회',
-    sets12Reps: '3세트 x 12회',
-    sets20RepsPerSide: '3세트 x 20회 (오른쪽 + 왼쪽)',
-    sets30Sec: '3세트 x 30초',
-    rest30Sec: '세트 사이 휴식: 30초',
-  ),
-  'pt': _ProgramLocale(
-    program: 'Programa',
-    defaultProgramTitle: 'Ativacao de queima de gordura',
-    dayPrefix: 'Dia ',
-    dayConnector: ': ',
-    jumpingJack: 'Jumping Jack',
-    bodyweightSquat: 'Agachamento com peso corporal',
-    modifiedPushUp: 'Flexão modificada',
-    standingKneeDrive: 'Elevação de joelho em pé',
-    gluteBridge: 'Ponte de glúteos',
-    marchingPlank: 'Prancha marchando',
-    lowImpactMountainClimber: 'Mountain climber de baixo impacto',
-    shadowBoxingMedium: 'Boxe de sombra (ritmo médio)',
-    sets40Sec: '3 series x 40 s',
-    sets20Reps: '3 series x 20 rep.',
-    sets12Reps: '3 series x 12 rep.',
-    sets20RepsPerSide: '3 series x 20 rep. (direita + esquerda)',
-    sets30Sec: '3 series x 30 s',
-    rest30Sec: 'Descanso entre séries: 30 s',
-  ),
-  'ru': _ProgramLocale(
-    program: 'Программа',
-    defaultProgramTitle: 'Активация жиросжигания',
-    dayPrefix: 'День ',
-    dayConnector: ': ',
-    jumpingJack: 'Джампинг джек',
-    bodyweightSquat: 'Приседания с собственным весом',
-    modifiedPushUp: 'Модифицированные отжимания',
-    standingKneeDrive: 'Подъем колена стоя',
-    gluteBridge: 'Ягодичный мостик',
-    marchingPlank: 'Планка с шагами',
-    lowImpactMountainClimber: 'Низкоударный альпинист',
-    shadowBoxingMedium: 'Бой с тенью (средний темп)',
-    sets40Sec: '3 подхода x 40 сек',
-    sets20Reps: '3 подхода x 20 повторений',
-    sets12Reps: '3 подхода x 12 повторений',
-    sets20RepsPerSide: '3 подхода x 20 повторений (правая + левая)',
-    sets30Sec: '3 подхода x 30 сек',
-    rest30Sec: 'Отдых между подходами: 30 сек',
-  ),
-  'zh': _ProgramLocale(
-    program: '训练计划',
-    defaultProgramTitle: '燃脂激活',
-    dayPrefix: '第',
-    dayConnector: '天: ',
-    jumpingJack: '开合跳',
-    bodyweightSquat: '徒手深蹲',
-    modifiedPushUp: '改良俯卧撑',
-    standingKneeDrive: '站姿提膝',
-    gluteBridge: '臀桥',
-    marchingPlank: '行进平板支撑',
-    lowImpactMountainClimber: '低冲击登山者',
-    shadowBoxingMedium: '影子拳击（中等节奏）',
-    sets40Sec: '3组 x 40秒',
-    sets20Reps: '3组 x 20次',
-    sets12Reps: '3组 x 12次',
-    sets20RepsPerSide: '3组 x 20次（右 + 左）',
-    sets30Sec: '3组 x 30秒',
-    rest30Sec: '组间休息: 30秒',
-  ),
-};
 
 class _BottomBar extends StatelessWidget {
   const _BottomBar({required this.iconBase});
