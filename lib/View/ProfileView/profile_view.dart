@@ -1,27 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
+import 'package:slim30/Riverpod/Models/app_models.dart';
+import 'package:slim30/Riverpod/Providers/backend_providers.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
 
-class ProfileView extends StatefulWidget {
+class ProfileView extends ConsumerStatefulWidget {
   const ProfileView({super.key});
 
   static const _profileIconBase = 'assets/images/icons/profilePage';
   static const _homeIconBase = 'assets/images/icons/homePage';
 
   @override
-  State<ProfileView> createState() => _ProfileViewState();
+  ConsumerState<ProfileView> createState() => _ProfileViewState();
 }
 
-class _ProfileViewState extends State<ProfileView> {
+class _ProfileViewState extends ConsumerState<ProfileView> {
   bool _notificationsEnabled = true;
   bool _healthEnabled = true;
+  bool _settingsHydrated = false;
 
   @override
   Widget build(BuildContext context) {
+    final profile = ref.watch(userProfileProvider).valueOrNull;
+    final summary = ref.watch(progressOverviewProvider);
+    final premium = ref.watch(premiumStatusProvider).valueOrNull;
+    final settings = ref.watch(notificationSettingsProvider).valueOrNull;
+
+    if (!_settingsHydrated && settings != null) {
+      _settingsHydrated = true;
+      _notificationsEnabled = settings.dailyReminderEnabled;
+      _healthEnabled = settings.progressSummaryEnabled;
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -39,21 +54,38 @@ class _ProfileViewState extends State<ProfileView> {
                       children: [
                         const _TopHeader(),
                         SizedBox(height: 33.h),
-                        const Center(child: _ProfileIdentity()),
+                        Center(
+                          child: _ProfileIdentity(name: profile?.name ?? 'User'),
+                        ),
                         SizedBox(height: 30.h),
-                        const _StatsStrip(),
+                        _StatsStrip(
+                          totalDays: summary?.totalDays ?? 30,
+                          completedDays: summary?.completedDays ?? 0,
+                          completionRate: summary?.completionRate ?? 0,
+                        ),
                         SizedBox(height: 30.h),
                         _SettingsSection(
                           notificationsEnabled: _notificationsEnabled,
-                          onNotificationsChanged: (value) {
+                          isPremium: premium?.isPremium == true,
+                          onNotificationsChanged: (value) async {
                             setState(() => _notificationsEnabled = value);
+                            final source = settings ?? NotificationSettingsModel.defaults();
+                            await updateNotificationSettings(
+                              ref,
+                              source.copyWith(dailyReminderEnabled: value),
+                            );
                           },
                         ),
                         SizedBox(height: 30.h),
                         _SupportSection(
                           healthEnabled: _healthEnabled,
-                          onHealthChanged: (value) {
+                          onHealthChanged: (value) async {
                             setState(() => _healthEnabled = value);
+                            final source = settings ?? NotificationSettingsModel.defaults();
+                            await updateNotificationSettings(
+                              ref,
+                              source.copyWith(progressSummaryEnabled: value),
+                            );
                           },
                         ),
                       ],
@@ -134,7 +166,9 @@ class _TopHeader extends StatelessWidget {
 }
 
 class _ProfileIdentity extends StatelessWidget {
-  const _ProfileIdentity();
+  const _ProfileIdentity({required this.name});
+
+  final String name;
 
   @override
   Widget build(BuildContext context) {
@@ -186,7 +220,7 @@ class _ProfileIdentity extends StatelessWidget {
               ),
               SizedBox(height: 8.h),
               Text(
-                'Evrim Kurt',
+                name,
                 style: GoogleFonts.leagueSpartan(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w500,
@@ -203,7 +237,15 @@ class _ProfileIdentity extends StatelessWidget {
 }
 
 class _StatsStrip extends StatelessWidget {
-  const _StatsStrip();
+  const _StatsStrip({
+    required this.totalDays,
+    required this.completedDays,
+    required this.completionRate,
+  });
+
+  final int totalDays;
+  final int completedDays;
+  final double completionRate;
 
   @override
   Widget build(BuildContext context) {
@@ -214,19 +256,19 @@ class _StatsStrip extends StatelessWidget {
       children: [
         _StatItem(
           iconData: Iconsax.clock,
-          value: '2',
+          value: '$totalDays',
           label: l10n.profileDoneTimeLabel,
         ),
         SizedBox(width: 40.w),
         _StatItem(
           iconData: Iconsax.activity,
-          value: '10',
+          value: '$completedDays',
           label: l10n.profileCompletedActivityLabel,
         ),
         SizedBox(width: 40.w),
         _StatItem(
           iconData: Iconsax.flash_1,
-          value: '3',
+          value: '${completionRate.round()}%',
           label: l10n.profileStreaksLabel,
         ),
       ],
@@ -292,10 +334,12 @@ class _SettingsSection extends StatelessWidget {
   const _SettingsSection({
     required this.notificationsEnabled,
     required this.onNotificationsChanged,
+    required this.isPremium,
   });
 
   final bool notificationsEnabled;
   final ValueChanged<bool> onNotificationsChanged;
+  final bool isPremium;
 
   @override
   Widget build(BuildContext context) {
@@ -335,7 +379,7 @@ class _SettingsSection extends StatelessWidget {
             ),
             _SettingRow(
               iconPath: '${ProfileView._profileIconBase}/iconsax-crown-1.svg',
-              title: l10n.profilePremium,
+              title: isPremium ? '${l10n.profilePremium} (ON)' : l10n.profilePremium,
               trailing: _Chevron(),
               onTap: () {},
             ),

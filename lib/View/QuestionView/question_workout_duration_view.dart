@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:slim30/Core/Network/onboarding_api.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
 import 'package:slim30/Core/Theme/my_colors.dart';
 import 'package:slim30/View/QuestionView/widgets/question_bottom_actions.dart';
@@ -160,10 +161,14 @@ class _QuestionWorkoutDurationViewState
                 child: QuestionBottomActions(
                   onBack: () => Navigator.pop(context),
                   onNext: _selected != null
-                      ? () => Navigator.pushNamed(
-                          context,
-                          AppRoutes.questionGoalSpeed,
-                        )
+                      ? () async {
+                          await OnboardingApi.upsertAnswer('workout_duration', _selected!.name);
+                          if (!mounted) return;
+                          Navigator.pushNamed(
+                            context,
+                            AppRoutes.questionGoalSpeed,
+                          );
+                        }
                       : null,
                 ),
               ),

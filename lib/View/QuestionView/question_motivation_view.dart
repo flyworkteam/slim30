@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:slim30/Core/Network/onboarding_api.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
 import 'package:slim30/View/QuestionView/widgets/question_bottom_actions.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
@@ -110,7 +111,9 @@ class QuestionMotivationView extends StatelessWidget {
                 width: 342.w,
                 child: QuestionBottomActions(
                   onBack: () => Navigator.pop(context),
-                  onNext: () {
+                  onNext: () async {
+                    await OnboardingApi.upsertAnswer('motivation_seen', true);
+                    if (!context.mounted) return;
                     Navigator.pushNamed(context, AppRoutes.questionWorkout);
                   },
                 ),

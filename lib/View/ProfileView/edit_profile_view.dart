@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
+import 'package:slim30/Riverpod/Providers/backend_providers.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
 
-class EditProfileView extends StatefulWidget {
+class EditProfileView extends ConsumerStatefulWidget {
   const EditProfileView({super.key});
 
   @override
-  State<EditProfileView> createState() => _EditProfileViewState();
+  ConsumerState<EditProfileView> createState() => _EditProfileViewState();
 }
 
-class _EditProfileViewState extends State<EditProfileView> {
+class _EditProfileViewState extends ConsumerState<EditProfileView> {
   static const _homeIconBase = 'assets/images/icons/homePage';
   static const _bodyTypes = ['slim', 'normal', 'overweight', 'obese'];
 
@@ -22,6 +24,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   late final TextEditingController _weightController;
 
   String _bodyType = 'normal';
+  bool _initializedFromApi = false;
 
   @override
   void initState() {
@@ -96,8 +99,33 @@ class _EditProfileViewState extends State<EditProfileView> {
     }
   }
 
-  void _saveChanges() {
+  Future<void> _saveChanges() async {
     final l10n = AppLocalizations.of(context)!;
+
+    double? parseHeightCm(String input) {
+      final raw = input.trim().replaceAll(',', '.');
+      final value = double.tryParse(raw);
+      if (value == null) {
+        return null;
+      }
+
+      if (value <= 3) {
+        return value * 100;
+      }
+
+      return value;
+    }
+
+    final payload = <String, dynamic>{
+      'name': _nameController.text.trim(),
+      'age': int.tryParse(_ageController.text.trim()),
+      'height_cm': parseHeightCm(_heightController.text),
+      'weight_kg': double.tryParse(_weightController.text.trim().replaceAll(',', '.')),
+    };
+
+    payload.removeWhere((_, value) => value == null);
+
+    await updateProfile(ref, payload);
 
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
@@ -166,6 +194,17 @@ class _EditProfileViewState extends State<EditProfileView> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final profile = ref.watch(userProfileProvider).valueOrNull;
+
+    if (!_initializedFromApi && profile != null) {
+      _initializedFromApi = true;
+      _nameController.text = profile.name;
+      _ageController.text = profile.age?.toString() ?? _ageController.text;
+      _heightController.text = profile.heightCm != null
+          ? (profile.heightCm! / 100).toStringAsFixed(2)
+          : _heightController.text;
+      _weightController.text = profile.weightKg?.toStringAsFixed(0) ?? _weightController.text;
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -202,7 +241,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                         _SaveActions(
                           label: l10n.editProfileSaveButton,
                           deleteLabel: l10n.editProfileDeleteAccount,
-                          onSave: _saveChanges,
+                          onSave: () {
+                            _saveChanges();
+                          },
                           onDelete: _deleteAccount,
                         ),
                       ],

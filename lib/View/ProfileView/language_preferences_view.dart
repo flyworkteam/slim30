@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:slim30/Riverpod/Providers/all_providers.dart';
+import 'package:slim30/Riverpod/Providers/backend_providers.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
 
 class LanguagePreferencesView extends ConsumerStatefulWidget {
@@ -40,6 +41,7 @@ class _LanguagePreferencesViewState
 
   Future<void> _saveLanguage() async {
     await ref.read(localeProvider.notifier).setLocale(_selectedLanguageCode);
+    await updateProfile(ref, {'language': _selectedLanguageCode});
     if (!mounted) return;
     Navigator.of(context).pop();
   }

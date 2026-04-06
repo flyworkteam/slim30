@@ -1,20 +1,22 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
+import 'package:slim30/Riverpod/Providers/workout/workout_program_provider.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
 
-class ProgressView extends StatefulWidget {
+class ProgressView extends ConsumerStatefulWidget {
   const ProgressView({super.key});
 
   @override
-  State<ProgressView> createState() => _ProgressViewState();
+  ConsumerState<ProgressView> createState() => _ProgressViewState();
 }
 
-class _ProgressViewState extends State<ProgressView> {
+class _ProgressViewState extends ConsumerState<ProgressView> {
   static const _homeIconBase = 'assets/images/icons/homePage';
   static const _progressIconBase = 'assets/images/icons/progress_icon';
 
@@ -24,6 +26,20 @@ class _ProgressViewState extends State<ProgressView> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final summaryAsync = ref.watch(progressSummaryProvider);
+    final summary = summaryAsync.valueOrNull;
+    final totalDays = summary?.totalDays;
+    final completedDays = summary?.completedDays;
+    final successPercent = summary?.completionRate.round();
+    final completedValue = summary != null
+        ? '$completedDays/$totalDays'
+        : (summaryAsync.isLoading ? '...' : '--');
+    final successValue = summary != null
+        ? '%$successPercent'
+        : (summaryAsync.isLoading ? '...' : '--');
+    final totalCompletedValue = summary != null
+        ? '$completedDays'
+        : (summaryAsync.isLoading ? '...' : '--');
     final goalOptions = [
       l10n.progressGoalDaily5k,
       l10n.progressGoalDaily10k,
@@ -47,6 +63,10 @@ class _ProgressViewState extends State<ProgressView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _Header(title: l10n.progressTitle),
+                        if (summaryAsync.isLoading) ...[
+                          SizedBox(height: 10.h),
+                          const LinearProgressIndicator(minHeight: 2),
+                        ],
                         SizedBox(height: 16.h),
                         _TodayWorkoutCard(
                           title: l10n.homeTodayWorkoutTitle,
@@ -84,7 +104,7 @@ class _ProgressViewState extends State<ProgressView> {
                         SizedBox(height: 15.h),
                         _DailySummaryCard(
                           completedTitle: l10n.progressCompletedActivity,
-                          completedValue: '6/8',
+                          completedValue: completedValue,
                           caloriesTitle: l10n.progressCaloriesBurnedLabel,
                           caloriesValue: '140 ${l10n.progressUnitKcal}',
                           muscleLabel: l10n.progressMuscleGainLabel,
@@ -98,7 +118,7 @@ class _ProgressViewState extends State<ProgressView> {
                           durationLabel: l10n.progressDurationLabel,
                           durationValue: '40 ${l10n.progressUnitMinute}',
                           successLabel: l10n.progressSuccessPercentLabel,
-                          successValue: '%69',
+                          successValue: successValue,
                         ),
                         SizedBox(height: 24.h),
                         _OverallPerformanceRow(
@@ -141,7 +161,7 @@ class _ProgressViewState extends State<ProgressView> {
                         _StatTile(
                           iconPath: '$_progressIconBase/iconsax-activity.svg',
                           label: l10n.progressTotalCompletedLabel,
-                          value: '12',
+                          value: totalCompletedValue,
                         ),
                         SizedBox(height: 10.h),
                         _StatTile(

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
+import 'package:slim30/Riverpod/Providers/workout/workout_program_provider.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
 import 'package:slim30/View/WorkoutView/workout_program_view.dart';
 
-class WorkoutView extends StatelessWidget {
+class WorkoutView extends ConsumerWidget {
   const WorkoutView({super.key});
 
   static const _iconBase = 'assets/images/icons/homePage';
@@ -190,14 +192,14 @@ class WorkoutView extends StatelessWidget {
     return '$dayNumber${text.daySuffix}';
   }
 
-  List<_WorkoutDayItem> _items(BuildContext context) {
+  List<_WorkoutDayItem> _fallbackItems(BuildContext context) {
     final dayTitles = _localizedDayTitles(context);
 
     return List<_WorkoutDayItem>.generate(30, (index) {
       final day = index + 1;
-      final state = day <= 6
-          ? _WorkoutCardState.completed
-          : _WorkoutCardState.unlocked;
+      final state = day == 1
+          ? _WorkoutCardState.unlocked
+          : _WorkoutCardState.locked;
 
       return _WorkoutDayItem(
         dayNumber: day,
@@ -209,9 +211,28 @@ class WorkoutView extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final remoteProgram = ref.watch(workoutProgramUiProvider);
+    final remoteItems = remoteProgram.valueOrNull;
+
+    final allItems = (remoteItems != null && remoteItems.isNotEmpty)
+        ? remoteItems
+              .map(
+                (item) => _WorkoutDayItem(
+                  dayNumber: item.dayNumber,
+                  title: item.title,
+                  imagePath: item.imagePath,
+                  state: item.isCompleted
+                      ? _WorkoutCardState.completed
+                      : (item.isLocked
+                            ? _WorkoutCardState.locked
+                            : _WorkoutCardState.unlocked),
+                ),
+              )
+              .toList(growable: false)
+        : _fallbackItems(context);
+
     final rows = <List<_WorkoutDayItem>>[];
-    final allItems = _items(context);
 
     for (var i = 0; i < allItems.length; i += 2) {
       final end = (i + 2) > allItems.length ? allItems.length : (i + 2);

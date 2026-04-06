@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
+import 'package:slim30/Riverpod/Providers/backend_providers.dart';
+import 'package:slim30/Riverpod/Providers/workout/workout_program_provider.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends ConsumerWidget {
   const HomeView({super.key});
 
   static const _iconBase = 'assets/images/icons/homePage';
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dashboardAsync = ref.watch(homeDashboardProvider);
+    final completedDaysAsync = ref.watch(completedProgressDaysProvider);
+    final completedDays = completedDaysAsync.valueOrNull ?? <int>{};
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -25,13 +32,16 @@ class HomeView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _Header(iconBase: _iconBase),
+                      _Header(
+                        iconBase: _iconBase,
+                        dashboard: dashboardAsync.valueOrNull,
+                      ),
                       SizedBox(height: 34.h),
-                      _DayStrip(),
+                      _DayStrip(completedDays: completedDays),
                       SizedBox(height: 40.h),
                       _TodayWorkoutCard(),
                       SizedBox(height: 40.h),
-                      _CompletedDays(),
+                      _CompletedDays(completedDays: completedDays),
                       SizedBox(height: 40.h),
                       _ProgressSection(iconBase: _iconBase),
                       SizedBox(height: 40.h),
@@ -59,9 +69,10 @@ class HomeView extends StatelessWidget {
 }
 
 class _Header extends StatelessWidget {
-  const _Header({required this.iconBase});
+  const _Header({required this.iconBase, required this.dashboard});
 
   final String iconBase;
+  final dynamic dashboard;
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +92,7 @@ class _Header extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                l10n.homeGreeting,
+                '${l10n.homeGreeting} ${dashboard?.profile.name ?? ''}'.trim(),
                 style: GoogleFonts.leagueSpartan(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w600,
@@ -133,7 +144,7 @@ class _Header extends StatelessWidget {
                     colors: [Color(0xFFFFEECC), Color(0xFFAD9515)],
                   ).createShader(bounds),
                   child: Text(
-                    l10n.homePremium,
+                    dashboard?.isPremium == true ? l10n.homePremium : 'Free',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.leagueSpartan(
@@ -168,17 +179,32 @@ class _Header extends StatelessWidget {
 }
 
 class _DayStrip extends StatelessWidget {
+  const _DayStrip({required this.completedDays});
+
+  final Set<int> completedDays;
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final now = DateTime.now();
+    final first = now.subtract(Duration(days: now.weekday - 1));
+    final labels = [
+      l10n.homeDayMonShort,
+      l10n.homeDayTueShort,
+      l10n.homeDayWedShort,
+      l10n.homeDayThuShort,
+      l10n.homeDayFriShort,
+      l10n.homeDaySatShort,
+      l10n.homeDaySunShort,
+    ];
+
     final data = [
-      (l10n.homeDayMonShort, '22', false),
-      (l10n.homeDayTueShort, '23', false),
-      (l10n.homeDayWedShort, '24', true),
-      (l10n.homeDayThuShort, '25', false),
-      (l10n.homeDayFriShort, '26', false),
-      (l10n.homeDaySatShort, '27', false),
-      (l10n.homeDaySunShort, '28', false),
+      for (var i = 0; i < 7; i++)
+        (
+          labels[i],
+          '${first.add(Duration(days: i)).day}',
+          completedDays.contains(i + 1),
+        ),
     ];
 
     return SizedBox(
@@ -341,6 +367,10 @@ class _TodayWorkoutCard extends StatelessWidget {
 }
 
 class _CompletedDays extends StatelessWidget {
+  const _CompletedDays({required this.completedDays});
+
+  final Set<int> completedDays;
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -370,7 +400,7 @@ class _CompletedDays extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(days.length, (index) {
-              final done = index < 3;
+              final done = completedDays.contains(index + 1);
               return Column(
                 children: [
                   Text(

@@ -1,83 +1,72 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:slim30/Riverpod/Models/app_models.dart';
+import 'package:slim30/Riverpod/Providers/backend_providers.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
 
-class NotificationsView extends StatefulWidget {
+class NotificationsView extends ConsumerStatefulWidget {
   const NotificationsView({super.key});
 
   @override
-  State<NotificationsView> createState() => _NotificationsViewState();
+  ConsumerState<NotificationsView> createState() => _NotificationsViewState();
 }
 
-class _NotificationsViewState extends State<NotificationsView> {
+class _NotificationsViewState extends ConsumerState<NotificationsView> {
   static const _iconBase = 'assets/images/icons/notification_icon';
 
-  Set<String> _removedIds = <String>{};
+  Set<int> _removedIds = <int>{};
   bool _clearedAll = false;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final notifications = ref.watch(notificationsProvider).valueOrNull ??
+        const <NotificationModel>[];
+    final now = DateTime.now();
+    final todayStart = DateTime(now.year, now.month, now.day);
+    final yesterdayStart = todayStart.subtract(const Duration(days: 1));
 
-    final todayItems = [
-      _NotificationItem(
-        id: 'today-workout',
-        iconPath: '$_iconBase/iconsax-sms-tracking.svg',
-        title: l10n.notificationsWorkoutTitle,
-        subtitle: l10n.notificationsWorkoutBody,
-        time: l10n.notificationsWorkoutTime,
-      ),
-      _NotificationItem(
-        id: 'today-streak',
-        iconPath: '$_iconBase/iconsax-huobi-token-(ht).svg',
-        title: l10n.notificationsStreakTitle,
-        subtitle: l10n.notificationsStreakBody,
-        time: l10n.notificationsStreakTime,
-      ),
-      _NotificationItem(
-        id: 'today-stretch',
-        iconPath: '$_iconBase/iconsax-fireworks-2.svg',
-        title: l10n.notificationsStretchTitle,
-        subtitle: l10n.notificationsStretchBody,
-        time: l10n.notificationsStretchTime,
-      ),
-    ];
+    String formatTime(DateTime date) {
+      final h = date.hour.toString().padLeft(2, '0');
+      final m = date.minute.toString().padLeft(2, '0');
+      return '$h:$m';
+    }
 
-    final yesterdayItems = [
-      _NotificationItem(
-        id: 'yesterday-done',
-        iconPath: '$_iconBase/iconsax-sms-tracking.svg',
-        title: l10n.notificationsDoneTitle,
-        subtitle: l10n.notificationsDoneBody,
-        time: l10n.notificationsDoneTime,
-      ),
-      _NotificationItem(
-        id: 'yesterday-weekly',
-        iconPath: '$_iconBase/iconsax-driver.svg',
-        title: l10n.notificationsWeeklyTitle,
-        subtitle: l10n.notificationsWeeklyBody,
-        time: l10n.notificationsWeeklyTime,
-      ),
-      _NotificationItem(
-        id: 'yesterday-done-2',
-        iconPath: '$_iconBase/iconsax-sms-tracking.svg',
-        title: l10n.notificationsDoneTitle,
-        subtitle: l10n.notificationsDoneBody,
-        time: l10n.notificationsDoneTime,
-      ),
-    ];
+    final mapped = notifications
+        .where((item) => !_removedIds.contains(item.id))
+        .map(
+          (item) => _NotificationItem(
+            id: item.id,
+            iconPath: '$_iconBase/iconsax-sms-tracking.svg',
+            title: item.title,
+            subtitle: item.body,
+            time: formatTime(item.createdAt),
+            createdAt: item.createdAt,
+          ),
+        )
+        .toList(growable: false);
 
-    final visibleToday = _clearedAll
+    final todayItems = _clearedAll
         ? const <_NotificationItem>[]
-        : todayItems.where((e) => !_removedIds.contains(e.id)).toList();
-    final visibleYesterday = _clearedAll
+        : mapped
+              .where((item) => item.createdAt.isAfter(todayStart))
+              .toList(growable: false);
+
+    final yesterdayItems = _clearedAll
         ? const <_NotificationItem>[]
-        : yesterdayItems.where((e) => !_removedIds.contains(e.id)).toList();
-    final hasNotifications =
-        visibleToday.isNotEmpty || visibleYesterday.isNotEmpty;
+        : mapped
+              .where(
+                (item) =>
+                    item.createdAt.isAfter(yesterdayStart) &&
+                    item.createdAt.isBefore(todayStart),
+              )
+              .toList(growable: false);
+
+    final hasNotifications = todayItems.isNotEmpty || yesterdayItems.isNotEmpty;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -100,13 +89,12 @@ class _NotificationsViewState extends State<NotificationsView> {
                         child: _ClearAllButton(
                           label: l10n.notificationsClearAll,
                           enabled: hasNotifications,
-                          onTap: () {
+                          onTap: () async {
                             if (!hasNotifications) {
                               return;
                             }
-                            setState(() {
-                              _clearedAll = true;
-                            });
+                            await markAllNotificationsRead(ref);
+                            setState(() => _clearedAll = true);
                             ScaffoldMessenger.of(context)
                               ..clearSnackBars()
                               ..showSnackBar(
@@ -127,22 +115,20 @@ class _NotificationsViewState extends State<NotificationsView> {
                             _SectionTitle(text: l10n.notificationsToday),
                             SizedBox(height: 14.h),
                             _NotificationList(
-                              items: visibleToday,
-                              onDelete: (id) {
-                                setState(() {
-                                  _removedIds = {..._removedIds, id};
-                                });
+                              items: todayItems,
+                              onDelete: (id) async {
+                                await markNotificationRead(ref, id);
+                                setState(() => _removedIds = {..._removedIds, id});
                               },
                             ),
                             SizedBox(height: 28.h),
                             _SectionTitle(text: l10n.notificationsYesterday),
                             SizedBox(height: 14.h),
                             _NotificationList(
-                              items: visibleYesterday,
-                              onDelete: (id) {
-                                setState(() {
-                                  _removedIds = {..._removedIds, id};
-                                });
+                              items: yesterdayItems,
+                              onDelete: (id) async {
+                                await markNotificationRead(ref, id);
+                                setState(() => _removedIds = {..._removedIds, id});
                               },
                             ),
                           ],
@@ -263,7 +249,7 @@ class _NotificationList extends StatelessWidget {
   const _NotificationList({required this.items, required this.onDelete});
 
   final List<_NotificationItem> items;
-  final ValueChanged<String> onDelete;
+  final ValueChanged<int> onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -275,7 +261,7 @@ class _NotificationList extends StatelessWidget {
       children: [
         for (int i = 0; i < items.length; i++) ...[
           Slidable(
-            key: ValueKey<String>(items[i].id),
+            key: ValueKey<int>(items[i].id),
             endActionPane: ActionPane(
               motion: const DrawerMotion(),
               extentRatio: 0.13,
@@ -441,11 +427,13 @@ class _NotificationItem {
     required this.title,
     required this.subtitle,
     required this.time,
+    required this.createdAt,
   });
 
-  final String id;
+  final int id;
   final String iconPath;
   final String title;
   final String subtitle;
   final String time;
+  final DateTime createdAt;
 }

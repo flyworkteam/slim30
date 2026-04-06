@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:slim30/Core/Storage/user_prefs.dart';
+import 'package:slim30/Core/Network/onboarding_api.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
 import 'package:slim30/Core/Theme/my_colors.dart';
 import 'package:slim30/View/QuestionView/widgets/question_bottom_actions.dart';
@@ -187,9 +188,11 @@ class _QuestionGenderViewState extends State<QuestionGenderView> {
                 width: 342.w,
                 child: QuestionBottomActions(
                   onBack: () => Navigator.pop(context),
-                  onNext: () {
+                  onNext: () async {
                     final selected = _selected ?? _Gender.unspecified;
-                    UserPrefs.setGender(selected.toUserGender());
+                    await UserPrefs.setGender(selected.toUserGender());
+                    await OnboardingApi.upsertAnswer('gender', selected.name);
+                    if (!mounted) return;
                     Navigator.pushNamed(context, AppRoutes.questionAge);
                   },
                 ),
