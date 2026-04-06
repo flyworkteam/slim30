@@ -51,15 +51,9 @@ class _SplashViewState extends State<SplashView> {
                   gradient: const LinearGradient(
                     begin: Alignment(0.08, -1.0),
                     end: Alignment(-0.08, 1.0),
-                    colors: [
-                      MyColors.splashCardStart,
-                      MyColors.splashCardEnd,
-                    ],
+                    colors: [MyColors.splashCardStart, MyColors.splashCardEnd],
                   ),
-                  border: Border.all(
-                    color: MyColors.splashBorder,
-                    width: 0.8,
-                  ),
+                  border: Border.all(color: MyColors.splashBorder, width: 0.8),
                   borderRadius: BorderRadius.circular(16.r),
                   boxShadow: [
                     BoxShadow(
