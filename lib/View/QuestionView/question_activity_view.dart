@@ -229,6 +229,8 @@ class _ActivityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final iconColor = selected ? Colors.black : null;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -248,6 +250,9 @@ class _ActivityCard extends StatelessWidget {
                 'assets/images/icons/${item.icon}',
                 width: 48.w,
                 height: 48.h,
+                colorFilter: iconColor == null
+                    ? null
+                    : ColorFilter.mode(iconColor, BlendMode.srcIn),
               ),
               SizedBox(height: 17.h),
               Text(
