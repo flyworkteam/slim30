@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
+import 'package:slim30/Riverpod/Models/app_models.dart';
 import 'package:slim30/Riverpod/Providers/backend_providers.dart';
 import 'package:slim30/Riverpod/Providers/workout/workout_program_provider.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
@@ -43,7 +44,11 @@ class HomeView extends ConsumerWidget {
                       SizedBox(height: 40.h),
                       _CompletedDays(completedDays: completedDays),
                       SizedBox(height: 40.h),
-                      _ProgressSection(iconBase: _iconBase),
+                      _ProgressSection(
+                        iconBase: _iconBase,
+                        dashboard: dashboardAsync.valueOrNull,
+                        completedDays: completedDays,
+                      ),
                       SizedBox(height: 40.h),
                       _ContinueSection(iconBase: _iconBase),
                       SizedBox(height: 40.h),
@@ -72,19 +77,30 @@ class _Header extends StatelessWidget {
   const _Header({required this.iconBase, required this.dashboard});
 
   final String iconBase;
-  final dynamic dashboard;
+  final HomeDashboardModel? dashboard;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final profile = dashboard?.profile;
+    final profileName = (profile?.name.trim().isNotEmpty ?? false)
+        ? profile!.name.trim()
+        : l10n.homeGreeting;
+    final profileAvatarUrl = profile?.avatarUrl;
 
     return Row(
       children: [
         CircleAvatar(
           radius: 19.r,
-          backgroundImage: const AssetImage(
-            'assets/images/f62810c637b67734e57a8bfb4985baec89b2e79e.jpg',
-          ),
+          backgroundColor: const Color(0xFFF5F5F5),
+          backgroundImage:
+              profileAvatarUrl != null && profileAvatarUrl.trim().isNotEmpty
+              ? NetworkImage(profileAvatarUrl)
+              : const AssetImage(
+                      'assets/images/f62810c637b67734e57a8bfb4985baec89b2e79e.jpg',
+                    )
+                    as ImageProvider,
+          onBackgroundImageError: (Object error, StackTrace? stackTrace) {},
         ),
         SizedBox(width: 9.w),
         Expanded(
@@ -92,7 +108,7 @@ class _Header extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${l10n.homeGreeting} ${dashboard?.profile.name ?? ''}'.trim(),
+                profileName,
                 style: GoogleFonts.leagueSpartan(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w600,
@@ -101,7 +117,9 @@ class _Header extends StatelessWidget {
               ),
               SizedBox(height: 7.h),
               Text(
-                l10n.homeWelcome,
+                profile?.email?.trim().isNotEmpty == true
+                    ? profile!.email!.trim()
+                    : l10n.homeWelcome,
                 style: GoogleFonts.leagueSpartan(
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w500,
@@ -558,13 +576,44 @@ class _CompletedDays extends StatelessWidget {
 }
 
 class _ProgressSection extends StatelessWidget {
-  const _ProgressSection({required this.iconBase});
+  const _ProgressSection({
+    required this.iconBase,
+    required this.dashboard,
+    required this.completedDays,
+  });
 
   final String iconBase;
+  final HomeDashboardModel? dashboard;
+  final Set<int> completedDays;
+
+  String _formatKg(double value) {
+    final trimmed = value.toStringAsFixed(1);
+    return trimmed.endsWith('.0') ? trimmed.substring(0, trimmed.length - 2) : trimmed;
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final summaryCompleted = dashboard?.completedDays ?? completedDays.length;
+    final totalDays = (dashboard?.totalDays ?? 30).clamp(1, 30);
+    final completionRate = ((dashboard?.completionRate ?? 0).toDouble())
+      .clamp(0.0, 100.0)
+      .toDouble();
+    final calories = summaryCompleted * 140;
+    final hydrationPercent = completionRate.round().clamp(0, 100);
+
+    final profile = dashboard?.profile;
+    final weight = profile?.weightKg;
+    final targetWeight = profile?.targetWeightKg;
+    final hasWeightGoal =
+        weight != null && targetWeight != null && weight > targetWeight;
+    final weightToGoal = hasWeightGoal ? (weight - targetWeight) : 0.0;
+    final weightValueText = hasWeightGoal
+        ? '-${_formatKg(weightToGoal)} kg'
+        : '0 kg';
+
+    final successPercent = completionRate.round();
+    final completionProgress = completionRate / 100;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -594,11 +643,31 @@ class _ProgressSection extends StatelessWidget {
         SizedBox(height: 15.h),
         Row(
           children: [
-            Expanded(child: _CaloriesCard(iconBase: iconBase)),
+            Expanded(
+              child: _CaloriesCard(
+                iconBase: iconBase,
+                calories: calories,
+                hydrationPercent: hydrationPercent,
+              ),
+            ),
             SizedBox(width: 9.w),
-            Expanded(child: _MiddleMetricsCard(iconBase: iconBase)),
+            Expanded(
+              child: _MiddleMetricsCard(
+                iconBase: iconBase,
+                weightValueText: weightValueText,
+                streakDays: summaryCompleted,
+              ),
+            ),
             SizedBox(width: 9.w),
-            Expanded(child: _RightMetricsCard(iconBase: iconBase)),
+            Expanded(
+              child: _RightMetricsCard(
+                iconBase: iconBase,
+                completedActivities: summaryCompleted,
+                totalDays: totalDays,
+                completionProgress: completionProgress,
+                successPercent: successPercent,
+              ),
+            ),
           ],
         ),
       ],
@@ -607,8 +676,14 @@ class _ProgressSection extends StatelessWidget {
 }
 
 class _CaloriesCard extends StatelessWidget {
-  const _CaloriesCard({required this.iconBase});
+  const _CaloriesCard({
+    required this.iconBase,
+    required this.calories,
+    required this.hydrationPercent,
+  });
   final String iconBase;
+  final int calories;
+  final int hydrationPercent;
 
   @override
   Widget build(BuildContext context) {
@@ -650,7 +725,7 @@ class _CaloriesCard extends StatelessWidget {
               ),
               SizedBox(height: 11.h),
               Text(
-                '140 kcal',
+                '$calories kcal',
                 style: GoogleFonts.leagueSpartan(
                   fontSize: 20.sp,
                   fontWeight: FontWeight.w500,
@@ -710,7 +785,7 @@ class _CaloriesCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '%72',
+                        '%$hydrationPercent',
                         style: GoogleFonts.leagueSpartan(
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w500,
@@ -757,8 +832,14 @@ class _MiniBar extends StatelessWidget {
 }
 
 class _MiddleMetricsCard extends StatelessWidget {
-  const _MiddleMetricsCard({required this.iconBase});
+  const _MiddleMetricsCard({
+    required this.iconBase,
+    required this.weightValueText,
+    required this.streakDays,
+  });
   final String iconBase;
+  final String weightValueText;
+  final int streakDays;
 
   @override
   Widget build(BuildContext context) {
@@ -770,7 +851,7 @@ class _MiddleMetricsCard extends StatelessWidget {
           bg: const Color(0xFFE1FBFF),
           icon: '$iconBase/iconsax-weight.svg',
           title: l10n.homeWeightLost,
-          value: '-3.4 kg',
+          value: weightValueText,
           subtitle: l10n.homeAmazing,
           subtitleColor: const Color(0xFF1EBFDA),
         ),
@@ -779,7 +860,7 @@ class _MiddleMetricsCard extends StatelessWidget {
           bg: const Color(0xFFCAFFE2),
           icon: '$iconBase/iconsax-fire.svg',
           title: l10n.homeStreaks,
-          value: '7 Gün',
+          value: '$streakDays',
           subtitle: l10n.homeDontBreakChain,
           subtitleColor: const Color(0xFF17CD52),
         ),
@@ -789,8 +870,18 @@ class _MiddleMetricsCard extends StatelessWidget {
 }
 
 class _RightMetricsCard extends StatelessWidget {
-  const _RightMetricsCard({required this.iconBase});
+  const _RightMetricsCard({
+    required this.iconBase,
+    required this.completedActivities,
+    required this.totalDays,
+    required this.completionProgress,
+    required this.successPercent,
+  });
   final String iconBase;
+  final int completedActivities;
+  final int totalDays;
+  final double completionProgress;
+  final int successPercent;
 
   @override
   Widget build(BuildContext context) {
@@ -833,7 +924,7 @@ class _RightMetricsCard extends StatelessWidget {
               ),
               SizedBox(height: 6.h),
               Text(
-                '12 aktivite',
+                '$completedActivities / $totalDays',
                 style: GoogleFonts.leagueSpartan(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.w500,
@@ -849,14 +940,14 @@ class _RightMetricsCard extends StatelessWidget {
                         width: 42.w,
                         height: 42.w,
                         child: CircularProgressIndicator(
-                          value: 0.32,
+                          value: completionProgress,
                           strokeWidth: 6,
                           backgroundColor: const Color(0xFFA4FFC8),
                           color: const Color(0xFF32EA6E),
                         ),
                       ),
                       Text(
-                        '%32',
+                        '%$successPercent',
                         style: GoogleFonts.leagueSpartan(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
@@ -898,7 +989,7 @@ class _RightMetricsCard extends StatelessWidget {
                       ),
                       SizedBox(height: 2.h),
                       Text(
-                        '%69',
+                        '%$successPercent',
                         style: GoogleFonts.leagueSpartan(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.w500,

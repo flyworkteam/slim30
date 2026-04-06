@@ -133,7 +133,11 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                         const _TopHeader(),
                         SizedBox(height: 33.h),
                         Center(
-                          child: _ProfileIdentity(name: profile?.name ?? 'User'),
+                          child: _ProfileIdentity(
+                            name: profile?.name ?? 'User',
+                            email: profile?.email,
+                            avatarUrl: profile?.avatarUrl,
+                          ),
                         ),
                         SizedBox(height: 30.h),
                         _StatsStrip(
@@ -249,9 +253,15 @@ class _TopHeader extends StatelessWidget {
 }
 
 class _ProfileIdentity extends StatelessWidget {
-  const _ProfileIdentity({required this.name});
+  const _ProfileIdentity({
+    required this.name,
+    required this.email,
+    required this.avatarUrl,
+  });
 
   final String name;
+  final String? email;
+  final String? avatarUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -272,12 +282,27 @@ class _ProfileIdentity extends StatelessWidget {
                       top: 0,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(35.r),
-                        child: Image.asset(
-                          'assets/images/f62810c637b67734e57a8bfb4985baec89b2e79e.jpg',
-                          width: 70.w,
-                          height: 70.w,
-                          fit: BoxFit.cover,
-                        ),
+                        child: avatarUrl != null && avatarUrl!.trim().isNotEmpty
+                            ? Image.network(
+                                avatarUrl!,
+                                width: 70.w,
+                                height: 70.w,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Image.asset(
+                                    'assets/images/f62810c637b67734e57a8bfb4985baec89b2e79e.jpg',
+                                    width: 70.w,
+                                    height: 70.w,
+                                    fit: BoxFit.cover,
+                                  );
+                                },
+                              )
+                            : Image.asset(
+                                'assets/images/f62810c637b67734e57a8bfb4985baec89b2e79e.jpg',
+                                width: 70.w,
+                                height: 70.w,
+                                fit: BoxFit.cover,
+                              ),
                       ),
                     ),
                     Positioned(
@@ -311,6 +336,20 @@ class _ProfileIdentity extends StatelessWidget {
                   color: Colors.black,
                 ),
               ),
+              if (email != null && email!.trim().isNotEmpty) ...[
+                SizedBox(height: 4.h),
+                Text(
+                  email!.trim(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.leagueSpartan(
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w400,
+                    height: 1,
+                    color: const Color(0xFF5C5C5C),
+                  ),
+                ),
+              ],
             ],
           ),
         ),
@@ -333,13 +372,14 @@ class _StatsStrip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final estimatedMinutes = completedDays * 10;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _StatItem(
           iconData: Iconsax.clock,
-          value: '$totalDays',
+          value: '${estimatedMinutes}m',
           label: l10n.profileDoneTimeLabel,
         ),
         SizedBox(width: 40.w),

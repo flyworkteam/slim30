@@ -10,6 +10,7 @@ import 'package:slim30/Riverpod/Providers/workout/workout_program_provider.dart'
 import 'package:slim30/l10n/generated/app_localizations.dart';
 import 'package:slim30/View/WorkoutView/workout_program_locale_data.dart';
 import 'package:slim30/View/WorkoutView/workout_detail_view.dart';
+import 'package:slim30/View/WorkoutView/exercise_video_catalog.dart';
 
 class WorkoutProgramArgs {
   const WorkoutProgramArgs({
@@ -1944,6 +1945,12 @@ class _WorkoutProgramViewState extends ConsumerState<WorkoutProgramView> {
                                                     subtitle: exercise.sets,
                                                     imagePath:
                                                         exercise.imagePath,
+                                                    videoUrl:
+                                                        resolveExerciseVideoUrlByMedia(
+                                                          mediaPath:
+                                                              exercise.imagePath,
+                                                          title: exercise.title,
+                                                        ),
                                                     durationSeconds:
                                                         _resolveExerciseDurationSeconds(
                                                           exercise,

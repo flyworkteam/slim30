@@ -5,18 +5,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
+import 'package:video_player/video_player.dart';
 
 class WorkoutDetailExercise {
   const WorkoutDetailExercise({
     required this.title,
     required this.subtitle,
     required this.imagePath,
+    this.videoUrl,
     required this.durationSeconds,
   });
 
   final String title;
   final String subtitle;
   final String imagePath;
+  final String? videoUrl;
   final int durationSeconds;
 }
 
@@ -51,6 +54,22 @@ class _WorkoutDetailViewState extends State<WorkoutDetailView> {
   late int _remainingSeconds;
   bool _isRunning = true;
   Timer? _ticker;
+  VideoPlayerController? _videoController;
+  bool _videoFailed = false;
+  int _videoLoadToken = 0;
+
+  Future<void> _safeVideoCall(Future<void> Function() action) async {
+    try {
+      await action();
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _videoFailed = true;
+      });
+    }
+  }
 
   @override
   void didChangeDependencies() {
@@ -93,7 +112,11 @@ class _WorkoutDetailViewState extends State<WorkoutDetailView> {
 
   @override
   void dispose() {
+    _videoLoadToken += 1;
     _ticker?.cancel();
+    unawaited(_safeVideoCall(() async {
+      await _videoController?.dispose();
+    }));
     super.dispose();
   }
 
@@ -135,6 +158,56 @@ class _WorkoutDetailViewState extends State<WorkoutDetailView> {
     _ticker = null;
   }
 
+  Future<void> _prepareVideoForCurrentExercise() async {
+    final loadToken = ++_videoLoadToken;
+    final previousController = _videoController;
+    _videoController = null;
+    _videoFailed = false;
+    await _safeVideoCall(() async {
+      await previousController?.dispose();
+    });
+
+    if (!mounted || loadToken != _videoLoadToken) {
+      return;
+    }
+
+    final videoUrl = _currentExercise.videoUrl;
+    if (videoUrl == null || videoUrl.isEmpty) {
+      if (mounted) {
+        setState(() {});
+      }
+      return;
+    }
+
+    final controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl));
+    try {
+      await controller.initialize();
+      if (!mounted || loadToken != _videoLoadToken) {
+        await controller.dispose();
+        return;
+      }
+      await controller.setLooping(true);
+      if (_isRunning) {
+        await _safeVideoCall(() => controller.play());
+      }
+      if (!mounted || loadToken != _videoLoadToken) {
+        await controller.dispose();
+        return;
+      }
+      setState(() {
+        _videoController = controller;
+      });
+    } catch (_) {
+      await controller.dispose();
+      if (!mounted || loadToken != _videoLoadToken) {
+        return;
+      }
+      setState(() {
+        _videoFailed = true;
+      });
+    }
+  }
+
   void _resetTimerForCurrentExercise({required bool startRunning}) {
     final forcedSeconds = _args.fixedDurationSeconds;
     _totalSeconds = (forcedSeconds != null && forcedSeconds > 0)
@@ -149,6 +222,7 @@ class _WorkoutDetailViewState extends State<WorkoutDetailView> {
     } else {
       _stopTicker();
     }
+    unawaited(_prepareVideoForCurrentExercise());
   }
 
   void _togglePause() {
@@ -162,8 +236,14 @@ class _WorkoutDetailViewState extends State<WorkoutDetailView> {
 
     if (_isRunning) {
       _startTicker();
+      unawaited(_safeVideoCall(() async {
+        await _videoController?.play();
+      }));
     } else {
       _stopTicker();
+      unawaited(_safeVideoCall(() async {
+        await _videoController?.pause();
+      }));
     }
   }
 
@@ -174,6 +254,9 @@ class _WorkoutDetailViewState extends State<WorkoutDetailView> {
         _isRunning = false;
       });
       _stopTicker();
+      unawaited(_safeVideoCall(() async {
+        await _videoController?.pause();
+      }));
       return;
     }
 
@@ -224,12 +307,24 @@ class _WorkoutDetailViewState extends State<WorkoutDetailView> {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      Image.asset(
-                        _currentExercise.imagePath,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) =>
-                            Container(color: const Color(0xFFEDEDED)),
-                      ),
+                      if (_videoController != null &&
+                          _videoController!.value.isInitialized &&
+                          !_videoFailed)
+                        FittedBox(
+                          fit: BoxFit.cover,
+                          child: SizedBox(
+                            width: _videoController!.value.size.width,
+                            height: _videoController!.value.size.height,
+                            child: VideoPlayer(_videoController!),
+                          ),
+                        )
+                      else
+                        Image.asset(
+                          _currentExercise.imagePath,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              Container(color: const Color(0xFFEDEDED)),
+                        ),
                     ],
                   ),
                 ),
