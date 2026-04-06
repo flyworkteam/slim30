@@ -114,9 +114,11 @@ class _WorkoutDetailViewState extends State<WorkoutDetailView> {
   void dispose() {
     _videoLoadToken += 1;
     _ticker?.cancel();
-    unawaited(_safeVideoCall(() async {
-      await _videoController?.dispose();
-    }));
+    unawaited(
+      _safeVideoCall(() async {
+        await _videoController?.dispose();
+      }),
+    );
     super.dispose();
   }
 
@@ -236,14 +238,18 @@ class _WorkoutDetailViewState extends State<WorkoutDetailView> {
 
     if (_isRunning) {
       _startTicker();
-      unawaited(_safeVideoCall(() async {
-        await _videoController?.play();
-      }));
+      unawaited(
+        _safeVideoCall(() async {
+          await _videoController?.play();
+        }),
+      );
     } else {
       _stopTicker();
-      unawaited(_safeVideoCall(() async {
-        await _videoController?.pause();
-      }));
+      unawaited(
+        _safeVideoCall(() async {
+          await _videoController?.pause();
+        }),
+      );
     }
   }
 
@@ -254,9 +260,11 @@ class _WorkoutDetailViewState extends State<WorkoutDetailView> {
         _isRunning = false;
       });
       _stopTicker();
-      unawaited(_safeVideoCall(() async {
-        await _videoController?.pause();
-      }));
+      unawaited(
+        _safeVideoCall(() async {
+          await _videoController?.pause();
+        }),
+      );
       return;
     }
 

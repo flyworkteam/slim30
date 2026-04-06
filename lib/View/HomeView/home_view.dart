@@ -84,8 +84,12 @@ class _Header extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final profile = dashboard?.profile;
     final profileName = (profile?.name.trim().isNotEmpty ?? false)
-        ? profile!.name.trim()
-        : l10n.homeGreeting;
+      ? profile!.name.trim()
+      : 'User';
+    final greetingBase = l10n.homeGreeting.trim();
+    final greetingLine = greetingBase.toLowerCase().contains('evrim')
+      ? profileName
+      : '$greetingBase $profileName'.trim();
     final profileAvatarUrl = profile?.avatarUrl;
 
     return Row(
@@ -108,7 +112,7 @@ class _Header extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                profileName,
+                greetingLine,
                 style: GoogleFonts.leagueSpartan(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w600,

@@ -1947,8 +1947,8 @@ class _WorkoutProgramViewState extends ConsumerState<WorkoutProgramView> {
                                                         exercise.imagePath,
                                                     videoUrl:
                                                         resolveExerciseVideoUrlByMedia(
-                                                          mediaPath:
-                                                              exercise.imagePath,
+                                                          mediaPath: exercise
+                                                              .imagePath,
                                                           title: exercise.title,
                                                         ),
                                                     durationSeconds:
