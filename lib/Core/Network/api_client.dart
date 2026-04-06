@@ -7,11 +7,13 @@ class ApiClient {
   ApiClient({
     required this.baseUrl,
     required this.defaultHeaders,
+    this.authTokenProvider,
     http.Client? httpClient,
   }) : _httpClient = httpClient ?? http.Client();
 
   final String baseUrl;
   final Map<String, String> defaultHeaders;
+  final Future<String?> Function()? authTokenProvider;
   final http.Client _httpClient;
 
   Future<Map<String, dynamic>> get(String path) async {
@@ -38,6 +40,12 @@ class ApiClient {
     final uri = Uri.parse('$baseUrl$path');
     try {
       final headers = <String, String>{...defaultHeaders};
+      if (authTokenProvider != null) {
+        final token = await authTokenProvider!();
+        if (token != null && token.trim().isNotEmpty) {
+          headers['Authorization'] = 'Bearer ${token.trim()}';
+        }
+      }
       http.Response response;
 
       if (method == 'GET') {

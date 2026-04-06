@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:slim30/Core/Config/app_config.dart';
 import 'package:slim30/Core/Network/api_client.dart';
+import 'package:slim30/Core/Storage/auth_token_store.dart';
 import 'package:slim30/Riverpod/Models/progress_day_model.dart';
 import 'package:slim30/Riverpod/Models/progress_summary_model.dart';
 import 'package:slim30/Riverpod/Models/workout_day_model.dart';
@@ -10,6 +11,7 @@ final apiClientProvider = Provider<ApiClient>((ref) {
   return ApiClient(
     baseUrl: AppConfig.apiBaseUrl,
     defaultHeaders: AppConfig.apiHeaders,
+    authTokenProvider: AuthTokenStore.getToken,
   );
 });
 

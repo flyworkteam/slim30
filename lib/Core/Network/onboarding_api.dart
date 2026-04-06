@@ -1,5 +1,6 @@
 import 'package:slim30/Core/Config/app_config.dart';
 import 'package:slim30/Core/Network/api_client.dart';
+import 'package:slim30/Core/Storage/auth_token_store.dart';
 
 class OnboardingApi {
   OnboardingApi._();
@@ -7,6 +8,7 @@ class OnboardingApi {
   static final ApiClient _client = ApiClient(
     baseUrl: AppConfig.apiBaseUrl,
     defaultHeaders: AppConfig.apiHeaders,
+    authTokenProvider: AuthTokenStore.getToken,
   );
 
   static Future<void> upsertAnswer(String questionKey, Object? answerValue) async {

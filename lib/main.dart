@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:slim30/Core/Config/app_config.dart';
+import 'package:slim30/Core/Config/firebase_options.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
+import 'package:slim30/Core/Storage/auth_token_store.dart';
 import 'package:slim30/Core/Theme/my_colors.dart';
 import 'package:slim30/Riverpod/Providers/all_providers.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await AuthTokenStore.init();
   runApp(const ProviderScope(child: Slim30App()));
 }
 
