@@ -1741,7 +1741,8 @@ class _WorkoutProgramViewState extends ConsumerState<WorkoutProgramView> {
       return _DayContent(items: const <_ExerciseItem>[], recoveryLines: [line]);
     }
 
-    final imagePath = 'assets/images/antrenman/day${((dayNumber - 1) % 16) + 1}.jpg';
+    final imagePath =
+        'assets/images/antrenman/day${((dayNumber - 1) % 16) + 1}.jpg';
     return _DayContent(
       items: remoteDay.exercises
           .map(
@@ -1799,10 +1800,9 @@ class _WorkoutProgramViewState extends ConsumerState<WorkoutProgramView> {
         : locale.defaultProgramTitle;
 
     final dayContent = remoteDay != null
-      ? _remoteDayContent(context, safeDayNumber, remoteDay)
-      : _dayContent(context, safeDayNumber);
-    final displayTitle =
-      remoteDay != null && remoteDay.title.trim().isNotEmpty
+        ? _remoteDayContent(context, safeDayNumber, remoteDay)
+        : _dayContent(context, safeDayNumber);
+    final displayTitle = remoteDay != null && remoteDay.title.trim().isNotEmpty
         ? remoteDay.title
         : safeProgramTitle;
     final items = dayContent.items;
@@ -1847,10 +1847,7 @@ class _WorkoutProgramViewState extends ConsumerState<WorkoutProgramView> {
                               ),
                               Expanded(
                                 child: Text(
-                                  locale.dayTitle(
-                                    safeDayNumber,
-                                    displayTitle,
-                                  ),
+                                  locale.dayTitle(safeDayNumber, displayTitle),
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.leagueSpartan(
                                     fontSize: 20.sp,
@@ -1926,33 +1923,48 @@ class _WorkoutProgramViewState extends ConsumerState<WorkoutProgramView> {
                                     item: items[i],
                                     iconBase: _iconBase,
                                     light: i.isEven,
-                                    onTap: items[i].locked ? null : () {
-                                      final playableItems = items
-                                          .where((exercise) => !exercise.locked)
-                                          .toList(growable: false);
-                                      final initialPlayableIndex = playableItems.indexOf(items[i]);
+                                    onTap: items[i].locked
+                                        ? null
+                                        : () {
+                                            final playableItems = items
+                                                .where(
+                                                  (exercise) =>
+                                                      !exercise.locked,
+                                                )
+                                                .toList(growable: false);
+                                            final initialPlayableIndex =
+                                                playableItems.indexOf(items[i]);
 
-                                      final detailExercises = playableItems
-                                          .map(
-                                            (exercise) => WorkoutDetailExercise(
-                                              title: exercise.title,
-                                              subtitle: exercise.sets,
-                                              imagePath: exercise.imagePath,
-                                              durationSeconds: _resolveExerciseDurationSeconds(exercise),
-                                            ),
-                                          )
-                                          .toList(growable: false);
+                                            final detailExercises = playableItems
+                                                .map(
+                                                  (
+                                                    exercise,
+                                                  ) => WorkoutDetailExercise(
+                                                    title: exercise.title,
+                                                    subtitle: exercise.sets,
+                                                    imagePath:
+                                                        exercise.imagePath,
+                                                    durationSeconds:
+                                                        _resolveExerciseDurationSeconds(
+                                                          exercise,
+                                                        ),
+                                                  ),
+                                                )
+                                                .toList(growable: false);
 
-                                      Navigator.of(context).pushNamed(
-                                        AppRoutes.workoutDetail,
-                                        arguments: WorkoutDetailArgs(
-                                          programTitle: displayTitle,
-                                          exercises: detailExercises,
-                                          initialIndex: initialPlayableIndex < 0 ? 0 : initialPlayableIndex,
-                                          fixedDurationSeconds: 600,
-                                        ),
-                                      );
-                                    },
+                                            Navigator.of(context).pushNamed(
+                                              AppRoutes.workoutDetail,
+                                              arguments: WorkoutDetailArgs(
+                                                programTitle: displayTitle,
+                                                exercises: detailExercises,
+                                                initialIndex:
+                                                    initialPlayableIndex < 0
+                                                    ? 0
+                                                    : initialPlayableIndex,
+                                                fixedDurationSeconds: 600,
+                                              ),
+                                            );
+                                          },
                                   ),
                                   if (i != items.length - 1)
                                     SizedBox(height: 17.h),
@@ -2005,126 +2017,128 @@ class _ExerciseCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: light ? const Color(0xFFF3FFF7) : const Color(0xFFF5FEFF),
             borderRadius: BorderRadius.circular(10.r),
-            border: Border.all(color: const Color.fromRGBO(241, 241, 241, 0.73)),
+            border: Border.all(
+              color: const Color.fromRGBO(241, 241, 241, 0.73),
+            ),
           ),
           child: Stack(
             children: [
-          Positioned(
-            left: 0,
-            top: 0,
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10.r),
-                bottomLeft: Radius.circular(10.r),
-              ),
-              child: Image.asset(
-                item.imagePath,
-                width: 124.w,
-                height: item.cardHeight.h,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Image.asset(
-                    item.fallbackImagePath,
+              Positioned(
+                left: 0,
+                top: 0,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10.r),
+                    bottomLeft: Radius.circular(10.r),
+                  ),
+                  child: Image.asset(
+                    item.imagePath,
                     width: 124.w,
                     height: item.cardHeight.h,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
-                      return Container(
+                      return Image.asset(
+                        item.fallbackImagePath,
                         width: 124.w,
                         height: item.cardHeight.h,
-                        color: const Color(0xFFEDEDED),
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            width: 124.w,
+                            height: item.cardHeight.h,
+                            color: const Color(0xFFEDEDED),
+                          );
+                        },
                       );
                     },
-                  );
-                },
-              ),
-            ),
-          ),
-          Positioned(
-            left: 140.w,
-            top: ((item.cardHeight - 59) / 2).h,
-            child: SizedBox(
-              width: 157.w,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.title,
-                    maxLines: item.cardHeight == 108 ? 2 : 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.leagueSpartan(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w500,
-                      height: 17 / 18,
-                      color: Colors.black,
-                    ),
                   ),
-                  SizedBox(height: 8.h),
-                  Row(
+                ),
+              ),
+              Positioned(
+                left: 140.w,
+                top: ((item.cardHeight - 59) / 2).h,
+                child: SizedBox(
+                  width: 157.w,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SvgPicture.asset(
-                        '$iconBase/iconsax-weight.svg',
-                        width: 14.w,
-                        height: 14.h,
-                        colorFilter: const ColorFilter.mode(
-                          Color(0xFF535353),
-                          BlendMode.srcIn,
+                      Text(
+                        item.title,
+                        maxLines: item.cardHeight == 108 ? 2 : 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.leagueSpartan(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w500,
+                          height: 17 / 18,
+                          color: Colors.black,
                         ),
                       ),
-                      SizedBox(width: 6.w),
-                      Expanded(
-                        child: Text(
-                          item.sets,
-                          style: GoogleFonts.leagueSpartan(
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w400,
-                            height: 11 / 12,
-                            color: const Color(0xFF535353),
+                      SizedBox(height: 8.h),
+                      Row(
+                        children: [
+                          SvgPicture.asset(
+                            '$iconBase/iconsax-weight.svg',
+                            width: 14.w,
+                            height: 14.h,
+                            colorFilter: const ColorFilter.mode(
+                              Color(0xFF535353),
+                              BlendMode.srcIn,
+                            ),
                           ),
-                        ),
+                          SizedBox(width: 6.w),
+                          Expanded(
+                            child: Text(
+                              item.sets,
+                              style: GoogleFonts.leagueSpartan(
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w400,
+                                height: 11 / 12,
+                                color: const Color(0xFF535353),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 4.h),
+                      Row(
+                        children: [
+                          SvgPicture.asset(
+                            '$iconBase/iconsax-clock.svg',
+                            width: 14.w,
+                            height: 14.h,
+                            colorFilter: const ColorFilter.mode(
+                              Color(0xFF535353),
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          SizedBox(width: 6.w),
+                          Expanded(
+                            child: Text(
+                              item.rest,
+                              style: GoogleFonts.leagueSpartan(
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w400,
+                                height: 11 / 12,
+                                color: const Color(0xFF535353),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  SizedBox(height: 4.h),
-                  Row(
-                    children: [
-                      SvgPicture.asset(
-                        '$iconBase/iconsax-clock.svg',
-                        width: 14.w,
-                        height: 14.h,
-                        colorFilter: const ColorFilter.mode(
-                          Color(0xFF535353),
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                      SizedBox(width: 6.w),
-                      Expanded(
-                        child: Text(
-                          item.rest,
-                          style: GoogleFonts.leagueSpartan(
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w400,
-                            height: 11 / 12,
-                            color: const Color(0xFF535353),
-                          ),
-                        ),
-                      ),
-                    ],
+                ),
+              ),
+              if (item.locked)
+                Positioned(
+                  right: 19.w,
+                  top: 68.h,
+                  child: Icon(
+                    Icons.lock_rounded,
+                    size: 14.w,
+                    color: const Color(0xFFB8B8B8),
                   ),
-                ],
-              ),
-            ),
-          ),
-          if (item.locked)
-            Positioned(
-              right: 19.w,
-              top: 68.h,
-              child: Icon(
-                Icons.lock_rounded,
-                size: 14.w,
-                color: const Color(0xFFB8B8B8),
-              ),
-            ),
+                ),
             ],
           ),
         ),
