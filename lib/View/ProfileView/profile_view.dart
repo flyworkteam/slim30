@@ -22,20 +22,21 @@ class ProfileView extends ConsumerStatefulWidget {
 class _ProfileViewState extends ConsumerState<ProfileView> {
   bool _notificationsEnabled = true;
   bool _healthEnabled = true;
-  bool _settingsHydrated = false;
+  bool _isSavingSettings = false;
+  Future<void> _settingsUpdateQueue = Future<void>.value();
+  NotificationSettingsModel? _confirmedSettings;
   NotificationSettingsModel? _settingsDraft;
-  int _settingsRequestSerial = 0;
 
   Future<void> _persistSettings(NotificationSettingsModel nextSettings) async {
+    _isSavingSettings = true;
     final previousSettings =
-        _settingsDraft ?? NotificationSettingsModel.defaults();
-    _settingsDraft = nextSettings;
-    final int requestId = ++_settingsRequestSerial;
+        _confirmedSettings ?? NotificationSettingsModel.defaults();
 
     try {
       await updateNotificationSettings(ref, nextSettings);
+      _confirmedSettings = nextSettings;
     } catch (_) {
-      if (!mounted || requestId != _settingsRequestSerial) {
+      if (!mounted) {
         return;
       }
 
@@ -46,9 +47,11 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
       });
       ref.invalidate(notificationSettingsProvider);
       return;
+    } finally {
+      _isSavingSettings = false;
     }
 
-    if (!mounted || requestId != _settingsRequestSerial) {
+    if (!mounted) {
       return;
     }
 
@@ -59,6 +62,13 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
     });
   }
 
+  Future<void> _enqueueSettingsPersist(NotificationSettingsModel nextSettings) {
+    _settingsUpdateQueue = _settingsUpdateQueue.then(
+      (_) => _persistSettings(nextSettings),
+    );
+    return _settingsUpdateQueue;
+  }
+
   @override
   Widget build(BuildContext context) {
     final profile = ref.watch(userProfileProvider).valueOrNull;
@@ -66,8 +76,8 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
     final premium = ref.watch(premiumStatusProvider).valueOrNull;
     final settings = ref.watch(notificationSettingsProvider).valueOrNull;
 
-    if (!_settingsHydrated && settings != null) {
-      _settingsHydrated = true;
+    if (settings != null && !_isSavingSettings) {
+      _confirmedSettings = settings;
       _settingsDraft = settings;
       _notificationsEnabled = settings.dailyReminderEnabled;
       _healthEnabled = settings.progressSummaryEnabled;
@@ -107,22 +117,28 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                           notificationsEnabled: _notificationsEnabled,
                           isPremium: premium?.isPremium == true,
                           onNotificationsChanged: (value) async {
-                            setState(() => _notificationsEnabled = value);
                             final nextSettings = effectiveSettings.copyWith(
                               dailyReminderEnabled: value,
                             );
-                            await _persistSettings(nextSettings);
+                            setState(() {
+                              _settingsDraft = nextSettings;
+                              _notificationsEnabled = value;
+                            });
+                            await _enqueueSettingsPersist(nextSettings);
                           },
                         ),
                         SizedBox(height: 30.h),
                         _SupportSection(
                           healthEnabled: _healthEnabled,
                           onHealthChanged: (value) async {
-                            setState(() => _healthEnabled = value);
                             final nextSettings = effectiveSettings.copyWith(
                               progressSummaryEnabled: value,
                             );
-                            await _persistSettings(nextSettings);
+                            setState(() {
+                              _settingsDraft = nextSettings;
+                              _healthEnabled = value;
+                            });
+                            await _enqueueSettingsPersist(nextSettings);
                           },
                         ),
                       ],
