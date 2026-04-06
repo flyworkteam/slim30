@@ -4,9 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:slim30/Core/Auth/auth_service.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
 import 'package:slim30/Riverpod/Models/app_models.dart';
 import 'package:slim30/Riverpod/Providers/backend_providers.dart';
+import 'package:slim30/Riverpod/Providers/workout/workout_program_provider.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
 
 class ProfileView extends ConsumerStatefulWidget {
@@ -67,6 +69,33 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
       (_) => _persistSettings(nextSettings),
     );
     return _settingsUpdateQueue;
+  }
+
+  Future<void> _logout() async {
+    try {
+      await AuthService.signOut();
+      if (!mounted) {
+        return;
+      }
+
+      ref.invalidate(userProfileProvider);
+      ref.invalidate(notificationSettingsProvider);
+      ref.invalidate(notificationsProvider);
+      ref.invalidate(progressSummaryProvider);
+      ref.invalidate(workoutProgramProvider);
+      ref.invalidate(completedProgressDaysProvider);
+
+      Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.login, (_) => false);
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context)
+        ..clearSnackBars()
+        ..showSnackBar(
+          const SnackBar(content: Text('Logout failed. Please try again.')),
+        );
+    }
   }
 
   @override
@@ -130,6 +159,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                         SizedBox(height: 30.h),
                         _SupportSection(
                           healthEnabled: _healthEnabled,
+                          onLogout: _logout,
                           onHealthChanged: (value) async {
                             final nextSettings = effectiveSettings.copyWith(
                               progressSummaryEnabled: value,
@@ -434,7 +464,7 @@ class _SettingsSection extends StatelessWidget {
               iconPath: '${ProfileView._profileIconBase}/iconsax-crown-1.svg',
               title: isPremium ? '${l10n.profilePremium} (ON)' : l10n.profilePremium,
               trailing: _Chevron(),
-              onTap: () {},
+              onTap: null,
             ),
           ],
         ),
@@ -447,10 +477,12 @@ class _SupportSection extends StatelessWidget {
   const _SupportSection({
     required this.healthEnabled,
     required this.onHealthChanged,
+    required this.onLogout,
   });
 
   final bool healthEnabled;
   final ValueChanged<bool> onHealthChanged;
+  final Future<void> Function() onLogout;
 
   @override
   Widget build(BuildContext context) {
@@ -516,7 +548,9 @@ class _SupportSection extends StatelessWidget {
               iconBackground: Color(0xFFF7092C),
               iconColor: Colors.white,
               trailing: SizedBox.shrink(),
-              onTap: () {},
+              onTap: () async {
+                await onLogout();
+              },
             ),
           ],
         ),

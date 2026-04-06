@@ -1,14 +1,14 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthTokenStore {
   AuthTokenStore._();
 
   static const String _tokenKey = 'backend_jwt_token';
+  static const FlutterSecureStorage _storage = FlutterSecureStorage();
   static String? _cachedToken;
 
   static Future<void> init() async {
-    final prefs = await SharedPreferences.getInstance();
-    _cachedToken = prefs.getString(_tokenKey);
+    _cachedToken = await _storage.read(key: _tokenKey);
   }
 
   static Future<String?> getToken() async {
@@ -16,21 +16,18 @@ class AuthTokenStore {
       return _cachedToken;
     }
 
-    final prefs = await SharedPreferences.getInstance();
-    _cachedToken = prefs.getString(_tokenKey);
+    _cachedToken = await _storage.read(key: _tokenKey);
     return _cachedToken;
   }
 
   static Future<void> setToken(String token) async {
     final normalized = token.trim();
     _cachedToken = normalized;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_tokenKey, normalized);
+    await _storage.write(key: _tokenKey, value: normalized);
   }
 
   static Future<void> clear() async {
     _cachedToken = null;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_tokenKey);
+    await _storage.delete(key: _tokenKey);
   }
 }

@@ -574,7 +574,7 @@ class _BottomBar extends StatelessWidget {
             iconPath: '$iconBase/iconsax-health.svg',
             label: l10n.homeTabWorkout,
             active: true,
-            onTap: () {},
+            onTap: null,
           ),
           SizedBox(width: 4.w),
           _BottomItem(

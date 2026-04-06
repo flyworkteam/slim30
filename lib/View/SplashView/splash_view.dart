@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
+import 'package:slim30/Core/Storage/auth_token_store.dart';
 import 'package:slim30/Core/Theme/my_colors.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
 
@@ -16,9 +17,18 @@ class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     super.initState();
-    Future<void>.delayed(const Duration(milliseconds: 1500), () {
+    Future<void>.delayed(const Duration(milliseconds: 1500), () async {
       if (!mounted) return;
-      Navigator.pushReplacementNamed(context, AppRoutes.onboardingIntro);
+
+      final token = await AuthTokenStore.getToken();
+      if (!mounted) {
+        return;
+      }
+
+      final initialRoute = (token != null && token.trim().isNotEmpty)
+          ? AppRoutes.home
+          : AppRoutes.onboardingIntro;
+      Navigator.pushReplacementNamed(context, initialRoute);
     });
   }
 

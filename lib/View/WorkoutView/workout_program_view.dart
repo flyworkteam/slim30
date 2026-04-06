@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
 import 'package:slim30/Core/Storage/user_prefs.dart';
+import 'package:slim30/Riverpod/Models/workout_day_model.dart';
+import 'package:slim30/Riverpod/Providers/workout/workout_program_provider.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
 import 'package:slim30/View/WorkoutView/workout_program_locale_data.dart';
 
@@ -17,14 +20,14 @@ class WorkoutProgramArgs {
   final String programTitle;
 }
 
-class WorkoutProgramView extends StatefulWidget {
+class WorkoutProgramView extends ConsumerStatefulWidget {
   const WorkoutProgramView({super.key});
 
   @override
-  State<WorkoutProgramView> createState() => _WorkoutProgramViewState();
+  ConsumerState<WorkoutProgramView> createState() => _WorkoutProgramViewState();
 }
 
-class _WorkoutProgramViewState extends State<WorkoutProgramView> {
+class _WorkoutProgramViewState extends ConsumerState<WorkoutProgramView> {
   static const _iconBase = 'assets/images/icons/homePage';
   static const _defaultImageFolder = 'woman';
   UserGender _gender = UserGender.unspecified;
@@ -1725,6 +1728,35 @@ class _WorkoutProgramViewState extends State<WorkoutProgramView> {
     }
   }
 
+  _DayContent _remoteDayContent(
+    BuildContext context,
+    int dayNumber,
+    WorkoutDayDetailModel remoteDay,
+  ) {
+    if (remoteDay.type == 'rest' || remoteDay.exercises.isEmpty) {
+      final line = remoteDay.estimatedMinutes > 0
+          ? '${remoteDay.title} • ${remoteDay.estimatedMinutes} min'
+          : remoteDay.title;
+      return _DayContent(items: const <_ExerciseItem>[], recoveryLines: [line]);
+    }
+
+    final imagePath = 'assets/images/antrenman/day${((dayNumber - 1) % 16) + 1}.jpg';
+    return _DayContent(
+      items: remoteDay.exercises
+          .map(
+            (exercise) => _ExerciseItem(
+              title: exercise.name,
+              sets: '${exercise.sets} x ${exercise.reps}',
+              rest: _locale(context).rest30Sec,
+              imagePath: imagePath,
+              fallbackImagePath: imagePath,
+              cardHeight: 108,
+            ),
+          )
+          .toList(growable: false),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final locale = _locale(context);
@@ -1737,11 +1769,19 @@ class _WorkoutProgramViewState extends State<WorkoutProgramView> {
           );
 
     final safeDayNumber = data.dayNumber.clamp(1, 30).toInt();
+    final remoteDayAsync = ref.watch(workoutDayDetailProvider(safeDayNumber));
+    final remoteDay = remoteDayAsync.valueOrNull;
     final safeProgramTitle = (data.dayNumber >= 1 && data.dayNumber <= 30)
         ? data.programTitle
         : locale.defaultProgramTitle;
 
-    final dayContent = _dayContent(context, safeDayNumber);
+    final dayContent = remoteDay != null
+      ? _remoteDayContent(context, safeDayNumber, remoteDay)
+      : _dayContent(context, safeDayNumber);
+    final displayTitle =
+      remoteDay != null && remoteDay.title.trim().isNotEmpty
+        ? remoteDay.title
+        : safeProgramTitle;
     final items = dayContent.items;
 
     return Scaffold(
@@ -1786,7 +1826,7 @@ class _WorkoutProgramViewState extends State<WorkoutProgramView> {
                                 child: Text(
                                   locale.dayTitle(
                                     safeDayNumber,
-                                    safeProgramTitle,
+                                    displayTitle,
                                   ),
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.leagueSpartan(
@@ -2101,7 +2141,7 @@ class _BottomBar extends StatelessWidget {
             iconPath: '$iconBase/iconsax-health.svg',
             label: l10n.homeTabWorkout,
             active: true,
-            onTap: () {},
+            onTap: null,
           ),
           SizedBox(width: 4.w),
           _BottomItem(

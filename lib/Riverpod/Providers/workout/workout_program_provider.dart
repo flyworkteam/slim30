@@ -35,6 +35,22 @@ final workoutProgramProvider = FutureProvider<List<WorkoutDayModel>>((ref) async
       .toList(growable: false);
 });
 
+final workoutDayDetailProvider =
+    FutureProvider.family<WorkoutDayDetailModel?, int>((ref, dayNumber) async {
+      if (dayNumber < 1 || dayNumber > 30) {
+        return null;
+      }
+
+      final apiClient = ref.read(apiClientProvider);
+      final data = await apiClient.get('/workouts/program/$dayNumber');
+      final day = data['day'];
+      if (day is! Map<String, dynamic>) {
+        return null;
+      }
+
+      return WorkoutDayDetailModel.fromJson(day);
+    });
+
 final completedProgressDaysProvider = FutureProvider<Set<int>>((ref) async {
   final apiClient = ref.read(apiClientProvider);
   final data = await apiClient.get('/progress/days');

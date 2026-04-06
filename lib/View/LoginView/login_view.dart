@@ -2,12 +2,76 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:slim30/Core/Auth/auth_service.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
 import 'package:slim30/Core/Theme/my_colors.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
 
-class LoginView extends StatelessWidget {
+class LoginView extends StatefulWidget {
   const LoginView({super.key});
+
+  @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
+  bool _isLoading = false;
+
+  Future<void> _handleGoogleLogin() async {
+    if (_isLoading) {
+      return;
+    }
+
+    setState(() => _isLoading = true);
+    try {
+      await AuthService.signInWithGoogleAndExchange();
+      if (!mounted) {
+        return;
+      }
+      Navigator.of(
+        context,
+      ).pushNamedAndRemoveUntil(AppRoutes.home, (_) => false);
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context)
+        ..clearSnackBars()
+        ..showSnackBar(SnackBar(content: Text(mapAuthError(error))));
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  Future<void> _handleAppleLogin() async {
+    if (_isLoading) {
+      return;
+    }
+
+    setState(() => _isLoading = true);
+    try {
+      await AuthService.signInWithAppleAndExchange();
+      if (!mounted) {
+        return;
+      }
+      Navigator.of(
+        context,
+      ).pushNamedAndRemoveUntil(AppRoutes.home, (_) => false);
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context)
+        ..clearSnackBars()
+        ..showSnackBar(SnackBar(content: Text(mapAuthError(error))));
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +87,7 @@ class LoginView extends StatelessWidget {
             children: [
               // ── Photo grid ──────────────────────────────────────
               // top_left:  left:5,   top:0
-              _GridPhoto(
-                path: 'assets/images/top_left.jpg',
-                left: 5.w,
-                top: 0,
-              ),
+              _GridPhoto(path: 'assets/images/top_left.jpg', left: 5.w, top: 0),
               // top_right: left:259, top:0
               _GridPhoto(
                 path: 'assets/images/top_right.jpg',
@@ -136,32 +196,37 @@ class LoginView extends StatelessWidget {
                     SizedBox(height: 15.h),
                     // Buttons: iOS → Apple first; Android → Google first
                     ...() {
-                      final isAndroid = Theme.of(context).platform ==
-                          TargetPlatform.android;
+                      final isAndroid =
+                          Theme.of(context).platform == TargetPlatform.android;
                       final apple = _SocialButton(
                         iconPath: 'assets/images/icons/icon_apple.svg',
                         label: l10n.loginApple,
-                        onPressed: () {},
+                        isLoading: _isLoading,
+                        onPressed: _handleAppleLogin,
                       );
                       final google = _SocialButton(
                         iconPath: 'assets/images/icons/icon_google.svg',
                         label: l10n.loginGoogle,
-                        onPressed: () {},
+                        isLoading: _isLoading,
+                        onPressed: _handleGoogleLogin,
                       );
-                      final first = isAndroid ? google : apple;
-                      final second = isAndroid ? apple : google;
-                      return [
-                        first,
-                        SizedBox(height: 12.h),
-                        second,
-                      ];
+                      if (isAndroid) {
+                        return [google];
+                      }
+
+                      return [apple, SizedBox(height: 12.h), google];
                     }(),
                     SizedBox(height: 15.h),
                     // Guest row
                     GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, AppRoutes.questionGender);
-                      },
+                      onTap: _isLoading
+                          ? null
+                          : () {
+                              Navigator.pushNamed(
+                                context,
+                                AppRoutes.questionGender,
+                              );
+                            },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -234,11 +299,7 @@ class LoginView extends StatelessWidget {
 // ── Photo tile ────────────────────────────────────────────────────────────────
 
 class _GridPhoto extends StatelessWidget {
-  const _GridPhoto({
-    required this.path,
-    required this.left,
-    required this.top,
-  });
+  const _GridPhoto({required this.path, required this.left, required this.top});
 
   final String path;
   final double left;
@@ -265,11 +326,13 @@ class _SocialButton extends StatelessWidget {
   const _SocialButton({
     required this.iconPath,
     required this.label,
+    required this.isLoading,
     required this.onPressed,
   });
 
   final String iconPath;
   final String label;
+  final bool isLoading;
   final VoidCallback onPressed;
 
   @override
@@ -278,7 +341,7 @@ class _SocialButton extends StatelessWidget {
       width: 298.w,
       height: 44.h,
       child: OutlinedButton(
-        onPressed: onPressed,
+        onPressed: isLoading ? null : onPressed,
         style: OutlinedButton.styleFrom(
           side: const BorderSide(color: MyColors.loginBorder, width: 1),
           shape: RoundedRectangleBorder(
@@ -287,24 +350,32 @@ class _SocialButton extends StatelessWidget {
           backgroundColor: Colors.white,
           padding: EdgeInsets.zero,
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SvgPicture.asset(iconPath, width: 28.w, height: 28.h),
-            SizedBox(width: 5.w),
-            Text(
-              label,
-              style: GoogleFonts.leagueSpartan(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w600,
-                height: 13 / 14,
-                color: MyColors.loginText,
+        child: isLoading
+            ? SizedBox(
+                width: 18.w,
+                height: 18.w,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: MyColors.loginText,
+                ),
+              )
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SvgPicture.asset(iconPath, width: 28.w, height: 28.h),
+                  SizedBox(width: 5.w),
+                  Text(
+                    label,
+                    style: GoogleFonts.leagueSpartan(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600,
+                      height: 13 / 14,
+                      color: MyColors.loginText,
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
       ),
     );
   }
 }
-

@@ -39,13 +39,19 @@ class AuthService {
       throw const AuthFlowException('Google sign-in did not return a user.');
     }
 
-    await _exchangeFirebaseToken(user);
+    try {
+      await _exchangeFirebaseToken(user);
+    } catch (_) {
+      await AuthTokenStore.clear();
+      rethrow;
+    }
   }
 
   static Future<void> signInWithAppleAndExchange() async {
-    if (defaultTargetPlatform != TargetPlatform.iOS &&
-        defaultTargetPlatform != TargetPlatform.macOS) {
-      throw const AuthFlowException('Apple sign-in is only available on Apple devices.');
+    if (defaultTargetPlatform != TargetPlatform.iOS) {
+      throw const AuthFlowException(
+        'Apple sign-in is only available on Apple devices.',
+      );
     }
 
     final rawNonce = _generateNonce();
@@ -61,27 +67,45 @@ class AuthService {
 
     final identityToken = appleCredential.identityToken;
     if (identityToken == null || identityToken.isEmpty) {
-      throw const AuthFlowException('Apple sign-in did not return identity token.');
+      throw const AuthFlowException(
+        'Apple sign-in did not return identity token.',
+      );
     }
 
-    final oauthCredential = OAuthProvider('apple.com').credential(
-      idToken: identityToken,
-      rawNonce: rawNonce,
-    );
+    final oauthCredential = OAuthProvider(
+      'apple.com',
+    ).credential(idToken: identityToken, rawNonce: rawNonce);
 
-    final userCredential = await _firebaseAuth.signInWithCredential(oauthCredential);
+    final userCredential = await _firebaseAuth.signInWithCredential(
+      oauthCredential,
+    );
     final user = userCredential.user;
     if (user == null) {
       throw const AuthFlowException('Apple sign-in did not return a user.');
     }
 
-    await _exchangeFirebaseToken(user);
+    try {
+      await _exchangeFirebaseToken(user);
+    } catch (_) {
+      await AuthTokenStore.clear();
+      rethrow;
+    }
+  }
+
+  static Future<void> signOut() async {
+    await Future.wait([
+      _firebaseAuth.signOut(),
+      _googleSignIn.signOut(),
+      AuthTokenStore.clear(),
+    ]);
   }
 
   static Future<void> _exchangeFirebaseToken(User user) async {
     final idToken = await user.getIdToken(true);
     if (idToken == null || idToken.isEmpty) {
-      throw const AuthFlowException('Firebase ID token could not be retrieved.');
+      throw const AuthFlowException(
+        'Firebase ID token could not be retrieved.',
+      );
     }
 
     final data = await _apiClient.post(
@@ -101,7 +125,10 @@ class AuthService {
     const chars =
         '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
     final random = Random.secure();
-    return List.generate(length, (_) => chars[random.nextInt(chars.length)]).join();
+    return List.generate(
+      length,
+      (_) => chars[random.nextInt(chars.length)],
+    ).join();
   }
 
   static String _sha256ofString(String input) {
