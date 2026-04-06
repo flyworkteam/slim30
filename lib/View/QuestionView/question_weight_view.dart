@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -34,6 +32,9 @@ class _QuestionWeightViewState extends State<QuestionWeightView> {
           height: 844.h,
           child: Stack(
             children: [
+              const Positioned.fill(
+                child: ColoredBox(color: Colors.white),
+              ),
               Positioned(
                 right: 24.w,
                 top: 87.h,
@@ -168,6 +169,7 @@ class _WeightPickerState extends State<_WeightPicker> {
   static const double _rulerLeft = 17;
   static const double _rulerTop = 135;
   static const double _rulerWidth = 297;
+  static const double _rulerHeight = 51.4;
   static const double _selectedValueWidth = 80;
   static const double _pointerWidth = 39.2;
   static const double _tickLabelWidth = 40;
@@ -202,6 +204,7 @@ class _WeightPickerState extends State<_WeightPicker> {
   @override
   Widget build(BuildContext context) {
     final rulerCenterX = _rulerLeft + (_rulerWidth / 2);
+    const majorStep = 5.71 * 10;
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -209,27 +212,23 @@ class _WeightPickerState extends State<_WeightPicker> {
       child: Stack(
         children: [
           Positioned(
-            left: 30.w,
-            top: 12.h,
-            child: Transform.rotate(
-              angle: math.pi / 2,
-              alignment: Alignment.topLeft,
-              child: Container(
-                width: 226.w,
-                height: 330.h,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.r),
-                  gradient: const LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    colors: [
-                      Color.fromRGBO(255, 255, 255, 0.2),
-                      Color.fromRGBO(136, 243, 207, 0.2),
-                      Color.fromRGBO(207, 250, 236, 0.2),
-                      Color.fromRGBO(255, 255, 255, 0.2),
-                    ],
-                    stops: [0.0804, 0.2428, 0.7714, 0.9062],
-                  ),
+            left: 0,
+            top: 0,
+            child: Container(
+              width: 330.w,
+              height: 257.h,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.r),
+                gradient: const LinearGradient(
+                  begin: Alignment.bottomLeft,
+                  end: Alignment.topRight,
+                  colors: [
+                    Color.fromRGBO(255, 255, 255, 0.2),
+                    Color.fromRGBO(136, 243, 207, 0.2),
+                    Color.fromRGBO(207, 250, 236, 0.2),
+                    Color.fromRGBO(255, 255, 255, 0.2),
+                  ],
+                  stops: [0.0804, 0.2428, 0.7714, 0.9062],
                 ),
               ),
             ),
@@ -297,54 +296,28 @@ class _WeightPickerState extends State<_WeightPicker> {
             left: _rulerLeft.w,
             top: _rulerTop.h,
             width: _rulerWidth.w,
-            height: 41.12.h,
-            child: CustomPaint(painter: _WeightRulerPainter()),
-          ),
-          Positioned(
-            left: 308.29.w,
-            top: 153.28.h,
-            child: Container(
-              width: 22.85.w,
-              height: 0,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: const Color(0xFFCECECE),
-                  width: 1.14231.w,
-                ),
-              ),
+            height: _rulerHeight.h,
+            child: CustomPaint(
+              painter: _WeightRulerPainter(selectedValue: _selected),
             ),
           ),
           Positioned(
-            left: 314.w,
-            top: 153.28.h,
-            child: Container(
-              width: 22.85.w,
-              height: 0,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: const Color(0xFFCECECE),
-                  width: 1.14231.w,
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            left: (41 + (23 - _tickLabelWidth) / 2).w,
+            left: (rulerCenterX - (2 * majorStep) - (_tickLabelWidth / 2)).w,
             top: 185.h,
             child: _tickLabel(_label(-20), const Color(0xFFCECECE)),
           ),
           Positioned(
-            left: (103 + (23 - _tickLabelWidth) / 2).w,
+            left: (rulerCenterX - majorStep - (_tickLabelWidth / 2)).w,
             top: 185.h,
             child: _tickLabel(_label(-10), const Color(0xFF434343)),
           ),
           Positioned(
-            left: (229 + (23 - _tickLabelWidth) / 2).w,
+            left: (rulerCenterX + majorStep - (_tickLabelWidth / 2)).w,
             top: 185.h,
             child: _tickLabel(_label(10), const Color(0xFF434343)),
           ),
           Positioned(
-            left: (291 + (23 - _tickLabelWidth) / 2).w,
+            left: (rulerCenterX + (2 * majorStep) - (_tickLabelWidth / 2)).w,
             top: 185.h,
             child: _tickLabel(_label(20), const Color(0xFFCECECE)),
           ),
@@ -380,35 +353,54 @@ class _WeightPickerState extends State<_WeightPicker> {
 }
 
 class _WeightRulerPainter extends CustomPainter {
+  const _WeightRulerPainter({required this.selectedValue});
+
+  final int selectedValue;
+
   @override
   void paint(Canvas canvas, Size size) {
     final minor = Paint()
       ..color = const Color(0xFFCECECE)
       ..strokeWidth = 1.14231.w;
-    final selected = Paint()
+    final major = Paint()
+      ..color = const Color(0xFFCECECE)
+      ..strokeWidth = 1.14231.w;
+    final center = Paint()
       ..color = Colors.black
       ..strokeWidth = 2.28461.w;
 
     const spacing = 5.71;
-    final lines = (size.width / spacing).floor();
-    final centerX = size.width / 2;
+    const minorHeight = 22.85;
+    const majorHeight = 41.12;
+    const centerHeight = 51.4;
+    const majorValueStep = 20;
 
-    for (var i = 0; i <= lines; i++) {
+    final centerIndex = (size.width / spacing / 2).round();
+    final lineCount = (size.width / spacing).floor();
+
+    for (var i = 0; i <= lineCount; i++) {
       final x = i * spacing;
-      final isCenter = (x - centerX).abs() < spacing / 2;
-      final isMajor = i % 10 == 0;
-      final startY = isCenter || isMajor ? 0.0 : size.height - 22.85.h;
-      final endY = isCenter ? 51.4.h : size.height;
+      final isCenter = i == centerIndex;
+      final tickValue = selectedValue + (i - centerIndex);
+      final isMajor = tickValue % majorValueStep == 0;
+
+      final lineHeight = isCenter
+          ? centerHeight
+          : (isMajor ? majorHeight : minorHeight);
+      final startY = size.height - lineHeight;
+
       canvas.drawLine(
         Offset(x, startY),
-        Offset(x, endY),
-        isCenter ? selected : minor,
+        Offset(x, size.height),
+        isCenter ? center : (isMajor ? major : minor),
       );
     }
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _WeightRulerPainter oldDelegate) {
+    return oldDelegate.selectedValue != selectedValue;
+  }
 }
 
 class _BottomPointerPainter extends CustomPainter {

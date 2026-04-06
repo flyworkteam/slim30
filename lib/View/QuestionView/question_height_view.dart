@@ -330,9 +330,9 @@ class _HeightPickerPreviewState extends State<_HeightPickerPreview> {
           ),
           Positioned(
             left: 242.4.w,
-            top: 205.73.h,
+            top: 207.73.h,
             child: CustomPaint(
-              size: Size(45.2.w, 32.h),
+              size: Size(39.2.w, 28.h),
               painter: _RightPointerPainter(),
             ),
           ),
