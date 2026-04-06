@@ -21,6 +21,7 @@ class _QuestionTargetWeightViewState extends State<QuestionTargetWeightView> {
   static const int _currentStep = 5;
   static const int _totalSteps = 12;
   int _selectedTargetWeight = 65;
+  bool _hasSelectedTargetWeight = false;
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +98,10 @@ class _QuestionTargetWeightViewState extends State<QuestionTargetWeightView> {
                 child: _WeightPicker(
                   initialSelected: _selectedTargetWeight,
                   onChanged: (value) {
-                    _selectedTargetWeight = value;
+                    setState(() {
+                      _selectedTargetWeight = value;
+                      _hasSelectedTargetWeight = true;
+                    });
                   },
                 ),
               ),
@@ -107,13 +111,15 @@ class _QuestionTargetWeightViewState extends State<QuestionTargetWeightView> {
                 width: 342.w,
                 child: QuestionBottomActions(
                   onBack: () => Navigator.pop(context),
-                  onNext: () {
-                    OnboardingApi.tryUpsertAnswer(
-                      'target_weight_kg',
-                      _selectedTargetWeight,
-                    );
-                    Navigator.pushNamed(context, AppRoutes.questionMotivation);
-                  },
+                  onNext: _hasSelectedTargetWeight
+                      ? () {
+                          OnboardingApi.tryUpsertAnswer(
+                            'target_weight_kg',
+                            _selectedTargetWeight,
+                          );
+                          Navigator.pushNamed(context, AppRoutes.questionMotivation);
+                        }
+                      : null,
                 ),
               ),
               Positioned(

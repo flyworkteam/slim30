@@ -19,6 +19,7 @@ class _QuestionHeightViewState extends State<QuestionHeightView> {
   static const int _currentStep = 3;
   static const int _totalSteps = 12;
   int _selectedHeight = 170;
+  bool _hasSelectedHeight = false;
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +114,10 @@ class _QuestionHeightViewState extends State<QuestionHeightView> {
                 child: _HeightPickerPreview(
                   initialHeight: _selectedHeight,
                   onChanged: (value) {
-                    _selectedHeight = value;
+                    setState(() {
+                      _selectedHeight = value;
+                      _hasSelectedHeight = true;
+                    });
                   },
                 ),
               ),
@@ -123,10 +127,12 @@ class _QuestionHeightViewState extends State<QuestionHeightView> {
                 width: 342.w,
                 child: QuestionBottomActions(
                   onBack: () => Navigator.pop(context),
-                  onNext: () {
-                    OnboardingApi.tryUpsertAnswer('height_cm', _selectedHeight);
-                    Navigator.pushNamed(context, AppRoutes.questionWeight);
-                  },
+                  onNext: _hasSelectedHeight
+                      ? () {
+                          OnboardingApi.tryUpsertAnswer('height_cm', _selectedHeight);
+                          Navigator.pushNamed(context, AppRoutes.questionWeight);
+                        }
+                      : null,
                 ),
               ),
               Positioned(
@@ -254,42 +260,25 @@ class _HeightPickerPreviewState extends State<_HeightPickerPreview> {
           Positioned(
             left: 46.18.w,
             top: 201.77.h,
-            width: 115.w,
-            height: 36.h,
-            child: Text(
-              '$_selectedHeight cm',
-              textAlign: TextAlign.center,
-              style: GoogleFonts.leagueSpartan(
-                fontSize: 38.756.sp,
-                fontWeight: FontWeight.w700,
-                height: 36 / 38.756,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          Positioned(
-            left: 52.8.w,
-            top: 238.12.h,
-            width: 104.4.w,
-            height: 32.12.h,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0383.r),
-                border: Border.all(color: Colors.white, width: 1.15985.w),
-                gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xFFCDFFDD),
-                    Color(0xFFCFFFEF),
-                    Color(0xFFD2F9FF),
-                  ],
+            width: 130.w,
+            height: 40.h,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '$_selectedHeight',
+                  style: GoogleFonts.leagueSpartan(
+                    fontSize: 52.sp,
+                    fontWeight: FontWeight.w700,
+                    height: 36 / 38.756,
+                    color: Colors.black,
+                  ),
                 ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
+                SizedBox(width: 6.w),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 5.h),
+                  child: Text(
                     'cm',
                     style: GoogleFonts.leagueSpartan(
                       fontSize: 20.8773.sp,
@@ -298,14 +287,8 @@ class _HeightPickerPreviewState extends State<_HeightPickerPreview> {
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(width: 5.8.w),
-                  Icon(
-                    Icons.keyboard_arrow_down,
-                    size: 14.w,
-                    color: Colors.black,
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
           Positioned(
@@ -347,9 +330,9 @@ class _HeightPickerPreviewState extends State<_HeightPickerPreview> {
           ),
           Positioned(
             left: 242.4.w,
-            top: 216.88.h,
+            top: 205.73.h,
             child: CustomPaint(
-              size: Size(39.2.w, 28.h),
+              size: Size(45.2.w, 32.h),
               painter: _RightPointerPainter(),
             ),
           ),

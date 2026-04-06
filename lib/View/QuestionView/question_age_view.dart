@@ -18,6 +18,7 @@ class _QuestionAgeViewState extends State<QuestionAgeView> {
   static const int _currentStep = 2;
   static const int _totalSteps = 12;
   int _selectedAge = 26;
+  bool _hasSelectedAge = false;
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +110,10 @@ class _QuestionAgeViewState extends State<QuestionAgeView> {
                 child: _AgePickerPreview(
                   selectedAge: _selectedAge,
                   onChanged: (value) {
-                    setState(() => _selectedAge = value);
+                    setState(() {
+                      _selectedAge = value;
+                      _hasSelectedAge = true;
+                    });
                   },
                 ),
               ),
@@ -119,10 +123,12 @@ class _QuestionAgeViewState extends State<QuestionAgeView> {
                 width: 342.w,
                 child: QuestionBottomActions(
                   onBack: () => Navigator.pop(context),
-                  onNext: () {
-                    OnboardingApi.tryUpsertAnswer('age', _selectedAge);
-                    Navigator.pushNamed(context, AppRoutes.questionHeight);
-                  },
+                  onNext: _hasSelectedAge
+                      ? () {
+                          OnboardingApi.tryUpsertAnswer('age', _selectedAge);
+                          Navigator.pushNamed(context, AppRoutes.questionHeight);
+                        }
+                      : null,
                 ),
               ),
               Positioned(
@@ -240,35 +246,31 @@ class _AgePickerPreview extends StatelessWidget {
                 gradient: MyColors.onboardingButtonGradient,
                 borderRadius: BorderRadius.circular(6.68293.r),
               ),
-              child: Stack(
-                children: [
-                  Positioned(
-                    left: 44.365.w,
-                    top: 15.005.h,
-                    child: SizedBox(
-                      width: 38.w,
-                      height: 31.h,
-                      child: Text(
-                        text,
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.leagueSpartan(
-                          fontSize: 33.4146.sp,
-                          fontWeight: FontWeight.w700,
-                          height: 31 / 33.4146,
-                          color: Colors.black,
-                        ),
+              child: Center(
+                child: SizedBox(
+                  width: 72.w,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      text,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.leagueSpartan(
+                        fontSize: 33.4146.sp,
+                        fontWeight: FontWeight.w700,
+                        height: 31 / 33.4146,
+                        color: Colors.black,
                       ),
                     ),
                   ),
-                ],
+                ),
               ),
             ),
           ),
           Positioned(
-            left: 2.17.w,
-            top: 10.h,
+            left: 4.5.w,
+            top: 13.h,
             child: CustomPaint(
-              size: Size(39.2.w, 28.h),
+              size: Size(26.w, 39.2.h),
               painter: _TrianglePainter(),
             ),
           ),
