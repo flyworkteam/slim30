@@ -27,13 +27,25 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
   int _settingsRequestSerial = 0;
 
   Future<void> _persistSettings(NotificationSettingsModel nextSettings) async {
+    final previousSettings =
+        _settingsDraft ?? NotificationSettingsModel.defaults();
     _settingsDraft = nextSettings;
     final int requestId = ++_settingsRequestSerial;
 
     try {
       await updateNotificationSettings(ref, nextSettings);
     } catch (_) {
-      // Keep optimistic UI; next app load/provider refresh re-syncs with backend.
+      if (!mounted || requestId != _settingsRequestSerial) {
+        return;
+      }
+
+      setState(() {
+        _settingsDraft = previousSettings;
+        _notificationsEnabled = previousSettings.dailyReminderEnabled;
+        _healthEnabled = previousSettings.progressSummaryEnabled;
+      });
+      ref.invalidate(notificationSettingsProvider);
+      return;
     }
 
     if (!mounted || requestId != _settingsRequestSerial) {
