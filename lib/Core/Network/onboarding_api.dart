@@ -42,4 +42,20 @@ class OnboardingApi {
       },
     );
   }
+
+  static Future<void> tryUpsertAnswer(String questionKey, Object? answerValue) async {
+    try {
+      await upsertAnswer(questionKey, answerValue);
+    } catch (_) {
+      // Fail-open to keep onboarding flow responsive when network is unavailable.
+    }
+  }
+
+  static Future<void> tryUpsertMany(Map<String, Object?> answers) async {
+    try {
+      await upsertMany(answers);
+    } catch (_) {
+      // Fail-open to keep onboarding flow responsive when network is unavailable.
+    }
+  }
 }

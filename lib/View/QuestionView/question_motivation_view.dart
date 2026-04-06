@@ -111,9 +111,8 @@ class QuestionMotivationView extends StatelessWidget {
                 width: 342.w,
                 child: QuestionBottomActions(
                   onBack: () => Navigator.pop(context),
-                  onNext: () async {
-                    await OnboardingApi.upsertAnswer('motivation_seen', true);
-                    if (!context.mounted) return;
+                  onNext: () {
+                    OnboardingApi.tryUpsertAnswer('motivation_seen', true);
                     Navigator.pushNamed(context, AppRoutes.questionWorkout);
                   },
                 ),

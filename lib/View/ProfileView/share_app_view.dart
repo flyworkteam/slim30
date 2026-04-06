@@ -139,9 +139,7 @@ class ShareAppView extends StatelessWidget {
       );
   }
 
-  Future<void> _shareApp(BuildContext context) async {
-    final l10n = AppLocalizations.of(context)!;
-    final shareText = '${l10n.shareAppShareMessage} $_shareLink';
+  Future<void> _shareApp(String shareText) async {
     await Share.share(shareText);
   }
 
@@ -170,7 +168,7 @@ class ShareAppView extends StatelessWidget {
       return;
     }
 
-    await _shareApp(context);
+    await _shareApp(shareText);
   }
 }
 

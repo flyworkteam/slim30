@@ -126,6 +126,9 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
     payload.removeWhere((_, value) => value == null);
 
     await updateProfile(ref, payload);
+    if (!mounted) {
+      return;
+    }
 
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()

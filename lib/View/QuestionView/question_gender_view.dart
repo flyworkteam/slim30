@@ -188,11 +188,10 @@ class _QuestionGenderViewState extends State<QuestionGenderView> {
                 width: 342.w,
                 child: QuestionBottomActions(
                   onBack: () => Navigator.pop(context),
-                  onNext: () async {
+                  onNext: () {
                     final selected = _selected ?? _Gender.unspecified;
-                    await UserPrefs.setGender(selected.toUserGender());
-                    await OnboardingApi.upsertAnswer('gender', selected.name);
-                    if (!mounted) return;
+                    UserPrefs.setGender(selected.toUserGender());
+                    OnboardingApi.tryUpsertAnswer('gender', selected.name);
                     Navigator.pushNamed(context, AppRoutes.questionAge);
                   },
                 ),

@@ -17,6 +17,7 @@ class QuestionAgeView extends StatefulWidget {
 class _QuestionAgeViewState extends State<QuestionAgeView> {
   static const int _currentStep = 2;
   static const int _totalSteps = 12;
+  int _selectedAge = 26;
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +106,12 @@ class _QuestionAgeViewState extends State<QuestionAgeView> {
                 top: 294.h,
                 width: 145.w,
                 height: 256.15.h,
-                child: const _AgePickerPreview(),
+                child: _AgePickerPreview(
+                  selectedAge: _selectedAge,
+                  onChanged: (value) {
+                    setState(() => _selectedAge = value);
+                  },
+                ),
               ),
               Positioned(
                 left: 24.w,
@@ -113,9 +119,8 @@ class _QuestionAgeViewState extends State<QuestionAgeView> {
                 width: 342.w,
                 child: QuestionBottomActions(
                   onBack: () => Navigator.pop(context),
-                  onNext: () async {
-                    await OnboardingApi.upsertAnswer('age', 26);
-                    if (!mounted) return;
+                  onNext: () {
+                    OnboardingApi.tryUpsertAnswer('age', _selectedAge);
                     Navigator.pushNamed(context, AppRoutes.questionHeight);
                   },
                 ),
@@ -149,30 +154,52 @@ class _QuestionAgeViewState extends State<QuestionAgeView> {
 }
 
 class _AgePickerPreview extends StatelessWidget {
-  const _AgePickerPreview();
+  const _AgePickerPreview({
+    required this.selectedAge,
+    required this.onChanged,
+  });
+
+  final int selectedAge;
+  final ValueChanged<int> onChanged;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 145.w,
-      height: 256.15.h,
-      child: Stack(
-        children: [
-          Positioned(top: 0, child: _ageLabel('24', const Color(0xFFCECECE))),
-          Positioned(
-            top: 49.h,
-            child: _ageLabel('25', const Color(0xFF434343)),
-          ),
-          Positioned(top: 98.h, child: _selectedAgeChip('26')),
-          Positioned(
-            top: 182.h,
-            child: _ageLabel('27', const Color(0xFF434343)),
-          ),
-          Positioned(
-            top: 231.h,
-            child: _ageLabel('28', const Color(0xFFCECECE)),
-          ),
-        ],
+    int clamp(int value) => value.clamp(12, 100).toInt();
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onVerticalDragUpdate: (details) {
+        final next = details.delta.dy > 0
+            ? clamp(selectedAge + 1)
+            : clamp(selectedAge - 1);
+        if (next != selectedAge) {
+          onChanged(next);
+        }
+      },
+      child: SizedBox(
+        width: 145.w,
+        height: 256.15.h,
+        child: Stack(
+          children: [
+            Positioned(
+              top: 0,
+              child: _ageLabel('${clamp(selectedAge - 2)}', const Color(0xFFCECECE)),
+            ),
+            Positioned(
+              top: 49.h,
+              child: _ageLabel('${clamp(selectedAge - 1)}', const Color(0xFF434343)),
+            ),
+            Positioned(top: 98.h, child: _selectedAgeChip('$selectedAge')),
+            Positioned(
+              top: 182.h,
+              child: _ageLabel('${clamp(selectedAge + 1)}', const Color(0xFF434343)),
+            ),
+            Positioned(
+              top: 231.h,
+              child: _ageLabel('${clamp(selectedAge + 2)}', const Color(0xFFCECECE)),
+            ),
+          ],
+        ),
       ),
     );
   }

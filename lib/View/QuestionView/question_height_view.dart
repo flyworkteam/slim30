@@ -7,11 +7,18 @@ import 'package:slim30/Core/Theme/my_colors.dart';
 import 'package:slim30/View/QuestionView/widgets/question_bottom_actions.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
 
-class QuestionHeightView extends StatelessWidget {
+class QuestionHeightView extends StatefulWidget {
   const QuestionHeightView({super.key});
+
+  @override
+  State<QuestionHeightView> createState() => _QuestionHeightViewState();
+}
+
+class _QuestionHeightViewState extends State<QuestionHeightView> {
 
   static const int _currentStep = 3;
   static const int _totalSteps = 12;
+  int _selectedHeight = 170;
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +110,12 @@ class QuestionHeightView extends StatelessWidget {
                 top: 238.12.h,
                 width: 262.w,
                 height: 458.75.h,
-                child: const _HeightPickerPreview(),
+                child: _HeightPickerPreview(
+                  initialHeight: _selectedHeight,
+                  onChanged: (value) {
+                    _selectedHeight = value;
+                  },
+                ),
               ),
               Positioned(
                 left: 24.w,
@@ -111,9 +123,8 @@ class QuestionHeightView extends StatelessWidget {
                 width: 342.w,
                 child: QuestionBottomActions(
                   onBack: () => Navigator.pop(context),
-                  onNext: () async {
-                    await OnboardingApi.upsertAnswer('height_cm', 170);
-                    if (!context.mounted) return;
+                  onNext: () {
+                    OnboardingApi.tryUpsertAnswer('height_cm', _selectedHeight);
                     Navigator.pushNamed(context, AppRoutes.questionWeight);
                   },
                 ),
@@ -147,7 +158,13 @@ class QuestionHeightView extends StatelessWidget {
 }
 
 class _HeightPickerPreview extends StatefulWidget {
-  const _HeightPickerPreview();
+  const _HeightPickerPreview({
+    required this.initialHeight,
+    required this.onChanged,
+  });
+
+  final int initialHeight;
+  final ValueChanged<int> onChanged;
 
   @override
   State<_HeightPickerPreview> createState() => _HeightPickerPreviewState();
@@ -156,8 +173,14 @@ class _HeightPickerPreview extends StatefulWidget {
 class _HeightPickerPreviewState extends State<_HeightPickerPreview> {
   static const int _minHeight = 140;
   static const int _maxHeight = 200;
-  int _selectedHeight = 170;
+  late int _selectedHeight;
   double _dragCarry = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedHeight = widget.initialHeight.clamp(_minHeight, _maxHeight).toInt();
+  }
 
   void _changeByDelta(double dy) {
     _dragCarry += dy;
@@ -169,6 +192,7 @@ class _HeightPickerPreviewState extends State<_HeightPickerPreview> {
     final next = (_selectedHeight + step).clamp(_minHeight, _maxHeight);
     if (next != _selectedHeight) {
       setState(() => _selectedHeight = next);
+      widget.onChanged(_selectedHeight);
     }
   }
 
@@ -192,6 +216,7 @@ class _HeightPickerPreviewState extends State<_HeightPickerPreview> {
               _maxHeight,
             ),
           );
+          widget.onChanged(_selectedHeight);
         } else if (details.localPosition.dy > centerY + 20.h) {
           setState(
             () => _selectedHeight = (_selectedHeight + 1).clamp(
@@ -199,6 +224,7 @@ class _HeightPickerPreviewState extends State<_HeightPickerPreview> {
               _maxHeight,
             ),
           );
+          widget.onChanged(_selectedHeight);
         }
       },
       child: Stack(

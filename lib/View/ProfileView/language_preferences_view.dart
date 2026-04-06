@@ -71,7 +71,7 @@ class _LanguagePreferencesViewState
                             Expanded(
                               child: ListView.separated(
                                 itemCount: _languages.length,
-                                separatorBuilder: (_, __) =>
+                                separatorBuilder: (context, index) =>
                                     SizedBox(height: 10.h),
                                 itemBuilder: (context, index) {
                                   final item = _languages[index];

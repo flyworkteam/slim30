@@ -23,6 +23,29 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
   bool _notificationsEnabled = true;
   bool _healthEnabled = true;
   bool _settingsHydrated = false;
+  NotificationSettingsModel? _settingsDraft;
+  int _settingsRequestSerial = 0;
+
+  Future<void> _persistSettings(NotificationSettingsModel nextSettings) async {
+    _settingsDraft = nextSettings;
+    final int requestId = ++_settingsRequestSerial;
+
+    try {
+      await updateNotificationSettings(ref, nextSettings);
+    } catch (_) {
+      // Keep optimistic UI; next app load/provider refresh re-syncs with backend.
+    }
+
+    if (!mounted || requestId != _settingsRequestSerial) {
+      return;
+    }
+
+    setState(() {
+      _settingsDraft = nextSettings;
+      _notificationsEnabled = nextSettings.dailyReminderEnabled;
+      _healthEnabled = nextSettings.progressSummaryEnabled;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +56,13 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
 
     if (!_settingsHydrated && settings != null) {
       _settingsHydrated = true;
+      _settingsDraft = settings;
       _notificationsEnabled = settings.dailyReminderEnabled;
       _healthEnabled = settings.progressSummaryEnabled;
     }
+
+    final effectiveSettings =
+        _settingsDraft ?? settings ?? NotificationSettingsModel.defaults();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -69,11 +96,10 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                           isPremium: premium?.isPremium == true,
                           onNotificationsChanged: (value) async {
                             setState(() => _notificationsEnabled = value);
-                            final source = settings ?? NotificationSettingsModel.defaults();
-                            await updateNotificationSettings(
-                              ref,
-                              source.copyWith(dailyReminderEnabled: value),
+                            final nextSettings = effectiveSettings.copyWith(
+                              dailyReminderEnabled: value,
                             );
+                            await _persistSettings(nextSettings);
                           },
                         ),
                         SizedBox(height: 30.h),
@@ -81,11 +107,10 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                           healthEnabled: _healthEnabled,
                           onHealthChanged: (value) async {
                             setState(() => _healthEnabled = value);
-                            final source = settings ?? NotificationSettingsModel.defaults();
-                            await updateNotificationSettings(
-                              ref,
-                              source.copyWith(progressSummaryEnabled: value),
+                            final nextSettings = effectiveSettings.copyWith(
+                              progressSummaryEnabled: value,
                             );
+                            await _persistSettings(nextSettings);
                           },
                         ),
                       ],

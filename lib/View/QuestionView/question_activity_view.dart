@@ -165,9 +165,8 @@ class _QuestionActivityViewState extends State<QuestionActivityView> {
                 child: QuestionBottomActions(
                   onBack: () => Navigator.pop(context),
                   onNext: _selected != null
-                      ? () async {
-                          await OnboardingApi.upsertAnswer('activity_level', _selected!.name);
-                          if (!mounted) return;
+                      ? () {
+                          OnboardingApi.tryUpsertAnswer('activity_level', _selected!.name);
                           Navigator.pushNamed(
                             context,
                             AppRoutes.questionBodyShape,

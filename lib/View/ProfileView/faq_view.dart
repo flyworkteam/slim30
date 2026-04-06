@@ -47,7 +47,8 @@ class _FaqViewState extends State<FaqView> {
                       Expanded(
                         child: ListView.separated(
                           itemCount: faqs.length,
-                          separatorBuilder: (_, __) => SizedBox(height: 15.h),
+                          separatorBuilder: (context, index) =>
+                              SizedBox(height: 15.h),
                           itemBuilder: (context, index) {
                             final isOpen = _openIndex == index;
                             final item = faqs[index];

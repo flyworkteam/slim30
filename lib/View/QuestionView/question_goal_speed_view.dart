@@ -165,9 +165,8 @@ class _QuestionGoalSpeedViewState extends State<QuestionGoalSpeedView> {
                 child: QuestionBottomActions(
                   onBack: () => Navigator.pop(context),
                   onNext: _selected != null
-                      ? () async {
-                          await OnboardingApi.upsertAnswer('goal_speed', _selected!.name);
-                          if (!mounted) return;
+                      ? () {
+                          OnboardingApi.tryUpsertAnswer('goal_speed', _selected!.name);
                           Navigator.pushNamed(
                             context,
                             AppRoutes.onboardingReady,

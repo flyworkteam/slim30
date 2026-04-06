@@ -161,9 +161,8 @@ class _QuestionWorkoutDurationViewState
                 child: QuestionBottomActions(
                   onBack: () => Navigator.pop(context),
                   onNext: _selected != null
-                      ? () async {
-                          await OnboardingApi.upsertAnswer('workout_duration', _selected!.name);
-                          if (!mounted) return;
+                      ? () {
+                          OnboardingApi.tryUpsertAnswer('workout_duration', _selected!.name);
                           Navigator.pushNamed(
                             context,
                             AppRoutes.questionGoalSpeed,

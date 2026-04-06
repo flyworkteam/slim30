@@ -167,9 +167,8 @@ class _QuestionDesiredBodyShapeViewState
                 child: QuestionBottomActions(
                   onBack: () => Navigator.pop(context),
                   onNext: _selected != null
-                      ? () async {
-                          await OnboardingApi.upsertAnswer('target_body_shape', _selected!.name);
-                          if (!mounted) return;
+                      ? () {
+                          OnboardingApi.tryUpsertAnswer('target_body_shape', _selected!.name);
                           Navigator.pushNamed(
                             context,
                             AppRoutes.questionWorkoutDays,

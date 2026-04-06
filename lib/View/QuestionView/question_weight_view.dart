@@ -19,6 +19,7 @@ class QuestionWeightView extends StatefulWidget {
 class _QuestionWeightViewState extends State<QuestionWeightView> {
   static const int _currentStep = 4;
   static const int _totalSteps = 12;
+  int _selectedWeight = 70;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +93,12 @@ class _QuestionWeightViewState extends State<QuestionWeightView> {
                 top: 296.h,
                 width: 330.w,
                 height: 257.h,
-                child: const _WeightPicker(),
+                child: _WeightPicker(
+                  initialSelected: _selectedWeight,
+                  onChanged: (value) {
+                    _selectedWeight = value;
+                  },
+                ),
               ),
               Positioned(
                 left: 24.w,
@@ -100,9 +106,8 @@ class _QuestionWeightViewState extends State<QuestionWeightView> {
                 width: 342.w,
                 child: QuestionBottomActions(
                   onBack: () => Navigator.pop(context),
-                  onNext: () async {
-                    await OnboardingApi.upsertAnswer('weight_kg', 70);
-                    if (!context.mounted) return;
+                  onNext: () {
+                    OnboardingApi.tryUpsertAnswer('weight_kg', _selectedWeight);
                     Navigator.pushNamed(
                       context,
                       AppRoutes.questionTargetWeight,
@@ -139,7 +144,13 @@ class _QuestionWeightViewState extends State<QuestionWeightView> {
 }
 
 class _WeightPicker extends StatefulWidget {
-  const _WeightPicker();
+  const _WeightPicker({
+    required this.initialSelected,
+    required this.onChanged,
+  });
+
+  final int initialSelected;
+  final ValueChanged<int> onChanged;
 
   @override
   State<_WeightPicker> createState() => _WeightPickerState();
@@ -154,8 +165,14 @@ class _WeightPickerState extends State<_WeightPicker> {
   static const double _selectedValueWidth = 80;
   static const double _pointerWidth = 39.2;
   static const double _tickLabelWidth = 40;
-  int _selected = 70;
+  late int _selected;
   double _dragCarry = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _selected = widget.initialSelected.clamp(_min, _max).toInt();
+  }
 
   void _onHorizontalDrag(double dx) {
     _dragCarry += dx;
@@ -166,6 +183,7 @@ class _WeightPickerState extends State<_WeightPicker> {
     final next = (_selected - step).clamp(_min, _max);
     if (next != _selected) {
       setState(() => _selected = next);
+      widget.onChanged(_selected);
     }
   }
 

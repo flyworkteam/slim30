@@ -165,9 +165,8 @@ class _QuestionBodyShapeViewState extends State<QuestionBodyShapeView> {
                 child: QuestionBottomActions(
                   onBack: () => Navigator.pop(context),
                   onNext: _selected != null
-                      ? () async {
-                          await OnboardingApi.upsertAnswer('current_body_shape', _selected!.name);
-                          if (!mounted) return;
+                      ? () {
+                          OnboardingApi.tryUpsertAnswer('current_body_shape', _selected!.name);
                           Navigator.pushNamed(
                             context,
                             AppRoutes.questionDesiredBodyShape,

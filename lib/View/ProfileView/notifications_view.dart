@@ -94,6 +94,9 @@ class _NotificationsViewState extends ConsumerState<NotificationsView> {
                               return;
                             }
                             await markAllNotificationsRead(ref);
+                            if (!context.mounted) {
+                              return;
+                            }
                             setState(() => _clearedAll = true);
                             ScaffoldMessenger.of(context)
                               ..clearSnackBars()
@@ -118,6 +121,9 @@ class _NotificationsViewState extends ConsumerState<NotificationsView> {
                               items: todayItems,
                               onDelete: (id) async {
                                 await markNotificationRead(ref, id);
+                                if (!mounted) {
+                                  return;
+                                }
                                 setState(() => _removedIds = {..._removedIds, id});
                               },
                             ),
@@ -128,6 +134,9 @@ class _NotificationsViewState extends ConsumerState<NotificationsView> {
                               items: yesterdayItems,
                               onDelete: (id) async {
                                 await markNotificationRead(ref, id);
+                                if (!mounted) {
+                                  return;
+                                }
                                 setState(() => _removedIds = {..._removedIds, id});
                               },
                             ),

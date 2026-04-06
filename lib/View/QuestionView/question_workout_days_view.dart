@@ -163,12 +163,11 @@ class _QuestionWorkoutDaysViewState extends State<QuestionWorkoutDaysView> {
                 child: QuestionBottomActions(
                   onBack: () => Navigator.pop(context),
                   onNext: _selected.isNotEmpty
-                      ? () async {
-                          await OnboardingApi.upsertAnswer(
+                      ? () {
+                          OnboardingApi.tryUpsertAnswer(
                             'workout_days',
                             _selected.map((day) => day.name).toList(growable: false),
                           );
-                          if (!mounted) return;
                           Navigator.pushNamed(
                             context,
                             AppRoutes.questionWorkoutDuration,

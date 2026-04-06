@@ -176,9 +176,8 @@ class _QuestionWorkoutViewState extends State<QuestionWorkoutView> {
                 child: QuestionBottomActions(
                   onBack: () => Navigator.pop(context),
                   onNext: _selected != null
-                      ? () async {
-                          await OnboardingApi.upsertAnswer('preferred_workout', _selected!.name);
-                          if (!mounted) return;
+                      ? () {
+                          OnboardingApi.tryUpsertAnswer('preferred_workout', _selected!.name);
                           Navigator.pushNamed(
                             context,
                             AppRoutes.questionActivity,
