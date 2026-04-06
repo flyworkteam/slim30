@@ -744,4 +744,22 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get progressGoalWeekly50k => 'Semanal 50k';
+
+  @override
+  String get workoutDetailRemainingLabel => 'Tempo restante';
+
+  @override
+  String get workoutDetailCompletedLabel => 'Concluido';
+
+  @override
+  String get workoutDetailNextMove => 'Proximo movimento';
+
+  @override
+  String get workoutDetailDefaultProgramTitle => 'Treino';
+
+  @override
+  String get workoutDetailDefaultExerciseTitle => 'Jumping Jack';
+
+  @override
+  String get workoutDetailDefaultExerciseSubtitle => '3 x 40 seg';
 }

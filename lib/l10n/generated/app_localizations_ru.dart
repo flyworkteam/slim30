@@ -737,4 +737,22 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get progressGoalWeekly50k => 'Еженедельно 50k';
+
+  @override
+  String get workoutDetailRemainingLabel => 'Оставшееся время';
+
+  @override
+  String get workoutDetailCompletedLabel => 'Выполнено';
+
+  @override
+  String get workoutDetailNextMove => 'Следующее движение';
+
+  @override
+  String get workoutDetailDefaultProgramTitle => 'Тренировка';
+
+  @override
+  String get workoutDetailDefaultExerciseTitle => 'Джампинг Джек';
+
+  @override
+  String get workoutDetailDefaultExerciseSubtitle => '3 x 40 сек';
 }

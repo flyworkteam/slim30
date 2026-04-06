@@ -235,5 +235,11 @@
   ,"progressGoalDaily5k": "매일 5k"
   ,"progressGoalDaily10k": "매일 10k"
   ,"progressGoalWeekly40k": "주간 40k"
-  ,"progressGoalWeekly50k": "주간 50k"
+  ,"progressGoalWeekly50k": "주간 50k",
+  "workoutDetailRemainingLabel": "남은 시간",
+  "workoutDetailCompletedLabel": "완료됨",
+  "workoutDetailNextMove": "다음 동작",
+  "workoutDetailDefaultProgramTitle": "운동",
+  "workoutDetailDefaultExerciseTitle": "점핑 잭",
+  "workoutDetailDefaultExerciseSubtitle": "3 x 40초"
 }

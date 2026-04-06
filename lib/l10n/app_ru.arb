@@ -235,5 +235,11 @@
   ,"progressGoalDaily5k": "Ежедневно 5k"
   ,"progressGoalDaily10k": "Ежедневно 10k"
   ,"progressGoalWeekly40k": "Еженедельно 40k"
-  ,"progressGoalWeekly50k": "Еженедельно 50k"
+  ,"progressGoalWeekly50k": "Еженедельно 50k",
+  "workoutDetailRemainingLabel": "Оставшееся время",
+  "workoutDetailCompletedLabel": "Выполнено",
+  "workoutDetailNextMove": "Следующее движение",
+  "workoutDetailDefaultProgramTitle": "Тренировка",
+  "workoutDetailDefaultExerciseTitle": "Джампинг Джек",
+  "workoutDetailDefaultExerciseSubtitle": "3 x 40 сек"
 }

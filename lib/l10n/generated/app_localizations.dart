@@ -1533,6 +1533,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Weekly 50k'**
   String get progressGoalWeekly50k;
+
+  /// No description provided for @workoutDetailRemainingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining Time'**
+  String get workoutDetailRemainingLabel;
+
+  /// No description provided for @workoutDetailCompletedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get workoutDetailCompletedLabel;
+
+  /// No description provided for @workoutDetailNextMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Next Move'**
+  String get workoutDetailNextMove;
+
+  /// No description provided for @workoutDetailDefaultProgramTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Workout'**
+  String get workoutDetailDefaultProgramTitle;
+
+  /// No description provided for @workoutDetailDefaultExerciseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Jumping Jack'**
+  String get workoutDetailDefaultExerciseTitle;
+
+  /// No description provided for @workoutDetailDefaultExerciseSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'3 x 40 sec'**
+  String get workoutDetailDefaultExerciseSubtitle;
 }
 
 class _AppLocalizationsDelegate

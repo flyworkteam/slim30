@@ -733,4 +733,22 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get progressGoalWeekly50k => '每周 50k';
+
+  @override
+  String get workoutDetailRemainingLabel => '剩余时间';
+
+  @override
+  String get workoutDetailCompletedLabel => '已完成';
+
+  @override
+  String get workoutDetailNextMove => '下一个动作';
+
+  @override
+  String get workoutDetailDefaultProgramTitle => '训练';
+
+  @override
+  String get workoutDetailDefaultExerciseTitle => '开合跳';
+
+  @override
+  String get workoutDetailDefaultExerciseSubtitle => '3 x 40 秒';
 }

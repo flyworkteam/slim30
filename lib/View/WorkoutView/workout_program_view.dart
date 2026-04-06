@@ -9,6 +9,7 @@ import 'package:slim30/Riverpod/Models/workout_day_model.dart';
 import 'package:slim30/Riverpod/Providers/workout/workout_program_provider.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
 import 'package:slim30/View/WorkoutView/workout_program_locale_data.dart';
+import 'package:slim30/View/WorkoutView/workout_detail_view.dart';
 
 class WorkoutProgramArgs {
   const WorkoutProgramArgs({
@@ -1757,6 +1758,28 @@ class _WorkoutProgramViewState extends ConsumerState<WorkoutProgramView> {
     );
   }
 
+  int _resolveExerciseDurationSeconds(_ExerciseItem item) {
+    final text = '${item.sets} ${item.rest}'.toLowerCase();
+
+    final minuteMatch = RegExp(r'(\d+)\s*(m|min|dk)').firstMatch(text);
+    if (minuteMatch != null) {
+      final minutes = int.tryParse(minuteMatch.group(1) ?? '0') ?? 0;
+      if (minutes > 0) {
+        return minutes * 60;
+      }
+    }
+
+    final secMatch = RegExp(r'(\d+)\s*(s|sec|sn|saniye)').firstMatch(text);
+    if (secMatch != null) {
+      final seconds = int.tryParse(secMatch.group(1) ?? '0') ?? 0;
+      if (seconds > 0) {
+        return seconds;
+      }
+    }
+
+    return 60;
+  }
+
   @override
   Widget build(BuildContext context) {
     final locale = _locale(context);
@@ -1903,6 +1926,33 @@ class _WorkoutProgramViewState extends ConsumerState<WorkoutProgramView> {
                                     item: items[i],
                                     iconBase: _iconBase,
                                     light: i.isEven,
+                                    onTap: items[i].locked ? null : () {
+                                      final playableItems = items
+                                          .where((exercise) => !exercise.locked)
+                                          .toList(growable: false);
+                                      final initialPlayableIndex = playableItems.indexOf(items[i]);
+
+                                      final detailExercises = playableItems
+                                          .map(
+                                            (exercise) => WorkoutDetailExercise(
+                                              title: exercise.title,
+                                              subtitle: exercise.sets,
+                                              imagePath: exercise.imagePath,
+                                              durationSeconds: _resolveExerciseDurationSeconds(exercise),
+                                            ),
+                                          )
+                                          .toList(growable: false);
+
+                                      Navigator.of(context).pushNamed(
+                                        AppRoutes.workoutDetail,
+                                        arguments: WorkoutDetailArgs(
+                                          programTitle: displayTitle,
+                                          exercises: detailExercises,
+                                          initialIndex: initialPlayableIndex < 0 ? 0 : initialPlayableIndex,
+                                          fixedDurationSeconds: 600,
+                                        ),
+                                      );
+                                    },
                                   ),
                                   if (i != items.length - 1)
                                     SizedBox(height: 17.h),
@@ -1934,24 +1984,31 @@ class _ExerciseCard extends StatelessWidget {
     required this.item,
     required this.iconBase,
     required this.light,
+    this.onTap,
   });
 
   final _ExerciseItem item;
   final String iconBase;
   final bool light;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 342.w,
-      height: item.cardHeight.h,
-      decoration: BoxDecoration(
-        color: light ? const Color(0xFFF3FFF7) : const Color(0xFFF5FEFF),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(10.r),
-        border: Border.all(color: const Color.fromRGBO(241, 241, 241, 0.73)),
-      ),
-      child: Stack(
-        children: [
+        child: Container(
+          width: 342.w,
+          height: item.cardHeight.h,
+          decoration: BoxDecoration(
+            color: light ? const Color(0xFFF3FFF7) : const Color(0xFFF5FEFF),
+            borderRadius: BorderRadius.circular(10.r),
+            border: Border.all(color: const Color.fromRGBO(241, 241, 241, 0.73)),
+          ),
+          child: Stack(
+            children: [
           Positioned(
             left: 0,
             top: 0,
@@ -2068,7 +2125,9 @@ class _ExerciseCard extends StatelessWidget {
                 color: const Color(0xFFB8B8B8),
               ),
             ),
-        ],
+            ],
+          ),
+        ),
       ),
     );
   }

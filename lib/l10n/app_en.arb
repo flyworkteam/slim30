@@ -235,5 +235,11 @@
   ,"progressGoalDaily5k": "Daily 5k"
   ,"progressGoalDaily10k": "Daily 10k"
   ,"progressGoalWeekly40k": "Weekly 40k"
-  ,"progressGoalWeekly50k": "Weekly 50k"
+  ,"progressGoalWeekly50k": "Weekly 50k",
+  "workoutDetailRemainingLabel": "Remaining Time",
+  "workoutDetailCompletedLabel": "Completed",
+  "workoutDetailNextMove": "Next Move",
+  "workoutDetailDefaultProgramTitle": "Workout",
+  "workoutDetailDefaultExerciseTitle": "Jumping Jack",
+  "workoutDetailDefaultExerciseSubtitle": "3 x 40 sec"
 }

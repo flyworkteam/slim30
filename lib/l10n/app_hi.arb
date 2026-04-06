@@ -235,5 +235,11 @@
   ,"progressGoalDaily5k": "रोज़ 5k"
   ,"progressGoalDaily10k": "रोज़ 10k"
   ,"progressGoalWeekly40k": "साप्ताहिक 40k"
-  ,"progressGoalWeekly50k": "साप्ताहिक 50k"
+  ,"progressGoalWeekly50k": "साप्ताहिक 50k",
+  "workoutDetailRemainingLabel": "शेष समय",
+  "workoutDetailCompletedLabel": "पूर्ण",
+  "workoutDetailNextMove": "अगली चाल",
+  "workoutDetailDefaultProgramTitle": "वर्कआउट",
+  "workoutDetailDefaultExerciseTitle": "जम्पिंग जैक",
+  "workoutDetailDefaultExerciseSubtitle": "3 x 40 सेकंड"
 }

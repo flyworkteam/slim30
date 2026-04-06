@@ -235,5 +235,11 @@
   ,"progressGoalDaily5k": "每日 5k"
   ,"progressGoalDaily10k": "每日 10k"
   ,"progressGoalWeekly40k": "每周 40k"
-  ,"progressGoalWeekly50k": "每周 50k"
+  ,"progressGoalWeekly50k": "每周 50k",
+  "workoutDetailRemainingLabel": "剩余时间",
+  "workoutDetailCompletedLabel": "已完成",
+  "workoutDetailNextMove": "下一个动作",
+  "workoutDetailDefaultProgramTitle": "训练",
+  "workoutDetailDefaultExerciseTitle": "开合跳",
+  "workoutDetailDefaultExerciseSubtitle": "3 x 40 秒"
 }

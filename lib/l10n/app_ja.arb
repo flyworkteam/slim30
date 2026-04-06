@@ -235,5 +235,11 @@
   ,"progressGoalDaily5k": "毎日 5k"
   ,"progressGoalDaily10k": "毎日 10k"
   ,"progressGoalWeekly40k": "毎週 40k"
-  ,"progressGoalWeekly50k": "毎週 50k"
+  ,"progressGoalWeekly50k": "毎週 50k",
+  "workoutDetailRemainingLabel": "残り時間",
+  "workoutDetailCompletedLabel": "完了",
+  "workoutDetailNextMove": "次の動き",
+  "workoutDetailDefaultProgramTitle": "ワークアウト",
+  "workoutDetailDefaultExerciseTitle": "ジャンピングジャック",
+  "workoutDetailDefaultExerciseSubtitle": "3 x 40 秒"
 }

@@ -733,4 +733,22 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get progressGoalWeekly50k => '주간 50k';
+
+  @override
+  String get workoutDetailRemainingLabel => '남은 시간';
+
+  @override
+  String get workoutDetailCompletedLabel => '완료됨';
+
+  @override
+  String get workoutDetailNextMove => '다음 동작';
+
+  @override
+  String get workoutDetailDefaultProgramTitle => '운동';
+
+  @override
+  String get workoutDetailDefaultExerciseTitle => '점핑 잭';
+
+  @override
+  String get workoutDetailDefaultExerciseSubtitle => '3 x 40초';
 }
