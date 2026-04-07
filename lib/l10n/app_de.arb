@@ -241,5 +241,8 @@
   "workoutDetailNextMove": "Nächste Übung",
   "workoutDetailDefaultProgramTitle": "Training",
   "workoutDetailDefaultExerciseTitle": "Jumping Jack",
-  "workoutDetailDefaultExerciseSubtitle": "3 x 40 Sek."
+  "workoutDetailDefaultExerciseSubtitle": "3 x 40 Sek.",
+  "workoutDetailSaveProgressFailed": "Fortschritt konnte nicht gespeichert werden.",
+  "workoutDetailSaveExerciseFailed": "Übung konnte nicht gespeichert werden.",
+  "commonRetry": "Erneut versuchen"
 }

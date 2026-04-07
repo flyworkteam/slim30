@@ -753,11 +753,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get workoutDetailDefaultExerciseSubtitle => '3 x 40 秒';
 
   @override
-  String get workoutDetailSaveProgressFailed => 'Progress save failed.';
+  String get workoutDetailSaveProgressFailed => '保存进度失败。';
 
   @override
-  String get workoutDetailSaveExerciseFailed => 'Exercise save failed.';
+  String get workoutDetailSaveExerciseFailed => '保存练习失败。';
 
   @override
-  String get commonRetry => 'Retry';
+  String get commonRetry => '重试';
 }

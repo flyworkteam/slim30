@@ -769,11 +769,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get workoutDetailDefaultExerciseSubtitle => '3 x 40 s';
 
   @override
-  String get workoutDetailSaveProgressFailed => 'Progress save failed.';
+  String get workoutDetailSaveProgressFailed =>
+      'Echec de l\'enregistrement de la progression.';
 
   @override
-  String get workoutDetailSaveExerciseFailed => 'Exercise save failed.';
+  String get workoutDetailSaveExerciseFailed =>
+      'Echec de l\'enregistrement de l\'exercice.';
 
   @override
-  String get commonRetry => 'Retry';
+  String get commonRetry => 'Reessayer';
 }

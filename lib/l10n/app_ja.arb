@@ -241,5 +241,8 @@
   "workoutDetailNextMove": "次の動き",
   "workoutDetailDefaultProgramTitle": "ワークアウト",
   "workoutDetailDefaultExerciseTitle": "ジャンピングジャック",
-  "workoutDetailDefaultExerciseSubtitle": "3 x 40 秒"
+  "workoutDetailDefaultExerciseSubtitle": "3 x 40 秒",
+  "workoutDetailSaveProgressFailed": "進捗を保存できませんでした。",
+  "workoutDetailSaveExerciseFailed": "エクササイズを保存できませんでした。",
+  "commonRetry": "再試行"
 }

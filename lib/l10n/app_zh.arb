@@ -241,5 +241,8 @@
   "workoutDetailNextMove": "下一个动作",
   "workoutDetailDefaultProgramTitle": "训练",
   "workoutDetailDefaultExerciseTitle": "开合跳",
-  "workoutDetailDefaultExerciseSubtitle": "3 x 40 秒"
+  "workoutDetailDefaultExerciseSubtitle": "3 x 40 秒",
+  "workoutDetailSaveProgressFailed": "保存进度失败。",
+  "workoutDetailSaveExerciseFailed": "保存练习失败。",
+  "commonRetry": "重试"
 }

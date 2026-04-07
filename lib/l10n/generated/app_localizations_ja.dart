@@ -753,11 +753,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get workoutDetailDefaultExerciseSubtitle => '3 x 40 秒';
 
   @override
-  String get workoutDetailSaveProgressFailed => 'Progress save failed.';
+  String get workoutDetailSaveProgressFailed => '進捗を保存できませんでした。';
 
   @override
-  String get workoutDetailSaveExerciseFailed => 'Exercise save failed.';
+  String get workoutDetailSaveExerciseFailed => 'エクササイズを保存できませんでした。';
 
   @override
-  String get commonRetry => 'Retry';
+  String get commonRetry => '再試行';
 }

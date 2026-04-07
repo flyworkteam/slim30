@@ -757,11 +757,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get workoutDetailDefaultExerciseSubtitle => '3 x 40 сек';
 
   @override
-  String get workoutDetailSaveProgressFailed => 'Progress save failed.';
+  String get workoutDetailSaveProgressFailed =>
+      'Не удалось сохранить прогресс.';
 
   @override
-  String get workoutDetailSaveExerciseFailed => 'Exercise save failed.';
+  String get workoutDetailSaveExerciseFailed =>
+      'Не удалось сохранить упражнение.';
 
   @override
-  String get commonRetry => 'Retry';
+  String get commonRetry => 'Повторить';
 }

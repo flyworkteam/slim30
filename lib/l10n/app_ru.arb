@@ -241,5 +241,8 @@
   "workoutDetailNextMove": "Следующее движение",
   "workoutDetailDefaultProgramTitle": "Тренировка",
   "workoutDetailDefaultExerciseTitle": "Джампинг Джек",
-  "workoutDetailDefaultExerciseSubtitle": "3 x 40 сек"
+  "workoutDetailDefaultExerciseSubtitle": "3 x 40 сек",
+  "workoutDetailSaveProgressFailed": "Не удалось сохранить прогресс.",
+  "workoutDetailSaveExerciseFailed": "Не удалось сохранить упражнение.",
+  "commonRetry": "Повторить"
 }
