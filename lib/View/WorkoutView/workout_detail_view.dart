@@ -1,9 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:slim30/Core/Config/app_config.dart';
+import 'package:slim30/Core/Network/api_client.dart';
+import 'package:slim30/Core/Storage/auth_token_store.dart';
+import 'package:slim30/Riverpod/Providers/workout/workout_program_provider.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
 import 'package:video_player/video_player.dart';
 
@@ -25,28 +30,33 @@ class WorkoutDetailExercise {
 
 class WorkoutDetailArgs {
   const WorkoutDetailArgs({
+    this.dayNumber,
     required this.programTitle,
     required this.exercises,
     required this.initialIndex,
     this.fixedDurationSeconds,
   });
 
+  final int? dayNumber;
   final String programTitle;
   final List<WorkoutDetailExercise> exercises;
   final int initialIndex;
   final int? fixedDurationSeconds;
 }
 
-class WorkoutDetailView extends StatefulWidget {
+class WorkoutDetailView extends ConsumerStatefulWidget {
   const WorkoutDetailView({super.key});
 
   @override
-  State<WorkoutDetailView> createState() => _WorkoutDetailViewState();
+  ConsumerState<WorkoutDetailView> createState() => _WorkoutDetailViewState();
 }
 
-class _WorkoutDetailViewState extends State<WorkoutDetailView> {
+class _WorkoutDetailViewState extends ConsumerState<WorkoutDetailView> {
   static const int _defaultSeconds = 600;
   bool _initialized = false;
+  bool _completionSaved = false;
+  bool _completionRequestInFlight = false;
+  final Set<int> _savedExercises = <int>{};
 
   late WorkoutDetailArgs _args;
   late int _currentIndex;
@@ -141,11 +151,20 @@ class _WorkoutDetailViewState extends State<WorkoutDetailView> {
 
       final nextRemaining = _remainingSeconds - 1;
       if (nextRemaining <= 0) {
+        final finishedExerciseIndex = _currentIndex;
+        final elapsedSeconds = _totalSeconds;
         setState(() {
           _remainingSeconds = 0;
           _isRunning = false;
         });
         _stopTicker();
+        unawaited(
+          _persistExerciseCompletionIfNeeded(
+            exerciseIndex: finishedExerciseIndex,
+            secondsSpent: elapsedSeconds,
+          ),
+        );
+        unawaited(_persistCompletionIfNeeded());
         return;
       }
 
@@ -255,6 +274,10 @@ class _WorkoutDetailViewState extends State<WorkoutDetailView> {
 
   void _goNextExercise() {
     if (_currentIndex >= _args.exercises.length - 1) {
+      if (_remainingSeconds > 0) {
+        return;
+      }
+
       setState(() {
         _remainingSeconds = 0;
         _isRunning = false;
@@ -265,6 +288,7 @@ class _WorkoutDetailViewState extends State<WorkoutDetailView> {
           await _videoController?.pause();
         }),
       );
+      unawaited(_persistCompletionIfNeeded());
       return;
     }
 
@@ -272,6 +296,112 @@ class _WorkoutDetailViewState extends State<WorkoutDetailView> {
       _currentIndex += 1;
       _resetTimerForCurrentExercise(startRunning: true);
     });
+  }
+
+  Future<void> _persistCompletionIfNeeded() async {
+    if (!_isWorkoutCompleted ||
+        _completionSaved ||
+        _completionRequestInFlight) {
+      return;
+    }
+
+    final dayNumber = _args.dayNumber;
+    if (dayNumber == null || dayNumber < 1 || dayNumber > 30) {
+      return;
+    }
+
+    _completionRequestInFlight = true;
+    try {
+      final apiClient = ApiClient(
+        baseUrl: AppConfig.apiBaseUrl,
+        defaultHeaders: AppConfig.apiHeaders,
+        authTokenProvider: AuthTokenStore.getToken,
+      );
+
+      await apiClient.put(
+        '/progress/days/$dayNumber',
+        body: const <String, dynamic>{'completed': true},
+      );
+
+      _completionSaved = true;
+      ref.invalidate(completedProgressDaysProvider);
+      ref.invalidate(progressSummaryProvider);
+      ref.invalidate(workoutProgramUiProvider);
+    } catch (_) {
+      _showRetrySnackbar(
+        message: 'Progress kaydi basarisiz oldu.',
+        onRetry: () {
+          unawaited(_persistCompletionIfNeeded());
+        },
+      );
+    } finally {
+      _completionRequestInFlight = false;
+    }
+  }
+
+  Future<void> _persistExerciseCompletionIfNeeded({
+    required int exerciseIndex,
+    required int secondsSpent,
+  }) async {
+    if (_savedExercises.contains(exerciseIndex)) {
+      return;
+    }
+
+    final dayNumber = _args.dayNumber;
+    if (dayNumber == null || dayNumber < 1 || dayNumber > 30) {
+      return;
+    }
+
+    try {
+      final apiClient = ApiClient(
+        baseUrl: AppConfig.apiBaseUrl,
+        defaultHeaders: AppConfig.apiHeaders,
+        authTokenProvider: AuthTokenStore.getToken,
+      );
+
+      await apiClient.put(
+        '/progress/days/$dayNumber/exercises/${exerciseIndex + 1}',
+        body: <String, dynamic>{
+          'completed': true,
+          'secondsSpent': secondsSpent,
+          'exerciseTitle': _args.exercises[exerciseIndex].title,
+        },
+      );
+
+      _savedExercises.add(exerciseIndex);
+      ref.invalidate(progressSummaryProvider);
+    } catch (_) {
+      _showRetrySnackbar(
+        message: 'Egzersiz kaydi basarisiz oldu.',
+        onRetry: () {
+          unawaited(
+            _persistExerciseCompletionIfNeeded(
+              exerciseIndex: exerciseIndex,
+              secondsSpent: secondsSpent,
+            ),
+          );
+        },
+      );
+    }
+  }
+
+  void _showRetrySnackbar({
+    required String message,
+    required VoidCallback onRetry,
+  }) {
+    if (!mounted) {
+      return;
+    }
+
+    final messenger = ScaffoldMessenger.of(context);
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(message),
+          action: SnackBarAction(label: 'Tekrar dene', onPressed: onRetry),
+        ),
+      );
   }
 
   void _goPrevExercise() {

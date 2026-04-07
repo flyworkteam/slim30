@@ -173,7 +173,6 @@ class _WorkoutProgramViewState extends ConsumerState<WorkoutProgramView> {
         imagePath: path('Jumping Jack.png'),
         fallbackImagePath: fallbackPath('Jumping Jack.png'),
         cardHeight: 91,
-        locked: true,
       ),
       _ExerciseItem(
         title: locale.bodyweightSquat,
@@ -190,7 +189,6 @@ class _WorkoutProgramViewState extends ConsumerState<WorkoutProgramView> {
         imagePath: path('Modified Push-Up.png'),
         fallbackImagePath: fallbackPath('Modified Push-Up.png'),
         cardHeight: 91,
-        locked: true,
       ),
       _ExerciseItem(
         title: locale.standingKneeDrive,
@@ -1962,6 +1960,7 @@ class _WorkoutProgramViewState extends ConsumerState<WorkoutProgramView> {
                                             Navigator.of(context).pushNamed(
                                               AppRoutes.workoutDetail,
                                               arguments: WorkoutDetailArgs(
+                                                dayNumber: safeDayNumber,
                                                 programTitle: displayTitle,
                                                 exercises: detailExercises,
                                                 initialIndex:

@@ -30,7 +30,7 @@ class _ProgressViewState extends ConsumerState<ProgressView> {
     final summary = summaryAsync.valueOrNull;
     final totalDays = summary?.totalDays;
     final completedDays = summary?.completedDays;
-    final successPercent = summary?.completionRate.round();
+    final successPercent = summary?.successRate.round();
     final completedValue = summary != null
         ? '$completedDays/$totalDays'
         : (summaryAsync.isLoading ? '...' : '--');
@@ -39,6 +39,39 @@ class _ProgressViewState extends ConsumerState<ProgressView> {
         : (summaryAsync.isLoading ? '...' : '--');
     final totalCompletedValue = summary != null
         ? '$completedDays'
+        : (summaryAsync.isLoading ? '...' : '--');
+    final caloriesValue = summary != null
+        ? '${summary.caloriesBurned} ${l10n.progressUnitKcal}'
+        : (summaryAsync.isLoading ? '...' : '--');
+    final movementValue = summary != null
+        ? '${summary.movementCount}'
+        : (summaryAsync.isLoading ? '...' : '--');
+    final durationValue = summary != null
+        ? '${summary.totalWorkoutMinutes} ${l10n.progressUnitMinute}'
+        : (summaryAsync.isLoading ? '...' : '--');
+    final overallPercent = summary != null ? summary.successRate.round() : 0;
+    final muscleValue = summary?.muscleGainKg != null
+        ? (summary!.muscleGainKg! >= 0
+              ? '+${summary.muscleGainKg!.toStringAsFixed(1)}'
+              : summary.muscleGainKg!.toStringAsFixed(1))
+        : (summaryAsync.isLoading ? '...' : '--');
+    final waistValue = summary?.waistChangeCm != null
+        ? summary!.waistChangeCm!.toStringAsFixed(1)
+        : (summaryAsync.isLoading ? '...' : '--');
+    final fatValue = summary?.bodyFatChangePercent != null
+        ? '${summary!.bodyFatChangePercent!.toStringAsFixed(1)}%'
+        : (summaryAsync.isLoading ? '...' : '--');
+    final weightLostValue = summary?.weightLostKg != null
+        ? '${summary!.weightLostKg!.toStringAsFixed(1)} ${l10n.progressUnitKg}'
+        : (summaryAsync.isLoading ? '...' : '--');
+    final heartRateValue = summary?.restingHeartRateBpm != null
+        ? '${summary!.restingHeartRateBpm} ${l10n.progressUnitBpm}'
+        : (summaryAsync.isLoading ? '...' : '--');
+    final hydrationValue = summary?.hydrationPercent != null
+        ? '%${summary!.hydrationPercent}'
+        : (summaryAsync.isLoading ? '...' : '--');
+    final sleepValue = summary?.sleepHours != null
+        ? '${summary!.sleepHours!.toStringAsFixed(1)} ${l10n.progressUnitHour}'
         : (summaryAsync.isLoading ? '...' : '--');
     final goalOptions = [
       l10n.progressGoalDaily5k,
@@ -106,17 +139,17 @@ class _ProgressViewState extends ConsumerState<ProgressView> {
                           completedTitle: l10n.progressCompletedActivity,
                           completedValue: completedValue,
                           caloriesTitle: l10n.progressCaloriesBurnedLabel,
-                          caloriesValue: '140 ${l10n.progressUnitKcal}',
+                          caloriesValue: caloriesValue,
                           muscleLabel: l10n.progressMuscleGainLabel,
-                          muscleValue: '+2.1',
+                          muscleValue: muscleValue,
                           waistLabel: l10n.progressWaistChangeLabel,
-                          waistValue: '-3.2',
+                          waistValue: waistValue,
                           fatLabel: l10n.progressBodyFatLabel,
-                          fatValue: '-4%',
+                          fatValue: fatValue,
                           movementLabel: l10n.progressMovementCountLabel,
-                          movementValue: '20',
+                          movementValue: movementValue,
                           durationLabel: l10n.progressDurationLabel,
-                          durationValue: '40 ${l10n.progressUnitMinute}',
+                          durationValue: durationValue,
                           successLabel: l10n.progressSuccessPercentLabel,
                           successValue: successValue,
                         ),
@@ -125,7 +158,7 @@ class _ProgressViewState extends ConsumerState<ProgressView> {
                           overallTitle: l10n.progressOverallPerformanceTitle,
                           overallSubtitle:
                               l10n.progressOverallPerformanceSubtitle,
-                          percentage: 82,
+                          percentage: overallPercent,
                         ),
                         SizedBox(height: 24.h),
                         _SectionTitle(text: l10n.progressGeneralStatusTitle),
@@ -133,29 +166,29 @@ class _ProgressViewState extends ConsumerState<ProgressView> {
                         _GeneralCaloriesTrendCard(
                           iconPath: '$_progressIconBase/iconsax-weight.svg',
                           title: l10n.progressCaloriesBurnedLabel,
-                          value: '140 ${l10n.progressUnitKcal}',
+                          value: caloriesValue,
                         ),
                         SizedBox(height: 15.h),
                         _GeneralBodyMetricsCard(
                           muscleLabel: l10n.progressMuscleGainLabel,
-                          muscleValue: '+2.1',
+                          muscleValue: muscleValue,
                           waistLabel: l10n.progressWaistChangeLabel,
-                          waistValue: '-3.2',
+                          waistValue: waistValue,
                           fatLabel: l10n.progressBodyFatLabel,
-                          fatValue: '-4%',
+                          fatValue: fatValue,
                         ),
                         SizedBox(height: 10.h),
                         _StatTile(
                           iconPath: '$_progressIconBase/iconsax-weight.svg',
                           label: l10n.progressWeightLostLabel,
-                          value: '-3.4 ${l10n.progressUnitKg}',
+                          value: weightLostValue,
                         ),
                         SizedBox(height: 10.h),
                         _StatTile(
                           iconPath:
                               '$_progressIconBase/iconsax-activity (1).svg',
                           label: l10n.progressHeartRateLabel,
-                          value: '80 ${l10n.progressUnitBpm}',
+                          value: heartRateValue,
                         ),
                         SizedBox(height: 10.h),
                         _StatTile(
@@ -167,13 +200,13 @@ class _ProgressViewState extends ConsumerState<ProgressView> {
                         _StatTile(
                           iconPath: '$_progressIconBase/iconsax-drop.svg',
                           label: l10n.progressHydrationLabel,
-                          value: '%72',
+                          value: hydrationValue,
                         ),
                         SizedBox(height: 10.h),
                         _StatTile(
                           iconPath: '$_progressIconBase/iconsax-moon.svg',
                           label: l10n.progressSleepLabel,
-                          value: '8 ${l10n.progressUnitHour}',
+                          value: sleepValue,
                         ),
                         SizedBox(height: 24.h),
                         _RewardCard(

@@ -15,7 +15,9 @@ final apiClientProvider = Provider<ApiClient>((ref) {
   );
 });
 
-final workoutProgramProvider = FutureProvider<List<WorkoutDayModel>>((ref) async {
+final workoutProgramProvider = FutureProvider<List<WorkoutDayModel>>((
+  ref,
+) async {
   final apiClient = ref.read(apiClientProvider);
   final data = await apiClient.get('/workouts/program');
   final program = data['program'];
@@ -67,7 +69,9 @@ final completedProgressDaysProvider = FutureProvider<Set<int>>((ref) async {
       .toSet();
 });
 
-final progressSummaryProvider = FutureProvider<ProgressSummaryModel>((ref) async {
+final progressSummaryProvider = FutureProvider<ProgressSummaryModel>((
+  ref,
+) async {
   final apiClient = ref.read(apiClientProvider);
   final data = await apiClient.get('/progress/summary');
   final summary = data['summary'];
@@ -77,6 +81,12 @@ final progressSummaryProvider = FutureProvider<ProgressSummaryModel>((ref) async
       completedDays: 0,
       remainingDays: 30,
       completionRate: 0,
+      successRate: 0,
+      totalCompletedExercises: 0,
+      movementCount: 0,
+      totalWorkoutSeconds: 0,
+      totalWorkoutMinutes: 0,
+      caloriesBurned: 0,
     );
   }
 
@@ -100,26 +110,26 @@ class WorkoutProgramUiItem {
   final String imagePath;
 }
 
-final workoutProgramUiProvider = FutureProvider<List<WorkoutProgramUiItem>>((ref) async {
+final workoutProgramUiProvider = FutureProvider<List<WorkoutProgramUiItem>>((
+  ref,
+) async {
   final programDays = await ref.watch(workoutProgramProvider.future);
   final completedDays = await ref.watch(completedProgressDaysProvider.future);
-
-  final hasAnyCompletion = completedDays.isNotEmpty;
-  final maxCompletedDay = hasAnyCompletion
-      ? completedDays.reduce((current, next) => current > next ? current : next)
-      : 0;
 
   return programDays
       .map((day) {
         final isCompleted = completedDays.contains(day.day);
-        final isLocked = hasAnyCompletion && day.day > (maxCompletedDay + 1);
+        final previousDayCompleted =
+            day.day == 1 || completedDays.contains(day.day - 1);
+        final isLocked = !isCompleted && !previousDayCompleted;
 
         return WorkoutProgramUiItem(
           dayNumber: day.day,
           title: day.title,
           isCompleted: isCompleted,
           isLocked: isLocked,
-          imagePath: 'assets/images/antrenman/day${((day.day - 1) % 16) + 1}.jpg',
+          imagePath:
+              'assets/images/antrenman/day${((day.day - 1) % 16) + 1}.jpg',
         );
       })
       .toList(growable: false);
