@@ -1569,6 +1569,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'3 x 40 sec'**
   String get workoutDetailDefaultExerciseSubtitle;
+
+  /// No description provided for @workoutDetailSaveProgressFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress save failed.'**
+  String get workoutDetailSaveProgressFailed;
+
+  /// No description provided for @workoutDetailSaveExerciseFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Exercise save failed.'**
+  String get workoutDetailSaveExerciseFailed;
+
+  /// No description provided for @commonRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get commonRetry;
 }
 
 class _AppLocalizationsDelegate

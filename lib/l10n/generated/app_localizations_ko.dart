@@ -751,4 +751,13 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get workoutDetailDefaultExerciseSubtitle => '3 x 40초';
+
+  @override
+  String get workoutDetailSaveProgressFailed => 'Progress save failed.';
+
+  @override
+  String get workoutDetailSaveExerciseFailed => 'Exercise save failed.';
+
+  @override
+  String get commonRetry => 'Retry';
 }

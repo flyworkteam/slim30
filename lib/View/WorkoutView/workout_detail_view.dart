@@ -159,12 +159,11 @@ class _WorkoutDetailViewState extends ConsumerState<WorkoutDetailView> {
         });
         _stopTicker();
         unawaited(
-          _persistExerciseCompletionIfNeeded(
+          _persistCompletionChain(
             exerciseIndex: finishedExerciseIndex,
             secondsSpent: elapsedSeconds,
           ),
         );
-        unawaited(_persistCompletionIfNeeded());
         return;
       }
 
@@ -288,7 +287,12 @@ class _WorkoutDetailViewState extends ConsumerState<WorkoutDetailView> {
           await _videoController?.pause();
         }),
       );
-      unawaited(_persistCompletionIfNeeded());
+      unawaited(
+        _persistCompletionChain(
+          exerciseIndex: _currentIndex,
+          secondsSpent: _totalSeconds,
+        ),
+      );
       return;
     }
 
@@ -328,8 +332,10 @@ class _WorkoutDetailViewState extends ConsumerState<WorkoutDetailView> {
       ref.invalidate(progressSummaryProvider);
       ref.invalidate(workoutProgramUiProvider);
     } catch (_) {
+      final l10n = AppLocalizations.of(context)!;
       _showRetrySnackbar(
-        message: 'Progress kaydi basarisiz oldu.',
+        message: l10n.workoutDetailSaveProgressFailed,
+        actionLabel: l10n.commonRetry,
         onRetry: () {
           unawaited(_persistCompletionIfNeeded());
         },
@@ -337,6 +343,17 @@ class _WorkoutDetailViewState extends ConsumerState<WorkoutDetailView> {
     } finally {
       _completionRequestInFlight = false;
     }
+  }
+
+  Future<void> _persistCompletionChain({
+    required int exerciseIndex,
+    required int secondsSpent,
+  }) async {
+    await _persistExerciseCompletionIfNeeded(
+      exerciseIndex: exerciseIndex,
+      secondsSpent: secondsSpent,
+    );
+    await _persistCompletionIfNeeded();
   }
 
   Future<void> _persistExerciseCompletionIfNeeded({
@@ -371,8 +388,10 @@ class _WorkoutDetailViewState extends ConsumerState<WorkoutDetailView> {
       _savedExercises.add(exerciseIndex);
       ref.invalidate(progressSummaryProvider);
     } catch (_) {
+      final l10n = AppLocalizations.of(context)!;
       _showRetrySnackbar(
-        message: 'Egzersiz kaydi basarisiz oldu.',
+        message: l10n.workoutDetailSaveExerciseFailed,
+        actionLabel: l10n.commonRetry,
         onRetry: () {
           unawaited(
             _persistExerciseCompletionIfNeeded(
@@ -387,6 +406,7 @@ class _WorkoutDetailViewState extends ConsumerState<WorkoutDetailView> {
 
   void _showRetrySnackbar({
     required String message,
+    required String actionLabel,
     required VoidCallback onRetry,
   }) {
     if (!mounted) {
@@ -399,7 +419,7 @@ class _WorkoutDetailViewState extends ConsumerState<WorkoutDetailView> {
       ..showSnackBar(
         SnackBar(
           content: Text(message),
-          action: SnackBarAction(label: 'Tekrar dene', onPressed: onRetry),
+          action: SnackBarAction(label: actionLabel, onPressed: onRetry),
         ),
       );
   }

@@ -241,5 +241,8 @@
   "workoutDetailNextMove": "Next Move",
   "workoutDetailDefaultProgramTitle": "Workout",
   "workoutDetailDefaultExerciseTitle": "Jumping Jack",
-  "workoutDetailDefaultExerciseSubtitle": "3 x 40 sec"
+  "workoutDetailDefaultExerciseSubtitle": "3 x 40 sec",
+  "workoutDetailSaveProgressFailed": "Progress save failed.",
+  "workoutDetailSaveExerciseFailed": "Exercise save failed.",
+  "commonRetry": "Retry"
 }

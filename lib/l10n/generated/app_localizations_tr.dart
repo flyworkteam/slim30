@@ -758,4 +758,15 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get workoutDetailDefaultExerciseSubtitle => '3 x 40 sn';
+
+  @override
+  String get workoutDetailSaveProgressFailed =>
+      'Ilerleme kaydi basarisiz oldu.';
+
+  @override
+  String get workoutDetailSaveExerciseFailed =>
+      'Egzersiz kaydi basarisiz oldu.';
+
+  @override
+  String get commonRetry => 'Tekrar dene';
 }

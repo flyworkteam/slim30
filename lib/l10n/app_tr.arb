@@ -241,5 +241,8 @@
   "workoutDetailNextMove": "Siradaki Hareket",
   "workoutDetailDefaultProgramTitle": "Antrenman",
   "workoutDetailDefaultExerciseTitle": "Jumping Jack",
-  "workoutDetailDefaultExerciseSubtitle": "3 x 40 sn"
+  "workoutDetailDefaultExerciseSubtitle": "3 x 40 sn",
+  "workoutDetailSaveProgressFailed": "Ilerleme kaydi basarisiz oldu.",
+  "workoutDetailSaveExerciseFailed": "Egzersiz kaydi basarisiz oldu.",
+  "commonRetry": "Tekrar dene"
 }
