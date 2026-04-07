@@ -244,5 +244,31 @@
   "workoutDetailDefaultExerciseSubtitle": "3 x 40 Sek.",
   "workoutDetailSaveProgressFailed": "Fortschritt konnte nicht gespeichert werden.",
   "workoutDetailSaveExerciseFailed": "Übung konnte nicht gespeichert werden.",
-  "commonRetry": "Erneut versuchen"
+  "commonRetry": "Erneut versuchen",
+  "workoutRestTitle": "Rest Time",
+  "workoutRestSubtitle": "Recharge for the next set.",
+  "workoutRestMoves": "{count} Moves",
+  "@workoutRestMoves": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "workoutRestCalories": "{kcal} Kcal",
+  "@workoutRestCalories": {
+    "placeholders": {
+      "kcal": {
+        "type": "int"
+      }
+    }
+  },
+  "workoutRestDurationMinutes": "{minutes} Minutes",
+  "@workoutRestDurationMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  }
 }

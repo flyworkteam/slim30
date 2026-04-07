@@ -1587,6 +1587,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Retry'**
   String get commonRetry;
+
+  /// No description provided for @workoutRestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest Time'**
+  String get workoutRestTitle;
+
+  /// No description provided for @workoutRestSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recharge for the next set.'**
+  String get workoutRestSubtitle;
+
+  /// No description provided for @workoutRestMoves.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Moves'**
+  String workoutRestMoves(int count);
+
+  /// No description provided for @workoutRestCalories.
+  ///
+  /// In en, this message translates to:
+  /// **'{kcal} Kcal'**
+  String workoutRestCalories(int kcal);
+
+  /// No description provided for @workoutRestDurationMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} Minutes'**
+  String workoutRestDurationMinutes(int minutes);
 }
 
 class _AppLocalizationsDelegate

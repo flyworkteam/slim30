@@ -244,5 +244,31 @@
   "workoutDetailDefaultExerciseSubtitle": "3 x 40 сек",
   "workoutDetailSaveProgressFailed": "Не удалось сохранить прогресс.",
   "workoutDetailSaveExerciseFailed": "Не удалось сохранить упражнение.",
-  "commonRetry": "Повторить"
+  "commonRetry": "Повторить",
+  "workoutRestTitle": "Rest Time",
+  "workoutRestSubtitle": "Recharge for the next set.",
+  "workoutRestMoves": "{count} Moves",
+  "@workoutRestMoves": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "workoutRestCalories": "{kcal} Kcal",
+  "@workoutRestCalories": {
+    "placeholders": {
+      "kcal": {
+        "type": "int"
+      }
+    }
+  },
+  "workoutRestDurationMinutes": "{minutes} Minutes",
+  "@workoutRestDurationMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  }
 }

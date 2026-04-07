@@ -760,4 +760,25 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get commonRetry => '再試行';
+
+  @override
+  String get workoutRestTitle => 'Rest Time';
+
+  @override
+  String get workoutRestSubtitle => 'Recharge for the next set.';
+
+  @override
+  String workoutRestMoves(int count) {
+    return '$count Moves';
+  }
+
+  @override
+  String workoutRestCalories(int kcal) {
+    return '$kcal Kcal';
+  }
+
+  @override
+  String workoutRestDurationMinutes(int minutes) {
+    return '$minutes Minutes';
+  }
 }

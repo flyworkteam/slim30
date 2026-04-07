@@ -244,5 +244,31 @@
   "workoutDetailDefaultExerciseSubtitle": "3 x 40 秒",
   "workoutDetailSaveProgressFailed": "保存进度失败。",
   "workoutDetailSaveExerciseFailed": "保存练习失败。",
-  "commonRetry": "重试"
+  "commonRetry": "重试",
+  "workoutRestTitle": "Rest Time",
+  "workoutRestSubtitle": "Recharge for the next set.",
+  "workoutRestMoves": "{count} Moves",
+  "@workoutRestMoves": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "workoutRestCalories": "{kcal} Kcal",
+  "@workoutRestCalories": {
+    "placeholders": {
+      "kcal": {
+        "type": "int"
+      }
+    }
+  },
+  "workoutRestDurationMinutes": "{minutes} Minutes",
+  "@workoutRestDurationMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  }
 }

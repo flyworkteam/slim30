@@ -244,5 +244,31 @@
   "workoutDetailDefaultExerciseSubtitle": "3 x 40 sn",
   "workoutDetailSaveProgressFailed": "Ilerleme kaydi basarisiz oldu.",
   "workoutDetailSaveExerciseFailed": "Egzersiz kaydi basarisiz oldu.",
-  "commonRetry": "Tekrar dene"
+  "commonRetry": "Tekrar dene",
+  "workoutRestTitle": "Mola Verme Zamani",
+  "workoutRestSubtitle": "Bir sonraki set icin enerji topla.",
+  "workoutRestMoves": "{count} Hareket",
+  "@workoutRestMoves": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "workoutRestCalories": "{kcal} Kcal",
+  "@workoutRestCalories": {
+    "placeholders": {
+      "kcal": {
+        "type": "int"
+      }
+    }
+  },
+  "workoutRestDurationMinutes": "{minutes} Dakika",
+  "@workoutRestDurationMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  }
 }

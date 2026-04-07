@@ -53,9 +53,12 @@ class WorkoutDetailView extends ConsumerStatefulWidget {
 
 class _WorkoutDetailViewState extends ConsumerState<WorkoutDetailView> {
   static const int _defaultSeconds = 600;
+  static const int _restSeconds = 600;
   bool _initialized = false;
   bool _completionSaved = false;
   bool _completionRequestInFlight = false;
+  bool _isRestMode = false;
+  int _restCaloriesKcal = 8;
   final Set<int> _savedExercises = <int>{};
 
   late WorkoutDetailArgs _args;
@@ -135,11 +138,18 @@ class _WorkoutDetailViewState extends ConsumerState<WorkoutDetailView> {
   WorkoutDetailExercise get _currentExercise => _args.exercises[_currentIndex];
   bool get _isWorkoutCompleted =>
       _currentIndex >= _args.exercises.length - 1 && _remainingSeconds <= 0;
+  bool get _isLastExercise => _currentIndex >= _args.exercises.length - 1;
 
   String _mmss(int totalSeconds) {
     final mm = (totalSeconds ~/ 60).toString().padLeft(2, '0');
     final ss = (totalSeconds % 60).toString().padLeft(2, '0');
     return '$mm:$ss';
+  }
+
+  int _estimateCaloriesFromSeconds(int secondsSpent) {
+    final safeSeconds = secondsSpent < 0 ? 0 : secondsSpent;
+    final estimated = (safeSeconds * 0.2).round();
+    return estimated < 1 ? 1 : estimated;
   }
 
   void _startTicker() {
@@ -153,17 +163,35 @@ class _WorkoutDetailViewState extends ConsumerState<WorkoutDetailView> {
       if (nextRemaining <= 0) {
         final finishedExerciseIndex = _currentIndex;
         final elapsedSeconds = _totalSeconds;
+
+        if (_isRestMode) {
+          _finishRestAndAdvance();
+          return;
+        }
+
         setState(() {
           _remainingSeconds = 0;
           _isRunning = false;
         });
         _stopTicker();
+
+        if (_isLastExercise) {
+          unawaited(
+            _persistCompletionChain(
+              exerciseIndex: finishedExerciseIndex,
+              secondsSpent: elapsedSeconds,
+            ),
+          );
+          return;
+        }
+
         unawaited(
-          _persistCompletionChain(
+          _persistExerciseCompletionIfNeeded(
             exerciseIndex: finishedExerciseIndex,
             secondsSpent: elapsedSeconds,
           ),
         );
+        _startRestMode(secondsSpent: elapsedSeconds);
         return;
       }
 
@@ -272,6 +300,11 @@ class _WorkoutDetailViewState extends ConsumerState<WorkoutDetailView> {
   }
 
   void _goNextExercise() {
+    if (_isRestMode) {
+      _finishRestAndAdvance();
+      return;
+    }
+
     if (_currentIndex >= _args.exercises.length - 1) {
       if (_remainingSeconds > 0) {
         return;
@@ -297,6 +330,40 @@ class _WorkoutDetailViewState extends ConsumerState<WorkoutDetailView> {
     }
 
     setState(() {
+      _currentIndex += 1;
+      _resetTimerForCurrentExercise(startRunning: true);
+    });
+  }
+
+  void _startRestMode({required int secondsSpent}) {
+    setState(() {
+      _isRestMode = true;
+      _totalSeconds = _restSeconds;
+      _remainingSeconds = _restSeconds;
+      _isRunning = true;
+      _restCaloriesKcal = _estimateCaloriesFromSeconds(secondsSpent);
+    });
+    _startTicker();
+    unawaited(
+      _safeVideoCall(() async {
+        await _videoController?.pause();
+      }),
+    );
+  }
+
+  void _finishRestAndAdvance() {
+    if (_isLastExercise) {
+      setState(() {
+        _isRestMode = false;
+        _remainingSeconds = 0;
+        _isRunning = false;
+      });
+      _stopTicker();
+      return;
+    }
+
+    setState(() {
+      _isRestMode = false;
       _currentIndex += 1;
       _resetTimerForCurrentExercise(startRunning: true);
     });
@@ -435,9 +502,234 @@ class _WorkoutDetailViewState extends ConsumerState<WorkoutDetailView> {
     });
   }
 
+  Widget _buildRestView() {
+    final l10n = AppLocalizations.of(context)!;
+    final elapsedProgress = _totalSeconds == 0
+        ? 0.0
+        : (_totalSeconds - _remainingSeconds) / _totalSeconds;
+    final remainingMoves = (_args.exercises.length - (_currentIndex + 1))
+        .clamp(0, _args.exercises.length)
+        .toInt();
+    final restMinutes = (_restSeconds / 60).round();
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Align(
+        alignment: Alignment.topCenter,
+        child: SizedBox(
+          width: 390.w,
+          height: 844.h,
+          child: Stack(
+            children: [
+              Positioned(
+                left: 0,
+                right: 0,
+                top: 216.h,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: 186.w,
+                      height: 186.h,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          CustomPaint(
+                            size: Size(186.w, 186.h),
+                            painter: _RestRingPainter(
+                              progress: elapsedProgress.clamp(0.0, 1.0),
+                            ),
+                          ),
+                          Text(
+                            _mmss(_remainingSeconds),
+                            style: GoogleFonts.leagueSpartan(
+                              fontSize: 41.sp,
+                              fontWeight: FontWeight.w500,
+                              height: 38 / 41,
+                              color: Colors.black,
+                            ),
+                          ),
+                          Positioned(
+                            top: 0,
+                            child: Container(
+                              width: 24.w,
+                              height: 24.h,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                gradient: LinearGradient(
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                  colors: [
+                                    Color(0xFF62DCF4),
+                                    Color(0xFF64E6C4),
+                                    Color(0xFF66F393),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 43.h),
+                    SizedBox(
+                      width: 260.w,
+                      child: Text(
+                        l10n.workoutRestTitle,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.leagueSpartan(
+                          fontSize: 32.sp,
+                          fontWeight: FontWeight.w500,
+                          height: 1.0,
+                          letterSpacing: -0.35,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 18.h),
+                    SizedBox(
+                      width: 260.w,
+                      child: Text(
+                        l10n.workoutRestSubtitle,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.leagueSpartan(
+                          fontSize: 20.sp,
+                          fontWeight: FontWeight.w500,
+                          height: 18 / 20,
+                          letterSpacing: -0.22,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 43.h),
+                    SizedBox(
+                      width: 233.w,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            l10n.workoutRestMoves(remainingMoves),
+                            style: GoogleFonts.leagueSpartan(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                              height: 15 / 14,
+                              letterSpacing: -0.15,
+                              color: const Color(0xFF534848),
+                            ),
+                          ),
+                          SizedBox(width: 14.w),
+                          SizedBox(
+                            width: 26.w,
+                            child: Divider(
+                              thickness: 1,
+                              color: const Color(0xFF534848),
+                            ),
+                          ),
+                          SizedBox(width: 14.w),
+                          Text(
+                            l10n.workoutRestCalories(_restCaloriesKcal),
+                            style: GoogleFonts.leagueSpartan(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                              height: 15 / 14,
+                              letterSpacing: -0.15,
+                              color: const Color(0xFF534848),
+                            ),
+                          ),
+                          SizedBox(width: 14.w),
+                          SizedBox(
+                            width: 26.w,
+                            child: Divider(
+                              thickness: 1,
+                              color: const Color(0xFF534848),
+                            ),
+                          ),
+                          SizedBox(width: 14.w),
+                          Text(
+                            l10n.workoutRestDurationMinutes(restMinutes),
+                            style: GoogleFonts.leagueSpartan(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                              height: 15 / 14,
+                              letterSpacing: -0.15,
+                              color: const Color(0xFF534848),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(
+                left: 24.w,
+                top: 750.h,
+                child: InkWell(
+                  onTap: _goNextExercise,
+                  borderRadius: BorderRadius.circular(10.r),
+                  child: Container(
+                    width: 342.w,
+                    height: 44.h,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.r),
+                      gradient: const LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        colors: [
+                          Color(0xFF62DCF4),
+                          Color(0xFF64E6C4),
+                          Color(0xFF66F393),
+                        ],
+                      ),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      l10n.questionSkip,
+                      style: GoogleFonts.leagueSpartan(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        height: 15 / 16,
+                        letterSpacing: -0.18,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                height: 34.h,
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 8.h),
+                    child: Container(
+                      width: 144.w,
+                      height: 5.h,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF0D0D0D),
+                        borderRadius: BorderRadius.circular(100.r),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+
+    if (_isRestMode) {
+      return _buildRestView();
+    }
+
     final progress = _totalSeconds == 0
         ? 0.0
         : (_totalSeconds - _remainingSeconds) / _totalSeconds;
@@ -787,6 +1079,52 @@ class _TimerRingPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _TimerRingPainter oldDelegate) {
+    return oldDelegate.progress != progress;
+  }
+}
+
+class _RestRingPainter extends CustomPainter {
+  const _RestRingPainter({required this.progress});
+
+  final double progress;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = (size.shortestSide / 2) - 12;
+    const startAngle = -1.57079632679;
+    final sweep = (6.28318530718 * progress).clamp(0.0, 6.28318530718);
+
+    final backgroundPaint = Paint()
+      ..color = const Color(0xFFEFEFEF)
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..strokeWidth = 12;
+
+    final gradientPaint = Paint()
+      ..shader = const LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [Color(0xFF66F393), Color(0xFF88F3CF), Color(0xFFA3F3FF)],
+      ).createShader(Rect.fromCircle(center: center, radius: radius))
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..strokeWidth = 12;
+
+    canvas.drawCircle(center, radius, backgroundPaint);
+    if (sweep > 0) {
+      canvas.drawArc(
+        Rect.fromCircle(center: center, radius: radius),
+        startAngle,
+        sweep,
+        false,
+        gradientPaint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _RestRingPainter oldDelegate) {
     return oldDelegate.progress != progress;
   }
 }

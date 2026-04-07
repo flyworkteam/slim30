@@ -769,4 +769,25 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get commonRetry => 'Tekrar dene';
+
+  @override
+  String get workoutRestTitle => 'Mola Verme Zamani';
+
+  @override
+  String get workoutRestSubtitle => 'Bir sonraki set icin enerji topla.';
+
+  @override
+  String workoutRestMoves(int count) {
+    return '$count Hareket';
+  }
+
+  @override
+  String workoutRestCalories(int kcal) {
+    return '$kcal Kcal';
+  }
+
+  @override
+  String workoutRestDurationMinutes(int minutes) {
+    return '$minutes Dakika';
+  }
 }
