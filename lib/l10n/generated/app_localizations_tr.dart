@@ -460,8 +460,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get editProfileConfirm => 'Tamam';
 
   @override
-  String get editProfileSaveMessage =>
-      'Degisiklikler hazirlandi. Backend baglantisi eklendiginde kaydedilecek.';
+  String get editProfileSaveMessage => 'Profil basariyla guncellendi.';
 
   @override
   String get editProfileDeletePendingMessage =>

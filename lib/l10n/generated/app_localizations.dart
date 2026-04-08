@@ -1003,7 +1003,7 @@ abstract class AppLocalizations {
   /// No description provided for @editProfileSaveMessage.
   ///
   /// In en, this message translates to:
-  /// **'Changes prepared. They will be saved when backend connection is added.'**
+  /// **'Profile updated successfully.'**
   String get editProfileSaveMessage;
 
   /// No description provided for @editProfileDeletePendingMessage.

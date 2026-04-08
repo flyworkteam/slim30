@@ -76,16 +76,6 @@ class OnboardingShell extends StatelessWidget {
                 ),
               ),
               Positioned(
-                left: 0,
-                right: 0,
-                top: 0,
-                height: 62.h,
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(24.w, 21.h, 24.w, 19.h),
-                  child: const _StatusBar(),
-                ),
-              ),
-              Positioned(
                 left: 330.w,
                 top: 72.h,
                 child: GestureDetector(
@@ -193,50 +183,6 @@ class OnboardingShell extends StatelessWidget {
   }
 }
 
-class _StatusBar extends StatelessWidget {
-  const _StatusBar();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: SizedBox(
-            height: 22.h,
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                '9:41',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 17.sp,
-                  fontWeight: FontWeight.w600,
-                  height: 22 / 17,
-                ),
-              ),
-            ),
-          ),
-        ),
-        Expanded(
-          child: SizedBox(
-            height: 22.h,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                const _CellularConnectionIcon(),
-                SizedBox(width: 7.w),
-                const _WifiIcon(),
-                SizedBox(width: 7.w),
-                const _BatteryIcon(),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class _PageIndicator extends StatelessWidget {
   const _PageIndicator({required this.activeIndex});
 
@@ -274,18 +220,12 @@ class _PageIndicator extends StatelessWidget {
       activeIndex == 2 ? buildActive() : buildDot(),
     ];
 
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: items,
-    );
+    return Row(mainAxisSize: MainAxisSize.min, children: items);
   }
 }
 
 class _ContinueButton extends StatelessWidget {
-  const _ContinueButton({
-    required this.label,
-    required this.onPressed,
-  });
+  const _ContinueButton({required this.label, required this.onPressed});
 
   final String label;
   final VoidCallback onPressed;
@@ -319,135 +259,6 @@ class _ContinueButton extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _CellularConnectionIcon extends StatelessWidget {
-  const _CellularConnectionIcon();
-
-  @override
-  Widget build(BuildContext context) {
-    final heights = [4.h, 6.h, 8.h, 12.h];
-
-    return SizedBox(
-      width: 19.2.w,
-      height: 12.23.h,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: List.generate(
-          heights.length,
-          (index) => Container(
-            width: 3.w,
-            height: heights[index],
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(1.r),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _WifiIcon extends StatelessWidget {
-  const _WifiIcon();
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 17.14.w,
-      height: 12.33.h,
-      child: CustomPaint(painter: _WifiPainter()),
-    );
-  }
-}
-
-class _WifiPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final stroke = Paint()
-      ..color = Colors.white
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.6
-      ..strokeCap = StrokeCap.round;
-    final fill = Paint()..color = Colors.white;
-    final center = Offset(size.width / 2, size.height);
-
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: size.width * 0.5),
-      3.95,
-      1.52,
-      false,
-      stroke,
-    );
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: size.width * 0.34),
-      4.02,
-      1.36,
-      false,
-      stroke,
-    );
-    canvas.drawCircle(Offset(size.width / 2, size.height - 1.3), 1.2, fill);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
-class _BatteryIcon extends StatelessWidget {
-  const _BatteryIcon();
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 27.33.w,
-      height: 13.h,
-      child: Stack(
-        children: [
-          Positioned(
-            left: 0,
-            top: 0,
-            child: Container(
-              width: 25.w,
-              height: 13.h,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.35),
-                  width: 1,
-                ),
-                borderRadius: BorderRadius.circular(4.3.r),
-              ),
-            ),
-          ),
-          Positioned(
-            left: 24.67.w,
-            top: 4.5.h,
-            child: Container(
-              width: 1.33.w,
-              height: 4.1.h,
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.4),
-                borderRadius: BorderRadius.circular(1.r),
-              ),
-            ),
-          ),
-          Positioned(
-            left: 2.w,
-            top: 2.h,
-            child: Container(
-              width: 21.w,
-              height: 9.h,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(2.5.r),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

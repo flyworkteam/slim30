@@ -147,7 +147,7 @@
   ,"editProfileDeleteMessage": "Bu sadece onizleme aksiyonudur. Gercek silme backend baglandiginda eklenecek."
   ,"editProfileCancel": "Iptal"
   ,"editProfileConfirm": "Tamam"
-  ,"editProfileSaveMessage": "Degisiklikler hazirlandi. Backend baglantisi eklendiginde kaydedilecek."
+  ,"editProfileSaveMessage": "Profil basariyla guncellendi."
   ,"editProfileDeletePendingMessage": "Backend baglantisi bekleniyor. Islem uygulanmadi."
   ,"bodyTypeSlim": "Zayif"
   ,"bodyTypeNormal": "Normal"

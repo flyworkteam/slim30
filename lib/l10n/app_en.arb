@@ -147,7 +147,7 @@
   ,"editProfileDeleteMessage": "This is a preview action only. Deletion will be enabled when backend is connected."
   ,"editProfileCancel": "Cancel"
   ,"editProfileConfirm": "Confirm"
-  ,"editProfileSaveMessage": "Changes prepared. They will be saved when backend connection is added."
+  ,"editProfileSaveMessage": "Profile updated successfully."
   ,"editProfileDeletePendingMessage": "Backend connection is pending. Action not applied."
   ,"bodyTypeSlim": "Slim"
   ,"bodyTypeNormal": "Normal"

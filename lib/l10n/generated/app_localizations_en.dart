@@ -459,8 +459,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get editProfileConfirm => 'Confirm';
 
   @override
-  String get editProfileSaveMessage =>
-      'Changes prepared. They will be saved when backend connection is added.';
+  String get editProfileSaveMessage => 'Profile updated successfully.';
 
   @override
   String get editProfileDeletePendingMessage =>

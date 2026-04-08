@@ -99,6 +99,13 @@ class AuthService {
         body: const <String, dynamic>{},
       );
       await _storeBackendToken(data);
+    } on ApiException catch (error) {
+      if (error.statusCode == 404) {
+        throw const AuthFlowException(
+          'Misafir girisi backend tarafinda henuz aktif degil. /auth/guest endpointi eksik.',
+        );
+      }
+      rethrow;
     } catch (_) {
       await AuthTokenStore.clear();
       rethrow;

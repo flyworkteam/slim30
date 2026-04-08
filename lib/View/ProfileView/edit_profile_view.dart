@@ -1,5 +1,4 @@
-import 'dart:typed_data';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -37,10 +36,10 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: 'Evrim Kurt');
-    _ageController = TextEditingController(text: '26');
-    _heightController = TextEditingController(text: '1.70');
-    _weightController = TextEditingController(text: '70');
+    _nameController = TextEditingController();
+    _ageController = TextEditingController();
+    _heightController = TextEditingController();
+    _weightController = TextEditingController();
   }
 
   @override
@@ -328,13 +327,13 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
     if (!_initializedFromApi && profile != null) {
       _initializedFromApi = true;
       _nameController.text = profile.name;
-      _ageController.text = profile.age?.toString() ?? _ageController.text;
+      _ageController.text = profile.age?.toString() ?? '';
       _heightController.text = profile.heightCm != null
           ? (profile.heightCm! / 100).toStringAsFixed(2)
-          : _heightController.text;
-      _weightController.text =
-          profile.weightKg?.toStringAsFixed(0) ?? _weightController.text;
+          : '';
+      _weightController.text = profile.weightKg?.toStringAsFixed(0) ?? '';
       _avatarUrl = profile.avatarUrl;
+      _avatarBytes = null;
     }
 
     return Scaffold(
@@ -496,6 +495,7 @@ class _ProfileIdentity extends StatelessWidget {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(35.r),
                             child: _AvatarImage(
+                              nameListenable: nameController,
                               avatarUrl: avatarUrl,
                               avatarBytes: avatarBytes,
                             ),
@@ -551,7 +551,7 @@ class _ProfileIdentity extends StatelessWidget {
                   valueListenable: nameController,
                   builder: (context, value, _) {
                     return Text(
-                      value.text.trim().isEmpty ? 'Evrim Kurt' : value.text,
+                      value.text.trim().isEmpty ? 'User' : value.text.trim(),
                       textAlign: TextAlign.center,
                       style: GoogleFonts.leagueSpartan(
                         fontSize: 16.sp,
@@ -572,8 +572,13 @@ class _ProfileIdentity extends StatelessWidget {
 }
 
 class _AvatarImage extends StatelessWidget {
-  const _AvatarImage({required this.avatarUrl, required this.avatarBytes});
+  const _AvatarImage({
+    required this.nameListenable,
+    required this.avatarUrl,
+    required this.avatarBytes,
+  });
 
+  final ValueListenable<TextEditingValue> nameListenable;
   final String? avatarUrl;
   final Uint8List? avatarBytes;
 
@@ -595,26 +600,71 @@ class _AvatarImage extends StatelessWidget {
         height: 70.w,
         fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) {
-          return const _AvatarPlaceholderImage();
+          return _AvatarPlaceholderImage(nameListenable: nameListenable);
         },
       );
     }
 
-    return const _AvatarPlaceholderImage();
+    return _AvatarPlaceholderImage(nameListenable: nameListenable);
   }
 }
 
 class _AvatarPlaceholderImage extends StatelessWidget {
-  const _AvatarPlaceholderImage();
+  const _AvatarPlaceholderImage({required this.nameListenable});
+
+  final ValueListenable<TextEditingValue> nameListenable;
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(
-      'assets/images/f62810c637b67734e57a8bfb4985baec89b2e79e.jpg',
-      width: 70.w,
-      height: 70.w,
-      fit: BoxFit.cover,
+    return ValueListenableBuilder<TextEditingValue>(
+      valueListenable: nameListenable,
+      builder: (context, value, _) {
+        final initials = _initials(value.text);
+        return DecoratedBox(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFF62DCF4), Color(0xFF66F393)],
+            ),
+          ),
+          child: SizedBox(
+            width: 70.w,
+            height: 70.w,
+            child: Center(
+              child: Text(
+                initials,
+                style: GoogleFonts.leagueSpartan(
+                  fontSize: 24.sp,
+                  fontWeight: FontWeight.w700,
+                  height: 1,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
+  }
+
+  String _initials(String raw) {
+    final parts = raw
+        .trim()
+        .split(RegExp(r'\s+'))
+        .where((part) => part.isNotEmpty)
+        .toList(growable: false);
+
+    if (parts.isEmpty) {
+      return 'U';
+    }
+
+    if (parts.length == 1) {
+      return parts.first.substring(0, 1).toUpperCase();
+    }
+
+    return (parts.first.substring(0, 1) + parts.last.substring(0, 1))
+        .toUpperCase();
   }
 }
 
