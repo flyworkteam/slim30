@@ -2,6 +2,8 @@ import 'dart:typed_data';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:slim30/Core/Network/api_client.dart';
+import 'package:slim30/Core/Network/api_exception.dart';
+import 'package:slim30/Core/Storage/auth_token_store.dart';
 import 'package:slim30/Riverpod/Models/app_models.dart';
 import 'package:slim30/Riverpod/Models/progress_summary_model.dart';
 import 'package:slim30/Riverpod/Providers/workout/workout_program_provider.dart';
@@ -113,6 +115,11 @@ Future<String?> uploadProfileAvatar(
   required String filename,
   required String contentType,
 }) async {
+  final token = await AuthTokenStore.getToken();
+  if (token == null || token.trim().isEmpty) {
+    throw ApiException('Oturum bulunamadi. Lutfen tekrar giris yapin.');
+  }
+
   final apiClient = ref.read(apiClientProvider);
   final data = await apiClient.postMultipart(
     '/uploads/avatar',

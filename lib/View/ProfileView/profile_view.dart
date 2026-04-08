@@ -85,7 +85,9 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
       ref.invalidate(workoutProgramProvider);
       ref.invalidate(completedProgressDaysProvider);
 
-      Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.login, (_) => false);
+      Navigator.of(
+        context,
+      ).pushNamedAndRemoveUntil(AppRoutes.login, (_) => false);
     } catch (_) {
       if (!mounted) {
         return;
@@ -280,30 +282,7 @@ class _ProfileIdentity extends StatelessWidget {
                     Positioned(
                       left: 0,
                       top: 0,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(35.r),
-                        child: avatarUrl != null && avatarUrl!.trim().isNotEmpty
-                            ? Image.network(
-                                avatarUrl!,
-                                width: 70.w,
-                                height: 70.w,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Image.asset(
-                                    'assets/images/f62810c637b67734e57a8bfb4985baec89b2e79e.jpg',
-                                    width: 70.w,
-                                    height: 70.w,
-                                    fit: BoxFit.cover,
-                                  );
-                                },
-                              )
-                            : Image.asset(
-                                'assets/images/f62810c637b67734e57a8bfb4985baec89b2e79e.jpg',
-                                width: 70.w,
-                                height: 70.w,
-                                fit: BoxFit.cover,
-                              ),
-                      ),
+                      child: _ProfileAvatar(name: name, avatarUrl: avatarUrl),
                     ),
                     Positioned(
                       left: 23.w,
@@ -354,6 +333,87 @@ class _ProfileIdentity extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ProfileAvatar extends StatelessWidget {
+  const _ProfileAvatar({required this.name, required this.avatarUrl});
+
+  final String name;
+  final String? avatarUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    final normalizedUrl = avatarUrl?.trim();
+    final initials = _initials(name);
+
+    return Container(
+      width: 70.w,
+      height: 70.w,
+      decoration: BoxDecoration(
+        color: const Color(0xFFF5F5F5),
+        borderRadius: BorderRadius.circular(35.r),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: normalizedUrl != null && normalizedUrl.isNotEmpty
+          ? Image.network(
+              normalizedUrl,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return _ProfileAvatarInitials(initials: initials);
+              },
+            )
+          : _ProfileAvatarInitials(initials: initials),
+    );
+  }
+
+  String _initials(String raw) {
+    final parts = raw
+        .trim()
+        .split(RegExp(r'\s+'))
+        .where((part) => part.isNotEmpty)
+        .toList(growable: false);
+
+    if (parts.isEmpty) {
+      return 'U';
+    }
+
+    if (parts.length == 1) {
+      return parts.first.substring(0, 1).toUpperCase();
+    }
+
+    return (parts.first.substring(0, 1) + parts.last.substring(0, 1))
+        .toUpperCase();
+  }
+}
+
+class _ProfileAvatarInitials extends StatelessWidget {
+  const _ProfileAvatarInitials({required this.initials});
+
+  final String initials;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFF62DCF4), Color(0xFF66F393)],
+        ),
+      ),
+      child: Center(
+        child: Text(
+          initials,
+          style: GoogleFonts.leagueSpartan(
+            fontSize: 24.sp,
+            fontWeight: FontWeight.w700,
+            height: 1,
+            color: Colors.white,
+          ),
+        ),
+      ),
     );
   }
 }
@@ -502,7 +562,9 @@ class _SettingsSection extends StatelessWidget {
             ),
             _SettingRow(
               iconPath: '${ProfileView._profileIconBase}/iconsax-crown-1.svg',
-              title: isPremium ? '${l10n.profilePremium} (ON)' : l10n.profilePremium,
+              title: isPremium
+                  ? '${l10n.profilePremium} (ON)'
+                  : l10n.profilePremium,
               trailing: _Chevron(),
               onTap: null,
             ),

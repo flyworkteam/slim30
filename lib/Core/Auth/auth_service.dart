@@ -92,6 +92,19 @@ class AuthService {
     }
   }
 
+  static Future<void> signInAsGuest() async {
+    try {
+      final data = await _apiClient.post(
+        '/auth/guest',
+        body: const <String, dynamic>{},
+      );
+      await _storeBackendToken(data);
+    } catch (_) {
+      await AuthTokenStore.clear();
+      rethrow;
+    }
+  }
+
   static Future<void> signOut() async {
     await Future.wait([
       _firebaseAuth.signOut(),
@@ -113,6 +126,10 @@ class AuthService {
       body: {'firebase_token': idToken},
     );
 
+    await _storeBackendToken(data);
+  }
+
+  static Future<void> _storeBackendToken(Map<String, dynamic> data) async {
     final token = data['token'];
     if (token is! String || token.trim().isEmpty) {
       throw const AuthFlowException('Backend auth token is missing.');

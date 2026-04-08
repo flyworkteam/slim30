@@ -73,6 +73,34 @@ class _LoginViewState extends State<LoginView> {
     }
   }
 
+  Future<void> _handleGuestLogin() async {
+    if (_isLoading) {
+      return;
+    }
+
+    setState(() => _isLoading = true);
+    try {
+      await AuthService.signInAsGuest();
+      if (!mounted) {
+        return;
+      }
+      Navigator.of(
+        context,
+      ).pushNamedAndRemoveUntil(AppRoutes.questionGender, (_) => false);
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context)
+        ..clearSnackBars()
+        ..showSnackBar(SnackBar(content: Text(mapAuthError(error))));
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -219,14 +247,7 @@ class _LoginViewState extends State<LoginView> {
                     SizedBox(height: 15.h),
                     // Guest row
                     GestureDetector(
-                      onTap: _isLoading
-                          ? null
-                          : () {
-                              Navigator.pushNamed(
-                                context,
-                                AppRoutes.questionGender,
-                              );
-                            },
+                      onTap: _isLoading ? null : _handleGuestLogin,
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [

@@ -193,14 +193,17 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
       return;
     }
 
-    final contentType = _resolveImageContentType(pickedFile.name);
+    final contentType = _resolveImageContentType(
+      filename: pickedFile.name,
+      mimeType: pickedFile.mimeType,
+    );
     if (contentType == null) {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(
           const SnackBar(
             content: Text(
-              'Sadece JPG, PNG veya WEBP formatlari destekleniyor.',
+              'Sadece JPG, JPEG, PNG, WEBP, HEIC veya HEIF formatlari destekleniyor.',
             ),
           ),
         );
@@ -871,7 +874,21 @@ String _bodyTypeLabel(AppLocalizations l10n, String value) {
   }
 }
 
-String? _resolveImageContentType(String filename) {
+String? _resolveImageContentType({required String filename, String? mimeType}) {
+  final normalizedMimeType = mimeType?.trim().toLowerCase();
+  const supportedMimeTypes = <String>{
+    'image/jpeg',
+    'image/png',
+    'image/webp',
+    'image/heic',
+    'image/heif',
+  };
+
+  if (normalizedMimeType != null &&
+      supportedMimeTypes.contains(normalizedMimeType)) {
+    return normalizedMimeType;
+  }
+
   final lowerName = filename.trim().toLowerCase();
   if (lowerName.endsWith('.jpg') || lowerName.endsWith('.jpeg')) {
     return 'image/jpeg';
@@ -881,6 +898,12 @@ String? _resolveImageContentType(String filename) {
   }
   if (lowerName.endsWith('.webp')) {
     return 'image/webp';
+  }
+  if (lowerName.endsWith('.heic')) {
+    return 'image/heic';
+  }
+  if (lowerName.endsWith('.heif')) {
+    return 'image/heif';
   }
   return null;
 }
