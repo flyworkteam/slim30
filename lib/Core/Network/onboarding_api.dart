@@ -1,5 +1,6 @@
 import 'package:slim30/Core/Config/app_config.dart';
 import 'package:slim30/Core/Network/api_client.dart';
+import 'package:slim30/Core/Storage/app_locale_store.dart';
 import 'package:slim30/Core/Storage/auth_token_store.dart';
 
 class OnboardingApi {
@@ -9,6 +10,7 @@ class OnboardingApi {
     baseUrl: AppConfig.apiBaseUrl,
     defaultHeaders: AppConfig.apiHeaders,
     authTokenProvider: AuthTokenStore.getToken,
+    localeCodeProvider: AppLocaleStore.getLanguageCode,
   );
 
   static Future<void> upsertAnswer(String questionKey, Object? answerValue) async {

@@ -49,6 +49,10 @@ class HomeView extends ConsumerWidget {
                         dashboard: dashboardAsync.valueOrNull,
                         completedDays: completedDays,
                       ),
+                      if (dashboardAsync.valueOrNull?.isPremium != true) ...[
+                        SizedBox(height: 40.h),
+                        _PremiumUpsellCard(),
+                      ],
                       SizedBox(height: 40.h),
                       _ContinueSection(iconBase: _iconBase),
                       SizedBox(height: 40.h),
@@ -122,12 +126,14 @@ class _Header extends StatelessWidget {
             ],
           ),
         ),
-        _PremiumBadge(
-          iconBase: iconBase,
-          isPremium: true,
-          label: l10n.homePremium,
-        ),
-        SizedBox(width: 8.w),
+        if (dashboard?.isPremium == true) ...[
+          _PremiumBadge(
+            iconBase: iconBase,
+            isPremium: true,
+            label: l10n.homePremium,
+          ),
+          SizedBox(width: 8.w),
+        ],
         InkWell(
           onTap: () => Navigator.of(context).pushNamed(AppRoutes.notifications),
           borderRadius: BorderRadius.circular(30.r),
@@ -1215,6 +1221,193 @@ class _SmallMetricCard extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class _PremiumUpsellCard extends StatelessWidget {
+  const _PremiumUpsellCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final copy = _PremiumUpsellCopy.of(context);
+
+    return Container(
+      width: 342.w,
+      height: 128.h,
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: [Color(0xFF62DCF4), Color(0xFF64E6C4), Color(0xFF66F393)],
+          stops: [0.0, 0.5843, 1.0],
+        ),
+        borderRadius: BorderRadius.circular(20.r),
+        boxShadow: const [
+          BoxShadow(
+            color: Color.fromRGBO(8, 68, 78, 0.25),
+            blurRadius: 1,
+            offset: Offset(0, 1),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20.r),
+        child: Stack(
+          children: [
+            Positioned(
+              left: 4.w,
+              top: 2.h,
+              child: Opacity(
+                opacity: 0.96,
+                child: Image.asset(
+                  'assets/images/premiumHome.png',
+                  width: 136.w,
+                  height: 124.h,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [
+                      Colors.white.withValues(alpha: 0),
+                      Colors.white.withValues(alpha: 0.08),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              left: 149.w,
+              top: 12.h,
+              child: SizedBox(
+                width: 175.w,
+                height: 104.h,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      copy.title,
+                      style: GoogleFonts.leagueSpartan(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                        height: 15 / 16,
+                        color: const Color(0xFF101010),
+                      ),
+                    ),
+                    SizedBox(height: 2.h),
+                    Text(
+                      copy.subtitle,
+                      style: GoogleFonts.leagueSpartan(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                        height: 15 / 14,
+                        color: const Color(0xFF101010),
+                      ),
+                    ),
+                    SizedBox(height: 6.h),
+                    Text(
+                      copy.description,
+                      style: GoogleFonts.leagueSpartan(
+                        fontSize: 10.sp,
+                        fontWeight: FontWeight.w300,
+                        height: 1.1,
+                        color: const Color(0xFF3E3C3C),
+                      ),
+                    ),
+                    SizedBox(height: 7.h),
+                    Container(
+                      width: 175.w,
+                      height: 36.h,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFFDFD),
+                        borderRadius: BorderRadius.circular(20.r),
+                        border: Border.all(
+                          color: const Color.fromRGBO(96, 238, 202, 0.75),
+                        ),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color.fromRGBO(50, 50, 50, 0.44),
+                            blurRadius: 2,
+                            offset: Offset(0, 1),
+                          ),
+                        ],
+                      ),
+                      child: ShaderMask(
+                        blendMode: BlendMode.srcIn,
+                        shaderCallback: (bounds) => const LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: [
+                            Color(0xFF2EA9C2),
+                            Color(0xFF26A785),
+                            Color(0xFF35B75E),
+                          ],
+                          stops: [0.0, 0.7865, 1.0],
+                        ).createShader(bounds),
+                        child: Text(
+                          copy.button,
+                          style: GoogleFonts.leagueSpartan(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w700,
+                            height: 15 / 16,
+                            letterSpacing: -0.011,
+                            shadows: const [
+                              Shadow(
+                                color: Color.fromRGBO(0, 0, 0, 0.25),
+                                blurRadius: 1,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PremiumUpsellCopy {
+  const _PremiumUpsellCopy({
+    required this.title,
+    required this.subtitle,
+    required this.description,
+    required this.button,
+  });
+
+  final String title;
+  final String subtitle;
+  final String description;
+  final String button;
+
+  static _PremiumUpsellCopy of(BuildContext context) {
+    switch (Localizations.localeOf(context).languageCode) {
+      case 'tr':
+        return const _PremiumUpsellCopy(
+          title: 'Şimdi Planını Yükselt,',
+          subtitle: 'Hedefine Daha Kolay Ulaş',
+          description: 'Daha fazla antrenman ve gelişmiş analiz seni bekliyor.',
+          button: 'Premium’a Geç',
+        );
+      default:
+        return const _PremiumUpsellCopy(
+          title: 'Upgrade Your Plan Now,',
+          subtitle: 'Reach Your Goal More Easily',
+          description: 'More workouts and deeper insights are waiting for you.',
+          button: 'Go Premium',
+        );
+    }
   }
 }
 

@@ -10,12 +10,14 @@ class ApiClient {
     required this.baseUrl,
     required this.defaultHeaders,
     this.authTokenProvider,
+    this.localeCodeProvider,
     http.Client? httpClient,
   }) : _httpClient = httpClient ?? http.Client();
 
   final String baseUrl;
   final Map<String, String> defaultHeaders;
   final Future<String?> Function()? authTokenProvider;
+  final Future<String?> Function()? localeCodeProvider;
   final http.Client _httpClient;
 
   Future<Map<String, dynamic>> get(String path) async {
@@ -143,6 +145,13 @@ class ApiClient {
       final token = await authTokenProvider!();
       if (token != null && token.trim().isNotEmpty) {
         headers['Authorization'] = 'Bearer ${token.trim()}';
+      }
+    }
+
+    if (localeCodeProvider != null) {
+      final localeCode = await localeCodeProvider!();
+      if (localeCode != null && localeCode.trim().isNotEmpty) {
+        headers['Accept-Language'] = localeCode.trim().toLowerCase();
       }
     }
 

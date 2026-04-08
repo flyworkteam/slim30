@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:slim30/Core/Config/app_config.dart';
 import 'package:slim30/Core/Network/api_client.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
+import 'package:slim30/Core/Storage/app_locale_store.dart';
 import 'package:slim30/Core/Storage/auth_token_store.dart';
 import 'package:slim30/Riverpod/Providers/workout/workout_program_provider.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
@@ -389,6 +390,7 @@ class _WorkoutDetailViewState extends ConsumerState<WorkoutDetailView> {
         baseUrl: AppConfig.apiBaseUrl,
         defaultHeaders: AppConfig.apiHeaders,
         authTokenProvider: AuthTokenStore.getToken,
+        localeCodeProvider: AppLocaleStore.getLanguageCode,
       );
 
       await apiClient.put(
@@ -465,6 +467,7 @@ class _WorkoutDetailViewState extends ConsumerState<WorkoutDetailView> {
         baseUrl: AppConfig.apiBaseUrl,
         defaultHeaders: AppConfig.apiHeaders,
         authTokenProvider: AuthTokenStore.getToken,
+        localeCodeProvider: AppLocaleStore.getLanguageCode,
       );
 
       await apiClient.put(

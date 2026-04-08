@@ -9,6 +9,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:slim30/Core/Config/app_config.dart';
 import 'package:slim30/Core/Network/api_client.dart';
 import 'package:slim30/Core/Network/api_exception.dart';
+import 'package:slim30/Core/Storage/app_locale_store.dart';
 import 'package:slim30/Core/Storage/auth_token_store.dart';
 
 class AuthService {
@@ -19,6 +20,7 @@ class AuthService {
   static final ApiClient _apiClient = ApiClient(
     baseUrl: AppConfig.apiBaseUrl,
     defaultHeaders: AppConfig.apiHeaders,
+    localeCodeProvider: AppLocaleStore.getLanguageCode,
   );
 
   static Future<void> signInWithGoogleAndExchange() async {
