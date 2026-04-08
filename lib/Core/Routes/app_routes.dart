@@ -30,6 +30,7 @@ import 'package:slim30/View/ProgressView/progress_view.dart';
 import 'package:slim30/View/WorkoutView/workout_view.dart';
 import 'package:slim30/View/WorkoutView/workout_program_view.dart';
 import 'package:slim30/View/WorkoutView/workout_detail_view.dart';
+import 'package:slim30/View/WorkoutView/workout_day_complete_view.dart';
 
 class AppRoutes {
   static const String splash = '/splash';
@@ -63,6 +64,7 @@ class AppRoutes {
   static const String workout = '/workout';
   static const String workoutProgram = '/workout-program';
   static const String workoutDetail = '/workout-detail';
+  static const String workoutDayComplete = '/workout-day-complete';
 
   static final Map<String, Widget Function(BuildContext)> routes = {
     splash: (_) => const SplashView(),
@@ -96,5 +98,6 @@ class AppRoutes {
     workout: (_) => const WorkoutView(),
     workoutProgram: (_) => const WorkoutProgramView(),
     workoutDetail: (_) => const WorkoutDetailView(),
+    workoutDayComplete: (_) => const WorkoutDayCompleteView(),
   };
 }

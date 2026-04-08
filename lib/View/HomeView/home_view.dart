@@ -84,28 +84,17 @@ class _Header extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final profile = dashboard?.profile;
     final profileName = (profile?.name.trim().isNotEmpty ?? false)
-      ? profile!.name.trim()
-      : 'User';
+        ? profile!.name.trim()
+        : 'User';
     final greetingBase = l10n.homeGreeting.trim();
     final greetingLine = greetingBase.toLowerCase().contains('evrim')
-      ? profileName
-      : '$greetingBase $profileName'.trim();
-    final profileAvatarUrl = profile?.avatarUrl;
+        ? profileName
+        : '$greetingBase $profileName'.trim();
+    final profileAvatarUrl = profile?.avatarUrl?.trim();
 
     return Row(
       children: [
-        CircleAvatar(
-          radius: 19.r,
-          backgroundColor: const Color(0xFFF5F5F5),
-          backgroundImage:
-              profileAvatarUrl != null && profileAvatarUrl.trim().isNotEmpty
-              ? NetworkImage(profileAvatarUrl)
-              : const AssetImage(
-                      'assets/images/f62810c637b67734e57a8bfb4985baec89b2e79e.jpg',
-                    )
-                    as ImageProvider,
-          onBackgroundImageError: (Object error, StackTrace? stackTrace) {},
-        ),
+        _HeaderAvatar(name: profileName, avatarUrl: profileAvatarUrl),
         SizedBox(width: 9.w),
         Expanded(
           child: Column(
@@ -133,52 +122,10 @@ class _Header extends StatelessWidget {
             ],
           ),
         ),
-        Container(
-          width: 83.w,
-          height: 28.h,
-          padding: EdgeInsets.symmetric(horizontal: 7.w),
-          decoration: BoxDecoration(
-            color: const Color.fromRGBO(255, 251, 230, 0.2),
-            boxShadow: const [
-              BoxShadow(
-                color: Color.fromRGBO(207, 154, 74, 0.4),
-                blurRadius: 2,
-                offset: Offset(0, 1),
-              ),
-            ],
-            borderRadius: BorderRadius.circular(40.r),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              SvgPicture.asset(
-                '$iconBase/iconax-premium.svg',
-                width: 18.w,
-                height: 11.h,
-              ),
-              SizedBox(width: 4.w),
-              Flexible(
-                child: ShaderMask(
-                  shaderCallback: (bounds) => const LinearGradient(
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    colors: [Color(0xFFFFEECC), Color(0xFFAD9515)],
-                  ).createShader(bounds),
-                  child: Text(
-                    dashboard?.isPremium == true ? l10n.homePremium : 'Free',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.leagueSpartan(
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+        _PremiumBadge(
+          iconBase: iconBase,
+          isPremium: true,
+          label: l10n.homePremium,
         ),
         SizedBox(width: 8.w),
         InkWell(
@@ -197,6 +144,177 @@ class _Header extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class _HeaderAvatar extends StatelessWidget {
+  const _HeaderAvatar({required this.name, required this.avatarUrl});
+
+  final String name;
+  final String? avatarUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    final initials = _initials(name);
+
+    return Container(
+      width: 38.w,
+      height: 38.w,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: Color(0xFFF5F5F5),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: avatarUrl != null && avatarUrl!.isNotEmpty
+          ? Image.network(
+              avatarUrl!,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return _AvatarInitials(initials: initials);
+              },
+            )
+          : _AvatarInitials(initials: initials),
+    );
+  }
+
+  String _initials(String raw) {
+    final parts = raw
+        .trim()
+        .split(RegExp(r'\s+'))
+        .where((part) => part.isNotEmpty)
+        .toList(growable: false);
+
+    if (parts.isEmpty) {
+      return 'U';
+    }
+
+    if (parts.length == 1) {
+      return parts.first.substring(0, 1).toUpperCase();
+    }
+
+    return (parts.first.substring(0, 1) + parts.last.substring(0, 1))
+        .toUpperCase();
+  }
+}
+
+class _AvatarInitials extends StatelessWidget {
+  const _AvatarInitials({required this.initials});
+
+  final String initials;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFF62DCF4), Color(0xFF66F393)],
+        ),
+      ),
+      child: Center(
+        child: Text(
+          initials,
+          style: GoogleFonts.leagueSpartan(
+            fontSize: 15.sp,
+            fontWeight: FontWeight.w700,
+            height: 1,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PremiumBadge extends StatelessWidget {
+  const _PremiumBadge({
+    required this.iconBase,
+    required this.isPremium,
+    required this.label,
+  });
+
+  final String iconBase;
+  final bool isPremium;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 83.w,
+      height: 28.h,
+      decoration: BoxDecoration(
+        color: const Color.fromRGBO(255, 251, 230, 0.2),
+        boxShadow: const [
+          BoxShadow(
+            color: Color.fromRGBO(207, 154, 74, 0.4),
+            blurRadius: 2,
+            offset: Offset(0, 1),
+          ),
+        ],
+        borderRadius: BorderRadius.circular(40.r),
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            left: 6.81.w,
+            top: 8.8.h,
+            width: 69.38.w,
+            height: 12.h,
+            child: Stack(
+              children: [
+                Positioned(
+                  left: 0,
+                  top: 1.h,
+                  width: 18.38.w,
+                  height: 11.h,
+                  child: SvgPicture.asset(
+                    '$iconBase/iconax-premium.svg',
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                Positioned(
+                  left: 22.38.w,
+                  top: 1.h,
+                  width: 47.w,
+                  height: 11.h,
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                      label,
+                      maxLines: 1,
+                      overflow: TextOverflow.clip,
+                      softWrap: false,
+                      style: GoogleFonts.leagueSpartan(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w700,
+                        height: 11 / 12,
+                        foreground: _badgeTextPaint(isPremium),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Paint _badgeTextPaint(bool isPremium) {
+    final paint = Paint();
+    if (isPremium) {
+      paint.shader = const LinearGradient(
+        begin: Alignment.centerLeft,
+        end: Alignment.centerRight,
+        colors: [Color(0xFFFFEECC), Color(0xFFAD9515)],
+      ).createShader(const Rect.fromLTWH(0, 0, 47, 11));
+      return paint;
+    }
+
+    paint.color = const Color(0xFF9A7808);
+    return paint;
   }
 }
 
@@ -364,15 +482,24 @@ class _TodayWorkoutCard extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              _WorkoutStat(text: l10n.homeWorkoutMoves, width: 45.w),
+                              _WorkoutStat(
+                                text: l10n.homeWorkoutMoves,
+                                width: 45.w,
+                              ),
                               SizedBox(width: 20.w),
                               _WorkoutLineDivider(),
                               SizedBox(width: 20.w),
-                              _WorkoutStat(text: l10n.homeWorkoutCalories, width: 24.w),
+                              _WorkoutStat(
+                                text: l10n.homeWorkoutCalories,
+                                width: 24.w,
+                              ),
                               SizedBox(width: 20.w),
                               _WorkoutLineDivider(),
                               SizedBox(width: 20.w),
-                              _WorkoutStat(text: l10n.homeWorkoutDuration, width: 39.w),
+                              _WorkoutStat(
+                                text: l10n.homeWorkoutDuration,
+                                width: 39.w,
+                              ),
                             ],
                           ),
                         ),
@@ -592,7 +719,9 @@ class _ProgressSection extends StatelessWidget {
 
   String _formatKg(double value) {
     final trimmed = value.toStringAsFixed(1);
-    return trimmed.endsWith('.0') ? trimmed.substring(0, trimmed.length - 2) : trimmed;
+    return trimmed.endsWith('.0')
+        ? trimmed.substring(0, trimmed.length - 2)
+        : trimmed;
   }
 
   @override
@@ -601,8 +730,8 @@ class _ProgressSection extends StatelessWidget {
     final summaryCompleted = dashboard?.completedDays ?? completedDays.length;
     final totalDays = (dashboard?.totalDays ?? 30).clamp(1, 30);
     final completionRate = ((dashboard?.completionRate ?? 0).toDouble())
-      .clamp(0.0, 100.0)
-      .toDouble();
+        .clamp(0.0, 100.0)
+        .toDouble();
     final calories = summaryCompleted * 140;
     final hydrationPercent = completionRate.round().clamp(0, 100);
 

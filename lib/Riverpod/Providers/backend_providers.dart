@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:slim30/Core/Network/api_client.dart';
 import 'package:slim30/Riverpod/Models/app_models.dart';
 import 'package:slim30/Riverpod/Models/progress_summary_model.dart';
 import 'package:slim30/Riverpod/Providers/workout/workout_program_provider.dart';
@@ -25,7 +28,9 @@ final premiumStatusProvider = FutureProvider<PremiumStatusModel>((ref) async {
   return PremiumStatusModel.fromJson(status);
 });
 
-final notificationSettingsProvider = FutureProvider<NotificationSettingsModel>((ref) async {
+final notificationSettingsProvider = FutureProvider<NotificationSettingsModel>((
+  ref,
+) async {
   final apiClient = ref.read(apiClientProvider);
   final data = await apiClient.get('/notifications/settings');
   final settings = data['settings'];
@@ -36,7 +41,9 @@ final notificationSettingsProvider = FutureProvider<NotificationSettingsModel>((
   return NotificationSettingsModel.fromJson(settings);
 });
 
-final notificationsProvider = FutureProvider<List<NotificationModel>>((ref) async {
+final notificationsProvider = FutureProvider<List<NotificationModel>>((
+  ref,
+) async {
   final apiClient = ref.read(apiClientProvider);
   final data = await apiClient.get('/notifications?limit=100');
   final notifications = data['notifications'];
@@ -68,7 +75,9 @@ final homeDashboardProvider = FutureProvider<HomeDashboardModel>((ref) async {
   );
 });
 
-final onboardingAnswersProvider = FutureProvider<Map<String, Object?>>((ref) async {
+final onboardingAnswersProvider = FutureProvider<Map<String, Object?>>((
+  ref,
+) async {
   final apiClient = ref.read(apiClientProvider);
   final data = await apiClient.get('/onboarding/answers');
   final answers = data['answers'];
@@ -98,6 +107,29 @@ Future<void> updateProfile(WidgetRef ref, Map<String, dynamic> payload) async {
   ref.invalidate(homeDashboardProvider);
 }
 
+Future<String?> uploadProfileAvatar(
+  WidgetRef ref, {
+  required Uint8List bytes,
+  required String filename,
+  required String contentType,
+}) async {
+  final apiClient = ref.read(apiClientProvider);
+  final data = await apiClient.postMultipart(
+    '/uploads/avatar',
+    files: [
+      ApiMultipartFile(
+        field: 'avatar',
+        bytes: bytes,
+        filename: filename,
+        contentType: contentType,
+      ),
+    ],
+  );
+  ref.invalidate(userProfileProvider);
+  ref.invalidate(homeDashboardProvider);
+  return data['avatar_url'] as String?;
+}
+
 Future<void> updateNotificationSettings(
   WidgetRef ref,
   NotificationSettingsModel settings,
@@ -109,19 +141,28 @@ Future<void> updateNotificationSettings(
 
 Future<void> markNotificationRead(WidgetRef ref, int id) async {
   final apiClient = ref.read(apiClientProvider);
-  await apiClient.put('/notifications/$id/read', body: const <String, dynamic>{});
+  await apiClient.put(
+    '/notifications/$id/read',
+    body: const <String, dynamic>{},
+  );
   ref.invalidate(notificationsProvider);
   ref.invalidate(homeDashboardProvider);
 }
 
 Future<void> markAllNotificationsRead(WidgetRef ref) async {
   final apiClient = ref.read(apiClientProvider);
-  await apiClient.put('/notifications/read-all', body: const <String, dynamic>{});
+  await apiClient.put(
+    '/notifications/read-all',
+    body: const <String, dynamic>{},
+  );
   ref.invalidate(notificationsProvider);
   ref.invalidate(homeDashboardProvider);
 }
 
-Future<void> upsertOnboardingAnswers(WidgetRef ref, List<OnboardingAnswerModel> answers) async {
+Future<void> upsertOnboardingAnswers(
+  WidgetRef ref,
+  List<OnboardingAnswerModel> answers,
+) async {
   if (answers.isEmpty) {
     return;
   }

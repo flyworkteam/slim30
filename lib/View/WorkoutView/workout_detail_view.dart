@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:slim30/Core/Config/app_config.dart';
 import 'package:slim30/Core/Network/api_client.dart';
+import 'package:slim30/Core/Routes/app_routes.dart';
 import 'package:slim30/Core/Storage/auth_token_store.dart';
 import 'package:slim30/Riverpod/Providers/workout/workout_program_provider.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
@@ -57,6 +58,7 @@ class _WorkoutDetailViewState extends ConsumerState<WorkoutDetailView> {
   bool _initialized = false;
   bool _completionSaved = false;
   bool _completionRequestInFlight = false;
+  bool _completionScreenPresented = false;
   bool _isRestMode = false;
   int _restCaloriesKcal = 8;
   final Set<int> _savedExercises = <int>{};
@@ -177,7 +179,7 @@ class _WorkoutDetailViewState extends ConsumerState<WorkoutDetailView> {
 
         if (_isLastExercise) {
           unawaited(
-            _persistCompletionChain(
+            _completeWorkout(
               exerciseIndex: finishedExerciseIndex,
               secondsSpent: elapsedSeconds,
             ),
@@ -321,7 +323,7 @@ class _WorkoutDetailViewState extends ConsumerState<WorkoutDetailView> {
         }),
       );
       unawaited(
-        _persistCompletionChain(
+        _completeWorkout(
           exerciseIndex: _currentIndex,
           secondsSpent: _totalSeconds,
         ),
@@ -399,6 +401,9 @@ class _WorkoutDetailViewState extends ConsumerState<WorkoutDetailView> {
       ref.invalidate(progressSummaryProvider);
       ref.invalidate(workoutProgramUiProvider);
     } catch (_) {
+      if (!mounted) {
+        return;
+      }
       final l10n = AppLocalizations.of(context)!;
       _showRetrySnackbar(
         message: l10n.workoutDetailSaveProgressFailed,
@@ -421,6 +426,25 @@ class _WorkoutDetailViewState extends ConsumerState<WorkoutDetailView> {
       secondsSpent: secondsSpent,
     );
     await _persistCompletionIfNeeded();
+  }
+
+  Future<void> _completeWorkout({
+    required int exerciseIndex,
+    required int secondsSpent,
+  }) async {
+    await _persistCompletionChain(
+      exerciseIndex: exerciseIndex,
+      secondsSpent: secondsSpent,
+    );
+
+    if (!mounted || _completionScreenPresented) {
+      return;
+    }
+
+    _completionScreenPresented = true;
+    await Navigator.of(
+      context,
+    ).pushReplacementNamed(AppRoutes.workoutDayComplete);
   }
 
   Future<void> _persistExerciseCompletionIfNeeded({
@@ -455,6 +479,9 @@ class _WorkoutDetailViewState extends ConsumerState<WorkoutDetailView> {
       _savedExercises.add(exerciseIndex);
       ref.invalidate(progressSummaryProvider);
     } catch (_) {
+      if (!mounted) {
+        return;
+      }
       final l10n = AppLocalizations.of(context)!;
       _showRetrySnackbar(
         message: l10n.workoutDetailSaveExerciseFailed,

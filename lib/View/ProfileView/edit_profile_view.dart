@@ -1,8 +1,12 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:slim30/Core/Network/api_exception.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
 import 'package:slim30/Riverpod/Providers/backend_providers.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
@@ -22,9 +26,13 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
   late final TextEditingController _ageController;
   late final TextEditingController _heightController;
   late final TextEditingController _weightController;
+  final ImagePicker _imagePicker = ImagePicker();
 
   String _bodyType = 'normal';
   bool _initializedFromApi = false;
+  bool _isUploadingAvatar = false;
+  String? _avatarUrl;
+  Uint8List? _avatarBytes;
 
   @override
   void initState() {
@@ -120,29 +128,144 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
       'name': _nameController.text.trim(),
       'age': int.tryParse(_ageController.text.trim()),
       'height_cm': parseHeightCm(_heightController.text),
-      'weight_kg': double.tryParse(_weightController.text.trim().replaceAll(',', '.')),
+      'weight_kg': double.tryParse(
+        _weightController.text.trim().replaceAll(',', '.'),
+      ),
     };
 
     payload.removeWhere((_, value) => value == null);
 
-    await updateProfile(ref, payload);
+    try {
+      await updateProfile(ref, payload);
+      if (!mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(
+              l10n.editProfileSaveMessage,
+              style: GoogleFonts.leagueSpartan(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        );
+    } on ApiException catch (error) {
+      if (!mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(error.message)));
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          const SnackBar(
+            content: Text('Profil kaydedilemedi. Tekrar deneyin.'),
+          ),
+        );
+    }
+  }
+
+  Future<void> _pickAndUploadAvatar() async {
+    if (_isUploadingAvatar) {
+      return;
+    }
+
+    final pickedFile = await _imagePicker.pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 1600,
+      maxHeight: 1600,
+      imageQuality: 88,
+    );
+
+    if (!mounted || pickedFile == null) {
+      return;
+    }
+
+    final contentType = _resolveImageContentType(pickedFile.name);
+    if (contentType == null) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Sadece JPG, PNG veya WEBP formatlari destekleniyor.',
+            ),
+          ),
+        );
+      return;
+    }
+
+    final bytes = await pickedFile.readAsBytes();
+
     if (!mounted) {
       return;
     }
 
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Text(
-            l10n.editProfileSaveMessage,
-            style: GoogleFonts.leagueSpartan(
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
+    setState(() {
+      _isUploadingAvatar = true;
+    });
+
+    try {
+      final avatarUrl = await uploadProfileAvatar(
+        ref,
+        bytes: bytes,
+        filename: pickedFile.name,
+        contentType: contentType,
       );
+
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        _avatarUrl = avatarUrl;
+        _avatarBytes = bytes;
+      });
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          const SnackBar(content: Text('Profil fotografi guncellendi.')),
+        );
+    } on ApiException catch (error) {
+      if (!mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(error.message)));
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          const SnackBar(
+            content: Text('Fotograf yuklenemedi. Tekrar deneyin.'),
+          ),
+        );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isUploadingAvatar = false;
+        });
+      }
+    }
   }
 
   void _deleteAccount() {
@@ -206,7 +329,9 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
       _heightController.text = profile.heightCm != null
           ? (profile.heightCm! / 100).toStringAsFixed(2)
           : _heightController.text;
-      _weightController.text = profile.weightKg?.toStringAsFixed(0) ?? _weightController.text;
+      _weightController.text =
+          profile.weightKg?.toStringAsFixed(0) ?? _weightController.text;
+      _avatarUrl = profile.avatarUrl;
     }
 
     return Scaffold(
@@ -229,6 +354,10 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
                         Center(
                           child: _ProfileIdentity(
                             nameController: _nameController,
+                            avatarUrl: _avatarUrl,
+                            avatarBytes: _avatarBytes,
+                            isUploadingAvatar: _isUploadingAvatar,
+                            onEditAvatar: _pickAndUploadAvatar,
                           ),
                         ),
                         SizedBox(height: 30.h),
@@ -244,9 +373,7 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
                         _SaveActions(
                           label: l10n.editProfileSaveButton,
                           deleteLabel: l10n.editProfileDeleteAccount,
-                          onSave: () {
-                            _saveChanges();
-                          },
+                          onSave: _saveChanges,
                           onDelete: _deleteAccount,
                         ),
                       ],
@@ -327,9 +454,19 @@ class _TopHeader extends StatelessWidget {
 }
 
 class _ProfileIdentity extends StatelessWidget {
-  const _ProfileIdentity({required this.nameController});
+  const _ProfileIdentity({
+    required this.nameController,
+    required this.avatarUrl,
+    required this.avatarBytes,
+    required this.isUploadingAvatar,
+    required this.onEditAvatar,
+  });
 
   final TextEditingController nameController;
+  final String? avatarUrl;
+  final Uint8List? avatarBytes;
+  final bool isUploadingAvatar;
+  final VoidCallback onEditAvatar;
 
   @override
   Widget build(BuildContext context) {
@@ -344,41 +481,66 @@ class _ProfileIdentity extends StatelessWidget {
                 SizedBox(
                   width: 70.w,
                   height: 82.h,
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Positioned(
-                        left: 0,
-                        top: 0,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(35.r),
-                          child: Image.asset(
-                            'assets/images/f62810c637b67734e57a8bfb4985baec89b2e79e.jpg',
-                            width: 70.w,
-                            height: 70.w,
-                            fit: BoxFit.cover,
+                  child: InkWell(
+                    onTap: isUploadingAvatar ? null : onEditAvatar,
+                    borderRadius: BorderRadius.circular(35.r),
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Positioned(
+                          left: 0,
+                          top: 0,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(35.r),
+                            child: _AvatarImage(
+                              avatarUrl: avatarUrl,
+                              avatarBytes: avatarBytes,
+                            ),
                           ),
                         ),
-                      ),
-                      Positioned(
-                        left: 23.w,
-                        top: 58.h,
-                        child: Container(
-                          width: 24.w,
-                          height: 24.w,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFF1F1F1),
-                            borderRadius: BorderRadius.circular(12.r),
+                        if (isUploadingAvatar)
+                          Positioned(
+                            left: 0,
+                            top: 0,
+                            child: Container(
+                              width: 70.w,
+                              height: 70.w,
+                              decoration: BoxDecoration(
+                                color: Colors.black.withValues(alpha: 0.18),
+                                borderRadius: BorderRadius.circular(35.r),
+                              ),
+                              alignment: Alignment.center,
+                              child: SizedBox(
+                                width: 22.w,
+                                height: 22.w,
+                                child: const CircularProgressIndicator(
+                                  strokeWidth: 2.2,
+                                ),
+                              ),
+                            ),
                           ),
-                          alignment: Alignment.center,
-                          child: Icon(
-                            Icons.edit,
-                            size: 14.w,
-                            color: Colors.black,
+                        Positioned(
+                          left: 23.w,
+                          top: 58.h,
+                          child: Container(
+                            width: 24.w,
+                            height: 24.w,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF1F1F1),
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
+                            alignment: Alignment.center,
+                            child: Icon(
+                              isUploadingAvatar
+                                  ? Icons.hourglass_top
+                                  : Icons.edit,
+                              size: 14.w,
+                              color: Colors.black,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(height: 8.h),
@@ -402,6 +564,53 @@ class _ProfileIdentity extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _AvatarImage extends StatelessWidget {
+  const _AvatarImage({required this.avatarUrl, required this.avatarBytes});
+
+  final String? avatarUrl;
+  final Uint8List? avatarBytes;
+
+  @override
+  Widget build(BuildContext context) {
+    if (avatarBytes != null) {
+      return Image.memory(
+        avatarBytes!,
+        width: 70.w,
+        height: 70.w,
+        fit: BoxFit.cover,
+      );
+    }
+
+    if (avatarUrl != null && avatarUrl!.trim().isNotEmpty) {
+      return Image.network(
+        avatarUrl!,
+        width: 70.w,
+        height: 70.w,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return const _AvatarPlaceholderImage();
+        },
+      );
+    }
+
+    return const _AvatarPlaceholderImage();
+  }
+}
+
+class _AvatarPlaceholderImage extends StatelessWidget {
+  const _AvatarPlaceholderImage();
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.asset(
+      'assets/images/f62810c637b67734e57a8bfb4985baec89b2e79e.jpg',
+      width: 70.w,
+      height: 70.w,
+      fit: BoxFit.cover,
     );
   }
 }
@@ -662,6 +871,20 @@ String _bodyTypeLabel(AppLocalizations l10n, String value) {
   }
 }
 
+String? _resolveImageContentType(String filename) {
+  final lowerName = filename.trim().toLowerCase();
+  if (lowerName.endsWith('.jpg') || lowerName.endsWith('.jpeg')) {
+    return 'image/jpeg';
+  }
+  if (lowerName.endsWith('.png')) {
+    return 'image/png';
+  }
+  if (lowerName.endsWith('.webp')) {
+    return 'image/webp';
+  }
+  return null;
+}
+
 class _BottomBar extends StatelessWidget {
   const _BottomBar({required this.iconBase});
 
@@ -759,7 +982,9 @@ class _BottomItem extends StatelessWidget {
               label,
               style: GoogleFonts.leagueSpartan(
                 fontSize: 12.sp,
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.w500,
+                height: 1,
+                letterSpacing: -0.13,
                 color: active ? const Color(0xFF01A2F1) : Colors.black,
               ),
             ),
