@@ -400,6 +400,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get profileNotifications => 'Benachrichtigungen';
 
   @override
+  String get profileWorkoutReminders => 'Workout Reminders';
+
+  @override
+  String get profileProgressSummaries => 'Progress Summaries';
+
+  @override
+  String get profileNotificationReminderHour => 'Reminder Hour';
+
+  @override
   String get profilePremium => 'Premium';
 
   @override
@@ -589,6 +598,12 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get notificationsYesterday => 'Gestern';
+
+  @override
+  String get notificationsEarlier => 'Earlier';
+
+  @override
+  String get notificationsEverySixHours => 'Every 6 hours';
 
   @override
   String get notificationsClearAll => 'Alle loeschen';

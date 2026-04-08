@@ -399,6 +399,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profileNotifications => 'Bildirimler';
 
   @override
+  String get profileWorkoutReminders => 'Antrenman Hatirlatmalari';
+
+  @override
+  String get profileProgressSummaries => 'Ilerleme Ozetleri';
+
+  @override
+  String get profileNotificationReminderHour => 'Hatirlatma Saati';
+
+  @override
   String get profilePremium => 'Premium';
 
   @override
@@ -587,6 +596,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get notificationsYesterday => 'Dun';
+
+  @override
+  String get notificationsEarlier => 'Daha Eski';
+
+  @override
+  String get notificationsEverySixHours => '6 saatte bir';
 
   @override
   String get notificationsClearAll => 'Tumunu Sil';

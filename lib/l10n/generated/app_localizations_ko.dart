@@ -394,6 +394,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get profileNotifications => '알림';
 
   @override
+  String get profileWorkoutReminders => 'Workout Reminders';
+
+  @override
+  String get profileProgressSummaries => 'Progress Summaries';
+
+  @override
+  String get profileNotificationReminderHour => 'Reminder Hour';
+
+  @override
   String get profilePremium => '프리미엄';
 
   @override
@@ -583,6 +592,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get notificationsYesterday => '어제';
+
+  @override
+  String get notificationsEarlier => 'Earlier';
+
+  @override
+  String get notificationsEverySixHours => 'Every 6 hours';
 
   @override
   String get notificationsClearAll => '모두 지우기';

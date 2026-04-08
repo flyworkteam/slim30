@@ -117,6 +117,8 @@ class NotificationModel {
     required this.id,
     required this.title,
     required this.body,
+    required this.iconName,
+    required this.iconBgHex,
     required this.isRead,
     required this.createdAt,
   });
@@ -124,6 +126,8 @@ class NotificationModel {
   final int id;
   final String title;
   final String body;
+  final String iconName;
+  final String iconBgHex;
   final bool isRead;
   final DateTime createdAt;
 
@@ -133,6 +137,8 @@ class NotificationModel {
       id: (json['id'] as num?)?.toInt() ?? 0,
       title: (json['title'] as String?) ?? '',
       body: (json['body'] as String?) ?? '',
+      iconName: ((json['iconName'] as String?) ?? 'notification').trim(),
+      iconBgHex: ((json['iconBgHex'] as String?) ?? '#F5F5F5').trim(),
       isRead: json['isRead'] == true,
       createdAt: createdAt,
     );

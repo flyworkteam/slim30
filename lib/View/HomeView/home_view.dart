@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
+import 'package:slim30/Core/Storage/user_prefs.dart';
 import 'package:slim30/Riverpod/Models/app_models.dart';
 import 'package:slim30/Riverpod/Providers/backend_providers.dart';
 import 'package:slim30/Riverpod/Providers/workout/workout_program_provider.dart';
@@ -18,6 +19,7 @@ class HomeView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final dashboardAsync = ref.watch(homeDashboardProvider);
     final completedDaysAsync = ref.watch(completedProgressDaysProvider);
+    final workoutProgramUiAsync = ref.watch(workoutProgramUiProvider);
     final completedDays = completedDaysAsync.valueOrNull ?? <int>{};
 
     return Scaffold(
@@ -38,7 +40,7 @@ class HomeView extends ConsumerWidget {
                         dashboard: dashboardAsync.valueOrNull,
                       ),
                       SizedBox(height: 34.h),
-                      _DayStrip(completedDays: completedDays),
+                      const _DayStrip(),
                       SizedBox(height: 40.h),
                       _TodayWorkoutCard(),
                       SizedBox(height: 40.h),
@@ -56,7 +58,11 @@ class HomeView extends ConsumerWidget {
                       SizedBox(height: 40.h),
                       _ContinueSection(iconBase: _iconBase),
                       SizedBox(height: 40.h),
-                      _MoodSection(),
+                      _MoodSection(
+                        dashboard: dashboardAsync.valueOrNull,
+                        programItems: workoutProgramUiAsync.valueOrNull,
+                        completedDays: completedDays,
+                      ),
                       SizedBox(height: 40.h),
                       _TransformationSection(),
                     ],
@@ -325,9 +331,7 @@ class _PremiumBadge extends StatelessWidget {
 }
 
 class _DayStrip extends StatelessWidget {
-  const _DayStrip({required this.completedDays});
-
-  final Set<int> completedDays;
+  const _DayStrip();
 
   @override
   Widget build(BuildContext context) {
@@ -346,11 +350,7 @@ class _DayStrip extends StatelessWidget {
 
     final data = [
       for (var i = 0; i < 7; i++)
-        (
-          labels[i],
-          '${first.add(Duration(days: i)).day}',
-          completedDays.contains(i + 1),
-        ),
+        (labels[i], '${first.add(Duration(days: i)).day}', i == now.weekday - 1),
     ];
 
     return SizedBox(
@@ -512,24 +512,32 @@ class _TodayWorkoutCard extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 5.h),
-                    Container(
-                      width: 116.w,
-                      height: 32.h,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5.r),
-                      ),
-                      child: Text(
-                        l10n.homeStartNow,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.leagueSpartan(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                          height: 13 / 14,
-                          letterSpacing: -0.011,
-                          color: const Color(0xFF171717),
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(
+                          context,
+                        ).pushReplacementNamed(AppRoutes.workout);
+                      },
+                      borderRadius: BorderRadius.circular(5.r),
+                      child: Container(
+                        width: 116.w,
+                        height: 32.h,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5.r),
+                        ),
+                        child: Text(
+                          l10n.homeStartNow,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.leagueSpartan(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                            height: 13 / 14,
+                            letterSpacing: -0.011,
+                            color: const Color(0xFF171717),
+                          ),
                         ),
                       ),
                     ),
@@ -634,80 +642,147 @@ class _CompletedDays extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          l10n.homeCompletedDaysTitle,
-          style: GoogleFonts.leagueSpartan(
-            fontSize: 18.sp,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        SizedBox(height: 20.h),
         SizedBox(
-          width: 328.w,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: List.generate(days.length, (index) {
-              final done = completedDays.contains(index + 1);
-              return Column(
+          width: 342.w,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                l10n.homeCompletedDaysTitle,
+                style: GoogleFonts.leagueSpartan(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w600,
+                  height: 17 / 18,
+                  color: Colors.black,
+                ),
+              ),
+              SizedBox(height: 20.h),
+              Column(
                 children: [
-                  Text(
-                    days[index],
-                    style: GoogleFonts.leagueSpartan(
-                      fontSize: 25.sp,
-                      fontWeight: FontWeight.w500,
+                  SizedBox(
+                    width: 328.w,
+                    child: Row(
+                      children: List.generate(days.length, (index) {
+                        final done = completedDays.contains(index + 1);
+                        return Padding(
+                          padding: EdgeInsets.only(
+                            right: index == days.length - 1 ? 0 : 22.w,
+                          ),
+                          child: _CompletedDayItem(
+                            label: days[index],
+                            completed: done,
+                          ),
+                        );
+                      }),
                     ),
                   ),
-                  SizedBox(height: 2.h),
+                  SizedBox(height: 20.h),
                   Container(
-                    width: 28.w,
-                    height: 28.w,
+                    width: 342.w,
+                    height: 36.h,
+                    padding: EdgeInsets.symmetric(horizontal: 10.w),
+                    alignment: Alignment.centerLeft,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(14.r),
-                      gradient: done
-                          ? const LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                Color(0xFF66F393),
-                                Color(0xFF88F3CF),
-                                Color(0xFFA3F3FF),
-                              ],
-                            )
-                          : null,
-                      color: done ? null : Colors.white,
+                      color: const Color(0xFFE9FFF3),
+                      borderRadius: BorderRadius.circular(10.r),
                     ),
-                    child: done
-                        ? Icon(
-                            Icons.check_rounded,
-                            size: 16.sp,
-                            color: Colors.white,
-                          )
-                        : null,
+                    child: Text(
+                      l10n.homeKeepGoing,
+                      style: GoogleFonts.leagueSpartan(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                        height: 13 / 14,
+                        color: Colors.black,
+                      ),
+                    ),
                   ),
                 ],
-              );
-            }),
-          ),
-        ),
-        SizedBox(height: 20.h),
-        Container(
-          width: 342.w,
-          height: 36.h,
-          padding: EdgeInsets.symmetric(horizontal: 10.w),
-          alignment: Alignment.centerLeft,
-          decoration: BoxDecoration(
-            color: const Color(0xFFE9FFF3),
-            borderRadius: BorderRadius.circular(10.r),
-          ),
-          child: Text(
-            l10n.homeKeepGoing,
-            style: GoogleFonts.leagueSpartan(
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w500,
-            ),
+              ),
+            ],
           ),
         ),
       ],
+    );
+  }
+}
+
+class _CompletedDayItem extends StatelessWidget {
+  const _CompletedDayItem({
+    required this.label,
+    required this.completed,
+  });
+
+  final String label;
+  final bool completed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 28.w,
+      height: 53.h,
+      child: Column(
+        children: [
+          SizedBox(
+            width: 28.w,
+            height: 23.h,
+            child: Center(
+              child: Text(
+                label,
+                style: GoogleFonts.leagueSpartan(
+                  fontSize: 24.86.sp,
+                  fontWeight: FontWeight.w500,
+                  height: 23 / 24.86,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 2.h),
+          Container(
+            width: 28.w,
+            height: 28.w,
+            decoration: BoxDecoration(
+              gradient: completed
+                  ? const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xFF66F393),
+                        Color(0xFF88F3CF),
+                        Color(0xFFA3F3FF),
+                      ],
+                    )
+                  : null,
+              color: completed ? null : Colors.white,
+              borderRadius: BorderRadius.circular(14.r),
+              border: completed
+                  ? null
+                  : Border.all(
+                      color: const Color(0xFF62DCF4),
+                      width: 1.2,
+                    ),
+              boxShadow: completed
+                  ? null
+                  : const [
+                      BoxShadow(
+                        color: Color.fromRGBO(98, 220, 244, 0.22),
+                        blurRadius: 2.2,
+                        offset: Offset(0, 0.9),
+                      ),
+                    ],
+            ),
+            child: completed
+                ? Center(
+                    child: Icon(
+                      Icons.check_rounded,
+                      size: 16.sp,
+                      color: Colors.white,
+                    ),
+                  )
+                : null,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -1567,10 +1642,58 @@ class _ContinueSection extends StatelessWidget {
   }
 }
 
-class _MoodSection extends StatelessWidget {
+class _MoodSection extends StatefulWidget {
+  const _MoodSection({
+    required this.dashboard,
+    required this.programItems,
+    required this.completedDays,
+  });
+
+  final HomeDashboardModel? dashboard;
+  final List<WorkoutProgramUiItem>? programItems;
+  final Set<int> completedDays;
+
+  @override
+  State<_MoodSection> createState() => _MoodSectionState();
+}
+
+class _MoodSectionState extends State<_MoodSection> {
+  UserMood _selectedMood = UserMood.energetic;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadMood();
+  }
+
+  Future<void> _loadMood() async {
+    final mood = await UserPrefs.getMood();
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _selectedMood = mood;
+    });
+  }
+
+  Future<void> _selectMood(UserMood mood) async {
+    if (_selectedMood == mood) {
+      return;
+    }
+
+    setState(() {
+      _selectedMood = mood;
+    });
+    await UserPrefs.setMood(mood);
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final totalDays = (widget.dashboard?.totalDays ?? 30).clamp(1, 30);
+    final currentDayNumber = _currentDayNumber(totalDays);
+    final currentItem = _currentProgramItem(currentDayNumber);
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1580,7 +1703,7 @@ class _MoodSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                l10n.homeMoodTitle,
+                _titleForDay(context, currentDayNumber),
                 style: GoogleFonts.leagueSpartan(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.w600,
@@ -1593,17 +1716,20 @@ class _MoodSection extends StatelessWidget {
                   _MoodChip(
                     emoji: '🥱',
                     label: l10n.homeMoodTired,
-                    selected: false,
+                    selected: _selectedMood == UserMood.tired,
+                    onTap: () => _selectMood(UserMood.tired),
                   ),
                   _MoodChip(
                     emoji: '🤩',
                     label: l10n.homeMoodEnergetic,
-                    selected: true,
+                    selected: _selectedMood == UserMood.energetic,
+                    onTap: () => _selectMood(UserMood.energetic),
                   ),
                   _MoodChip(
                     emoji: '💪🏻',
                     label: l10n.homeMoodStrong,
-                    selected: false,
+                    selected: _selectedMood == UserMood.strong,
+                    onTap: () => _selectMood(UserMood.strong),
                   ),
                 ],
               ),
@@ -1617,22 +1743,30 @@ class _MoodSection extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(10.r),
               child: Image.asset(
-                'assets/images/87bd5d4846d8036313a92142cf813f49c5bea8a0.jpg',
+                currentItem?.imagePath ??
+                    'assets/images/87bd5d4846d8036313a92142cf813f49c5bea8a0.jpg',
                 width: 98.w,
                 height: 73.h,
                 fit: BoxFit.cover,
               ),
             ),
             SizedBox(height: 6.h),
-            Text(
-              l10n.homeProgramName,
-              style: GoogleFonts.leagueSpartan(
-                fontSize: 10.sp,
-                fontWeight: FontWeight.w500,
+            SizedBox(
+              width: 98.w,
+              child: Text(
+                currentItem?.title ?? l10n.homeProgramName,
+                textAlign: TextAlign.right,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.leagueSpartan(
+                  fontSize: 10.sp,
+                  fontWeight: FontWeight.w500,
+                  height: 1.1,
+                ),
               ),
             ),
             Text(
-              '9/30',
+              '$currentDayNumber/$totalDays',
               style: GoogleFonts.leagueSpartan(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w500,
@@ -1643,6 +1777,40 @@ class _MoodSection extends StatelessWidget {
       ],
     );
   }
+
+  int _currentDayNumber(int totalDays) {
+    final completedCount =
+        widget.dashboard?.completedDays ?? widget.completedDays.length;
+    if (completedCount >= totalDays) {
+      return totalDays;
+    }
+
+    return (completedCount + 1).clamp(1, totalDays);
+  }
+
+  WorkoutProgramUiItem? _currentProgramItem(int currentDayNumber) {
+    final items = widget.programItems;
+    if (items == null || items.isEmpty) {
+      return null;
+    }
+
+    for (final item in items) {
+      if (item.dayNumber == currentDayNumber) {
+        return item;
+      }
+    }
+
+    return items.last;
+  }
+
+  String _titleForDay(BuildContext context, int dayNumber) {
+    switch (Localizations.localeOf(context).languageCode) {
+      case 'tr':
+        return '$dayNumber. Günündesin, Bedenin Nasıl Hissediyor?';
+      default:
+        return 'Day $dayNumber: How Does Your Body Feel?';
+    }
+  }
 }
 
 class _MoodChip extends StatelessWidget {
@@ -1650,58 +1818,63 @@ class _MoodChip extends StatelessWidget {
     required this.emoji,
     required this.label,
     required this.selected,
+    required this.onTap,
   });
 
   final String emoji;
   final String label;
   final bool selected;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 49.w,
-      height: 36.h,
-      margin: EdgeInsets.only(right: 4.w),
-      decoration: BoxDecoration(
-        gradient: selected
-            ? const LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(0xFF4BFE84),
-                  Color(0xFF88F3CF),
-                  Color(0xFF5AE3F7),
-                ],
-              )
-            : null,
-        color: selected ? null : const Color(0xFFDFFFE9),
-        borderRadius: BorderRadius.circular(3.r),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              emoji,
-              style: GoogleFonts.leagueSpartan(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 49.w,
+        height: 36.h,
+        margin: EdgeInsets.only(right: 4.w),
+        decoration: BoxDecoration(
+          gradient: selected
+              ? const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFF4BFE84),
+                    Color(0xFF88F3CF),
+                    Color(0xFF5AE3F7),
+                  ],
+                )
+              : null,
+          color: selected ? null : const Color(0xFFDFFFE9),
+          borderRadius: BorderRadius.circular(3.r),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                emoji,
+                style: GoogleFonts.leagueSpartan(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
-          ),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              label,
-              style: GoogleFonts.leagueSpartan(
-                fontSize: 10.sp,
-                fontWeight: FontWeight.w400,
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                label,
+                style: GoogleFonts.leagueSpartan(
+                  fontSize: 10.sp,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -1726,9 +1899,21 @@ class _TransformationSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _TransformMetric(value: '+2.1', label: l10n.homeMuscleGain),
-            _TransformMetric(value: '-3.2', label: l10n.homeWaistChange),
-            _TransformMetric(value: '-4%', label: l10n.homeBodyFatChange),
+            _TransformMetric(
+              value: '+2.1',
+              label: l10n.homeMuscleGain,
+              progress: 0.72,
+            ),
+            _TransformMetric(
+              value: '-3.2',
+              label: l10n.homeWaistChange,
+              progress: 0.64,
+            ),
+            _TransformMetric(
+              value: '-4%',
+              label: l10n.homeBodyFatChange,
+              progress: 0.58,
+            ),
           ],
         ),
       ],
@@ -1737,10 +1922,15 @@ class _TransformationSection extends StatelessWidget {
 }
 
 class _TransformMetric extends StatelessWidget {
-  const _TransformMetric({required this.value, required this.label});
+  const _TransformMetric({
+    required this.value,
+    required this.label,
+    this.progress = 1,
+  });
 
   final String value;
   final String label;
+  final double progress;
 
   @override
   Widget build(BuildContext context) {
@@ -1748,20 +1938,41 @@ class _TransformMetric extends StatelessWidget {
       width: 104.w,
       child: Column(
         children: [
-          Container(
+          SizedBox(
             width: 58.w,
             height: 58.w,
-            decoration: BoxDecoration(
-              color: const Color(0xFF32EA6E),
-              borderRadius: BorderRadius.circular(29.r),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              value,
-              style: GoogleFonts.leagueSpartan(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w600,
-              ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                SizedBox(
+                  width: 58.w,
+                  height: 58.w,
+                  child: CircularProgressIndicator(
+                    value: progress.clamp(0, 1),
+                    strokeWidth: 7.w,
+                    backgroundColor: const Color(0xFFD3FFE1),
+                    color: const Color(0xFF32EA6E),
+                  ),
+                ),
+                Container(
+                  width: 44.w,
+                  height: 44.w,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    value,
+                    style: GoogleFonts.leagueSpartan(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600,
+                      height: 16 / 14,
+                      color: const Color(0xFF2B2B2B),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           SizedBox(height: 5.h),

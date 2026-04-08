@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:slim30/Core/Network/api_exception.dart';
 import 'package:slim30/Riverpod/Models/app_models.dart';
 import 'package:slim30/Riverpod/Providers/backend_providers.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
@@ -41,7 +42,8 @@ class _NotificationsViewState extends ConsumerState<NotificationsView> {
         .map(
           (item) => _NotificationItem(
             id: item.id,
-            iconPath: '$_iconBase/iconsax-sms-tracking.svg',
+            iconPath: _resolveIconPath(item.iconName),
+            iconBackground: _parseHexColor(item.iconBgHex) ?? const Color(0xFFF5F5F5),
             title: item.title,
             subtitle: item.body,
             time: formatTime(item.createdAt),
@@ -66,7 +68,14 @@ class _NotificationsViewState extends ConsumerState<NotificationsView> {
               )
               .toList(growable: false);
 
-    final hasNotifications = todayItems.isNotEmpty || yesterdayItems.isNotEmpty;
+    final earlierItems = _clearedAll
+        ? const <_NotificationItem>[]
+        : mapped
+              .where((item) => item.createdAt.isBefore(yesterdayStart))
+              .toList(growable: false);
+
+    final hasNotifications =
+        todayItems.isNotEmpty || yesterdayItems.isNotEmpty || earlierItems.isNotEmpty;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -93,7 +102,22 @@ class _NotificationsViewState extends ConsumerState<NotificationsView> {
                             if (!hasNotifications) {
                               return;
                             }
-                            await markAllNotificationsRead(ref);
+                            try {
+                              await deleteAllNotifications(ref);
+                            } on ApiException {
+                              if (!context.mounted) {
+                                return;
+                              }
+                              ScaffoldMessenger.of(context)
+                                ..clearSnackBars()
+                                ..showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Notifications could not be cleared.'),
+                                    behavior: SnackBarBehavior.floating,
+                                  ),
+                                );
+                              return;
+                            }
                             if (!context.mounted) {
                               return;
                             }
@@ -120,7 +144,7 @@ class _NotificationsViewState extends ConsumerState<NotificationsView> {
                             _NotificationList(
                               items: todayItems,
                               onDelete: (id) async {
-                                await markNotificationRead(ref, id);
+                                await deleteNotificationById(ref, id);
                                 if (!mounted) {
                                   return;
                                 }
@@ -133,13 +157,28 @@ class _NotificationsViewState extends ConsumerState<NotificationsView> {
                             _NotificationList(
                               items: yesterdayItems,
                               onDelete: (id) async {
-                                await markNotificationRead(ref, id);
+                                await deleteNotificationById(ref, id);
                                 if (!mounted) {
                                   return;
                                 }
                                 setState(() => _removedIds = {..._removedIds, id});
                               },
                             ),
+                            if (earlierItems.isNotEmpty) ...[
+                              SizedBox(height: 28.h),
+                              _SectionTitle(text: l10n.notificationsEarlier),
+                              SizedBox(height: 14.h),
+                              _NotificationList(
+                                items: earlierItems,
+                                onDelete: (id) async {
+                                  await deleteNotificationById(ref, id);
+                                  if (!mounted) {
+                                    return;
+                                  }
+                                  setState(() => _removedIds = {..._removedIds, id});
+                                },
+                              ),
+                            ],
                           ],
                         ),
                       ),
@@ -323,7 +362,7 @@ class _NotificationRow extends StatelessWidget {
                 width: 28.w,
                 height: 28.w,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF5F5F5),
+                  color: item.iconBackground,
                   borderRadius: BorderRadius.circular(4.r),
                 ),
                 alignment: Alignment.center,
@@ -433,6 +472,7 @@ class _NotificationItem {
   const _NotificationItem({
     required this.id,
     required this.iconPath,
+    required this.iconBackground,
     required this.title,
     required this.subtitle,
     required this.time,
@@ -441,8 +481,41 @@ class _NotificationItem {
 
   final int id;
   final String iconPath;
+  final Color iconBackground;
   final String title;
   final String subtitle;
   final String time;
   final DateTime createdAt;
+}
+
+String _resolveIconPath(String iconName) {
+  switch (iconName.trim().toLowerCase()) {
+    case 'fireworks':
+      return '${_NotificationsViewState._iconBase}/iconsax-fireworks-2.svg';
+    case 'driver':
+      return '${_NotificationsViewState._iconBase}/iconsax-driver.svg';
+    case 'goal':
+      return '${_NotificationsViewState._iconBase}/iconsax-huobi-token-(ht).svg';
+    case 'message':
+    case 'notification':
+    default:
+      return '${_NotificationsViewState._iconBase}/iconsax-sms-tracking.svg';
+  }
+}
+
+Color? _parseHexColor(String value) {
+  final normalized = value.trim().replaceFirst('#', '');
+  if (normalized.length == 3) {
+    final expanded = normalized.split('').map((char) => '$char$char').join();
+    return _parseHexColor('#$expanded');
+  }
+  if (normalized.length != 6) {
+    return null;
+  }
+
+  final parsed = int.tryParse(normalized, radix: 16);
+  if (parsed == null) {
+    return null;
+  }
+  return Color(0xFF000000 | parsed);
 }

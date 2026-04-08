@@ -166,6 +166,20 @@ Future<void> markAllNotificationsRead(WidgetRef ref) async {
   ref.invalidate(homeDashboardProvider);
 }
 
+Future<void> deleteNotificationById(WidgetRef ref, int id) async {
+  final apiClient = ref.read(apiClientProvider);
+  await apiClient.delete('/notifications/$id');
+  ref.invalidate(notificationsProvider);
+  ref.invalidate(homeDashboardProvider);
+}
+
+Future<void> deleteAllNotifications(WidgetRef ref) async {
+  final apiClient = ref.read(apiClientProvider);
+  await apiClient.delete('/notifications');
+  ref.invalidate(notificationsProvider);
+  ref.invalidate(homeDashboardProvider);
+}
+
 Future<void> upsertOnboardingAnswers(
   WidgetRef ref,
   List<OnboardingAnswerModel> answers,

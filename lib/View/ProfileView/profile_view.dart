@@ -22,8 +22,10 @@ class ProfileView extends ConsumerStatefulWidget {
 }
 
 class _ProfileViewState extends ConsumerState<ProfileView> {
-  bool _notificationsEnabled = true;
-  bool _healthEnabled = true;
+  bool _dailyNotificationsEnabled = true;
+  bool _workoutRemindersEnabled = true;
+  bool _progressSummariesEnabled = true;
+  int _reminderHour = 9;
   bool _isSavingSettings = false;
   Future<void> _settingsUpdateQueue = Future<void>.value();
   NotificationSettingsModel? _confirmedSettings;
@@ -44,8 +46,10 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
 
       setState(() {
         _settingsDraft = previousSettings;
-        _notificationsEnabled = previousSettings.dailyReminderEnabled;
-        _healthEnabled = previousSettings.progressSummaryEnabled;
+        _dailyNotificationsEnabled = previousSettings.dailyReminderEnabled;
+        _workoutRemindersEnabled = previousSettings.workoutReminderEnabled;
+        _progressSummariesEnabled = previousSettings.progressSummaryEnabled;
+        _reminderHour = previousSettings.reminderHour;
       });
       ref.invalidate(notificationSettingsProvider);
       return;
@@ -59,8 +63,10 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
 
     setState(() {
       _settingsDraft = nextSettings;
-      _notificationsEnabled = nextSettings.dailyReminderEnabled;
-      _healthEnabled = nextSettings.progressSummaryEnabled;
+      _dailyNotificationsEnabled = nextSettings.dailyReminderEnabled;
+      _workoutRemindersEnabled = nextSettings.workoutReminderEnabled;
+      _progressSummariesEnabled = nextSettings.progressSummaryEnabled;
+      _reminderHour = nextSettings.reminderHour;
     });
   }
 
@@ -69,6 +75,77 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
       (_) => _persistSettings(nextSettings),
     );
     return _settingsUpdateQueue;
+  }
+
+  Future<void> _pickReminderHour(NotificationSettingsModel currentSettings) async {
+    final selected = await showModalBottomSheet<int>(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
+      ),
+      builder: (sheetContext) {
+        final l10n = AppLocalizations.of(sheetContext)!;
+        return SafeArea(
+          top: false,
+          child: SizedBox(
+            height: 420.h,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(24.w, 20.h, 24.w, 12.h),
+                  child: Text(
+                    l10n.profileNotificationReminderHour,
+                    style: GoogleFonts.leagueSpartan(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w700,
+                      height: 1,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: ListView.separated(
+                    itemCount: 24,
+                    separatorBuilder: (_, _) =>
+                        Divider(height: 1, color: const Color(0xFFECECEC)),
+                    itemBuilder: (itemContext, index) {
+                      final isSelected = index == _reminderHour;
+                      final label = '${index.toString().padLeft(2, '0')}:00';
+                      return ListTile(
+                        title: Text(
+                          label,
+                          style: GoogleFonts.leagueSpartan(
+                            fontSize: 18.sp,
+                            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                            color: Colors.black,
+                          ),
+                        ),
+                        trailing: isSelected
+                            ? Icon(Icons.check_rounded, color: const Color(0xFF32EA6E))
+                            : null,
+                        onTap: () => Navigator.of(itemContext).pop(index),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    if (!mounted || selected == null || selected == _reminderHour) {
+      return;
+    }
+
+    final nextSettings = currentSettings.copyWith(reminderHour: selected);
+    setState(() {
+      _settingsDraft = nextSettings;
+      _reminderHour = selected;
+    });
+    await _enqueueSettingsPersist(nextSettings);
   }
 
   Future<void> _logout() async {
@@ -110,8 +187,10 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
     if (settings != null && !_isSavingSettings) {
       _confirmedSettings = settings;
       _settingsDraft = settings;
-      _notificationsEnabled = settings.dailyReminderEnabled;
-      _healthEnabled = settings.progressSummaryEnabled;
+      _dailyNotificationsEnabled = settings.dailyReminderEnabled;
+      _workoutRemindersEnabled = settings.workoutReminderEnabled;
+      _progressSummariesEnabled = settings.progressSummaryEnabled;
+      _reminderHour = settings.reminderHour;
     }
 
     final effectiveSettings =
@@ -149,33 +228,46 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                         ),
                         SizedBox(height: 30.h),
                         _SettingsSection(
-                          notificationsEnabled: _notificationsEnabled,
+                          dailyNotificationsEnabled: _dailyNotificationsEnabled,
+                          workoutRemindersEnabled: _workoutRemindersEnabled,
+                          progressSummariesEnabled: _progressSummariesEnabled,
+                          reminderHour: _reminderHour,
                           isPremium: premium?.isPremium == true,
-                          onNotificationsChanged: (value) async {
+                          onDailyNotificationsChanged: (value) async {
                             final nextSettings = effectiveSettings.copyWith(
                               dailyReminderEnabled: value,
                             );
                             setState(() {
                               _settingsDraft = nextSettings;
-                              _notificationsEnabled = value;
+                              _dailyNotificationsEnabled = value;
                             });
                             await _enqueueSettingsPersist(nextSettings);
                           },
-                        ),
-                        SizedBox(height: 30.h),
-                        _SupportSection(
-                          healthEnabled: _healthEnabled,
-                          onLogout: _logout,
-                          onHealthChanged: (value) async {
+                          onWorkoutRemindersChanged: (value) async {
+                            final nextSettings = effectiveSettings.copyWith(
+                              workoutReminderEnabled: value,
+                            );
+                            setState(() {
+                              _settingsDraft = nextSettings;
+                              _workoutRemindersEnabled = value;
+                            });
+                            await _enqueueSettingsPersist(nextSettings);
+                          },
+                          onProgressSummariesChanged: (value) async {
                             final nextSettings = effectiveSettings.copyWith(
                               progressSummaryEnabled: value,
                             );
                             setState(() {
                               _settingsDraft = nextSettings;
-                              _healthEnabled = value;
+                              _progressSummariesEnabled = value;
                             });
                             await _enqueueSettingsPersist(nextSettings);
                           },
+                          onReminderHourTap: () => _pickReminderHour(effectiveSettings),
+                        ),
+                        SizedBox(height: 30.h),
+                        _SupportSection(
+                          onLogout: _logout,
                         ),
                       ],
                     ),
@@ -515,13 +607,25 @@ class _StatItem extends StatelessWidget {
 
 class _SettingsSection extends StatelessWidget {
   const _SettingsSection({
-    required this.notificationsEnabled,
-    required this.onNotificationsChanged,
+    required this.dailyNotificationsEnabled,
+    required this.workoutRemindersEnabled,
+    required this.progressSummariesEnabled,
+    required this.reminderHour,
+    required this.onDailyNotificationsChanged,
+    required this.onWorkoutRemindersChanged,
+    required this.onProgressSummariesChanged,
+    required this.onReminderHourTap,
     required this.isPremium,
   });
 
-  final bool notificationsEnabled;
-  final ValueChanged<bool> onNotificationsChanged;
+  final bool dailyNotificationsEnabled;
+  final bool workoutRemindersEnabled;
+  final bool progressSummariesEnabled;
+  final int reminderHour;
+  final ValueChanged<bool> onDailyNotificationsChanged;
+  final ValueChanged<bool> onWorkoutRemindersChanged;
+  final ValueChanged<bool> onProgressSummariesChanged;
+  final VoidCallback onReminderHourTap;
   final bool isPremium;
 
   @override
@@ -555,10 +659,41 @@ class _SettingsSection extends StatelessWidget {
                   '${ProfileView._profileIconBase}/iconsax-notification-bing.svg',
               title: l10n.profileNotifications,
               trailing: _SwitchPill(
-                enabled: notificationsEnabled,
-                onChanged: onNotificationsChanged,
+                enabled: dailyNotificationsEnabled,
+                onChanged: onDailyNotificationsChanged,
               ),
-              onTap: () => onNotificationsChanged(!notificationsEnabled),
+              onTap: () =>
+                  onDailyNotificationsChanged(!dailyNotificationsEnabled),
+            ),
+            _SettingRow(
+              iconPath:
+                  '${ProfileView._profileIconBase}/iconsax-notification-bing.svg',
+              title: l10n.profileWorkoutReminders,
+              trailing: _SwitchPill(
+                enabled: workoutRemindersEnabled,
+                onChanged: onWorkoutRemindersChanged,
+              ),
+              onTap: () =>
+                  onWorkoutRemindersChanged(!workoutRemindersEnabled),
+            ),
+            _SettingRow(
+              iconPath:
+                  '${ProfileView._profileIconBase}/iconsax-notification-bing.svg',
+              title: l10n.profileProgressSummaries,
+              trailing: _SwitchPill(
+                enabled: progressSummariesEnabled,
+                onChanged: onProgressSummariesChanged,
+              ),
+              onTap: () =>
+                  onProgressSummariesChanged(!progressSummariesEnabled),
+            ),
+            _SettingRow(
+              iconPath: '${ProfileView._profileIconBase}/icon-time.svg',
+              title: l10n.profileNotificationReminderHour,
+              subtitle:
+                  '${reminderHour.toString().padLeft(2, '0')}:00 • ${l10n.notificationsEverySixHours}',
+              trailing: _Chevron(),
+              onTap: onReminderHourTap,
             ),
             _SettingRow(
               iconPath: '${ProfileView._profileIconBase}/iconsax-crown-1.svg',
@@ -576,14 +711,8 @@ class _SettingsSection extends StatelessWidget {
 }
 
 class _SupportSection extends StatelessWidget {
-  const _SupportSection({
-    required this.healthEnabled,
-    required this.onHealthChanged,
-    required this.onLogout,
-  });
+  const _SupportSection({required this.onLogout});
 
-  final bool healthEnabled;
-  final ValueChanged<bool> onHealthChanged;
   final Future<void> Function() onLogout;
 
   @override
@@ -605,15 +734,6 @@ class _SupportSection extends StatelessWidget {
         SizedBox(height: 10.h),
         _SectionCard(
           children: [
-            _SettingRow(
-              iconPath: '${ProfileView._profileIconBase}/iconsax-health.svg',
-              title: l10n.profileConnectHealth,
-              trailing: _SwitchPill(
-                enabled: healthEnabled,
-                onChanged: onHealthChanged,
-              ),
-              onTap: () => onHealthChanged(!healthEnabled),
-            ),
             _SettingRow(
               iconPath: '${ProfileView._profileIconBase}/iconsax-translate.svg',
               title: l10n.profileLanguagePreferences,
@@ -704,6 +824,7 @@ class _SettingRow extends StatelessWidget {
     required this.title,
     required this.trailing,
     this.onTap,
+    this.subtitle,
     this.iconBackground = const Color(0xFFF5F5F5),
     this.iconColor,
     this.titleColor = Colors.black,
@@ -713,6 +834,7 @@ class _SettingRow extends StatelessWidget {
   final String title;
   final Widget trailing;
   final VoidCallback? onTap;
+  final String? subtitle;
   final Color iconBackground;
   final Color? iconColor;
   final Color titleColor;
@@ -724,7 +846,7 @@ class _SettingRow extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: SizedBox(
-          height: 60.h,
+          height: subtitle == null ? 60.h : 72.h,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 14.w),
             child: Row(
@@ -748,15 +870,34 @@ class _SettingRow extends StatelessWidget {
                 ),
                 SizedBox(width: 8.w),
                 Expanded(
-                  child: Text(
-                    title,
-                    style: GoogleFonts.leagueSpartan(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
-                      height: 1.5,
-                      letterSpacing: -0.15,
-                      color: titleColor,
-                    ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: GoogleFonts.leagueSpartan(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                          height: 1.5,
+                          letterSpacing: -0.15,
+                          color: titleColor,
+                        ),
+                      ),
+                      if (subtitle != null) ...[
+                        SizedBox(height: 2.h),
+                        Text(
+                          subtitle!,
+                          style: GoogleFonts.leagueSpartan(
+                            fontSize: 11.sp,
+                            fontWeight: FontWeight.w500,
+                            height: 1.2,
+                            letterSpacing: -0.12,
+                            color: const Color(0xFF6F6F6F),
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
                 ),
                 trailing,

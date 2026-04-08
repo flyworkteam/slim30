@@ -880,6 +880,24 @@ abstract class AppLocalizations {
   /// **'Notifications'**
   String get profileNotifications;
 
+  /// No description provided for @profileWorkoutReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'Workout Reminders'**
+  String get profileWorkoutReminders;
+
+  /// No description provided for @profileProgressSummaries.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress Summaries'**
+  String get profileProgressSummaries;
+
+  /// No description provided for @profileNotificationReminderHour.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder Hour'**
+  String get profileNotificationReminderHour;
+
   /// No description provided for @profilePremium.
   ///
   /// In en, this message translates to:
@@ -1233,6 +1251,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Yesterday'**
   String get notificationsYesterday;
+
+  /// No description provided for @notificationsEarlier.
+  ///
+  /// In en, this message translates to:
+  /// **'Earlier'**
+  String get notificationsEarlier;
+
+  /// No description provided for @notificationsEverySixHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Every 6 hours'**
+  String get notificationsEverySixHours;
 
   /// No description provided for @notificationsClearAll.
   ///
