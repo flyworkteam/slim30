@@ -41,7 +41,8 @@ class _PremiumViewState extends ConsumerState<PremiumView> {
       final configuredEntitlement =
           customerInfo.entitlements.active[AppConfig
               .revenueCatPremiumEntitlementId] ??
-          customerInfo.entitlements.all[AppConfig.revenueCatPremiumEntitlementId];
+          customerInfo.entitlements.all[AppConfig
+              .revenueCatPremiumEntitlementId];
       final hasPremiumEntitlement = configuredEntitlement?.isActive ?? false;
 
       if (hasPremiumEntitlement) {
@@ -49,7 +50,9 @@ class _PremiumViewState extends ConsumerState<PremiumView> {
         ref.invalidate(homeDashboardProvider);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Your premium subscription is active.')),
+            const SnackBar(
+              content: Text('Your premium subscription is active.'),
+            ),
           );
         }
       } else {
@@ -108,9 +111,7 @@ class _PremiumViewState extends ConsumerState<PremiumView> {
     } catch (error) {
       debugPrint('Paywall error: $error');
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Something went wrong. Please try again.'),
           ),

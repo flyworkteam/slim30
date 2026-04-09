@@ -327,7 +327,8 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
     if (profile != null) {
       final shouldHydrate =
           !_initializedFromApi ||
-          (_nameController.text.trim().isEmpty && profile.name.trim().isNotEmpty) ||
+          (_nameController.text.trim().isEmpty &&
+              profile.name.trim().isNotEmpty) ||
           (_ageController.text.trim().isEmpty && profile.age != null) ||
           (_heightController.text.trim().isEmpty && profile.heightCm != null) ||
           (_weightController.text.trim().isEmpty && profile.weightKg != null) ||

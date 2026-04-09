@@ -48,9 +48,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
       if (!mounted) {
         return;
       }
-      Navigator.of(
-        context,
-      ).pushNamedAndRemoveUntil(
+      Navigator.of(context).pushNamedAndRemoveUntil(
         onboardingStatus == OnboardingStatus.completed
             ? AppRoutes.home
             : AppRoutes.questionGender,
@@ -83,9 +81,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
       if (!mounted) {
         return;
       }
-      Navigator.of(
-        context,
-      ).pushNamedAndRemoveUntil(
+      Navigator.of(context).pushNamedAndRemoveUntil(
         onboardingStatus == OnboardingStatus.completed
             ? AppRoutes.home
             : AppRoutes.questionGender,
@@ -401,8 +397,7 @@ class _LegalSection extends StatelessWidget {
             TextSpan(
               text: 'CSAE',
               style: linkStyle,
-              recognizer: TapGestureRecognizer()
-                ..onTap = () => _open(_csaeUrl),
+              recognizer: TapGestureRecognizer()..onTap = () => _open(_csaeUrl),
             ),
             const TextSpan(text: '.'),
           ],

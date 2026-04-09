@@ -96,10 +96,13 @@ class AuthService {
       final validGender =
           gender == 'female' || gender == 'male' || gender == 'unspecified';
       final validAge = age != null && age >= 12 && age <= 100;
-      final validHeight = heightCm != null && heightCm >= 100 && heightCm <= 250;
+      final validHeight =
+          heightCm != null && heightCm >= 100 && heightCm <= 250;
       final validWeight = weightKg != null && weightKg >= 20 && weightKg <= 350;
       final validTargetWeight =
-          targetWeightKg != null && targetWeightKg >= 20 && targetWeightKg <= 350;
+          targetWeightKg != null &&
+          targetWeightKg >= 20 &&
+          targetWeightKg <= 350;
 
       return validGender &&
               validAge &&
@@ -256,11 +259,7 @@ class AuthFlowException implements Exception {
   String toString() => message;
 }
 
-enum OnboardingStatus {
-  completed,
-  incomplete,
-  unauthorized,
-}
+enum OnboardingStatus { completed, incomplete, unauthorized }
 
 String mapAuthError(Object error) {
   if (error is AuthFlowException) {
