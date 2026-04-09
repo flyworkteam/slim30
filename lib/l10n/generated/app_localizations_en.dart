@@ -65,6 +65,28 @@ class AppLocalizationsEn extends AppLocalizations {
       'By signing up for Slim30 you agree to our Terms of Service. To learn more about how we handle your data, please review our Privacy Policy and Cookie Policy.';
 
   @override
+  String loginLegalRich(
+    Object cookies,
+    Object csae,
+    Object privacy,
+    Object terms,
+  ) {
+    return 'By signing up for Slim30 you agree to our $terms. To learn more about how we handle your data, please review our $privacy and $cookies. $csae.';
+  }
+
+  @override
+  String get loginLegalTermsLabel => 'Terms of Service';
+
+  @override
+  String get loginLegalPrivacyLabel => 'Privacy Policy';
+
+  @override
+  String get loginLegalCookiesLabel => 'Cookie Policy';
+
+  @override
+  String get loginLegalCsaeLabel => 'CSAE';
+
+  @override
   String get questionSkip => 'Skip';
 
   @override

@@ -64,6 +64,28 @@ class AppLocalizationsZh extends AppLocalizations {
       '注册 Slim30 即表示您同意我们的服务条款。如需了解我们如何处理您的数据，请查阅我们的隐私政策和 Cookie 政策。';
 
   @override
+  String loginLegalRich(
+    Object cookies,
+    Object csae,
+    Object privacy,
+    Object terms,
+  ) {
+    return '注册 Slim30 即表示您同意我们的$terms。如需了解我们如何处理您的数据，请查阅我们的$privacy和$cookies。$csae。';
+  }
+
+  @override
+  String get loginLegalTermsLabel => '服务条款';
+
+  @override
+  String get loginLegalPrivacyLabel => '隐私政策';
+
+  @override
+  String get loginLegalCookiesLabel => 'Cookie 政策';
+
+  @override
+  String get loginLegalCsaeLabel => 'CSAE';
+
+  @override
   String get questionSkip => '跳过';
 
   @override

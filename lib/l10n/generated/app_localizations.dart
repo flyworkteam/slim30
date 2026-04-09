@@ -220,6 +220,41 @@ abstract class AppLocalizations {
   /// **'By signing up for Slim30 you agree to our Terms of Service. To learn more about how we handle your data, please review our Privacy Policy and Cookie Policy.'**
   String get loginLegal;
 
+  /// No description provided for @loginLegalRich.
+  ///
+  /// In en, this message translates to:
+  /// **'By signing up for Slim30 you agree to our {terms}. To learn more about how we handle your data, please review our {privacy} and {cookies}. {csae}.'**
+  String loginLegalRich(
+    Object cookies,
+    Object csae,
+    Object privacy,
+    Object terms,
+  );
+
+  /// No description provided for @loginLegalTermsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Service'**
+  String get loginLegalTermsLabel;
+
+  /// No description provided for @loginLegalPrivacyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get loginLegalPrivacyLabel;
+
+  /// No description provided for @loginLegalCookiesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cookie Policy'**
+  String get loginLegalCookiesLabel;
+
+  /// No description provided for @loginLegalCsaeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'CSAE'**
+  String get loginLegalCsaeLabel;
+
   /// No description provided for @questionSkip.
   ///
   /// In en, this message translates to:

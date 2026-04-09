@@ -341,6 +341,10 @@ class _LegalSection extends StatelessWidget {
   static const _privacyUrl = 'https://fly-work.com/slim30/privacy-policy/';
   static const _cookiesUrl = 'https://fly-work.com/slim30/cookies/';
   static const _csaeUrl = 'https://fly-work.com/slim30/csae/';
+  static const _termsToken = '__TERMS__';
+  static const _privacyToken = '__PRIVACY__';
+  static const _cookiesToken = '__COOKIES__';
+  static const _csaeToken = '__CSAE__';
 
   static Future<void> _open(String url) async {
     final uri = Uri.parse(url);
@@ -349,8 +353,62 @@ class _LegalSection extends StatelessWidget {
     }
   }
 
+  static List<InlineSpan> _buildInlineSpans({
+    required String template,
+    required TextStyle baseStyle,
+    required TextStyle linkStyle,
+    required Map<String, ({String label, String url})> links,
+  }) {
+    final spans = <InlineSpan>[];
+    var cursor = 0;
+
+    while (cursor < template.length) {
+      String? nearestToken;
+      var nearestIndex = -1;
+
+      for (final token in links.keys) {
+        final index = template.indexOf(token, cursor);
+        if (index == -1) {
+          continue;
+        }
+        if (nearestIndex == -1 || index < nearestIndex) {
+          nearestIndex = index;
+          nearestToken = token;
+        }
+      }
+
+      if (nearestToken == null || nearestIndex == -1) {
+        spans.add(TextSpan(text: template.substring(cursor), style: baseStyle));
+        break;
+      }
+
+      if (nearestIndex > cursor) {
+        spans.add(
+          TextSpan(
+            text: template.substring(cursor, nearestIndex),
+            style: baseStyle,
+          ),
+        );
+      }
+
+      final link = links[nearestToken]!;
+      spans.add(
+        TextSpan(
+          text: link.label,
+          style: linkStyle,
+          recognizer: TapGestureRecognizer()..onTap = () => _open(link.url),
+        ),
+      );
+
+      cursor = nearestIndex + nearestToken.length;
+    }
+
+    return spans;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final baseStyle = GoogleFonts.leagueSpartan(
       fontSize: 10.sp,
       fontWeight: FontWeight.w500,
@@ -362,45 +420,32 @@ class _LegalSection extends StatelessWidget {
       color: MyColors.loginText,
     );
 
+    final template = l10n.loginLegalRich(
+      _termsToken,
+      _privacyToken,
+      _cookiesToken,
+      _csaeToken,
+    );
+
+    final links = <String, ({String label, String url})>{
+      _termsToken: (label: l10n.loginLegalTermsLabel, url: _termsUrl),
+      _privacyToken: (label: l10n.loginLegalPrivacyLabel, url: _privacyUrl),
+      _cookiesToken: (label: l10n.loginLegalCookiesLabel, url: _cookiesUrl),
+      _csaeToken: (label: l10n.loginLegalCsaeLabel, url: _csaeUrl),
+    };
+
     return SizedBox(
       width: 298.w,
       child: RichText(
         textAlign: TextAlign.center,
         text: TextSpan(
           style: baseStyle,
-          children: [
-            const TextSpan(text: 'By signing up for Slim30 you agree to our '),
-            TextSpan(
-              text: 'Terms',
-              style: linkStyle,
-              recognizer: TapGestureRecognizer()
-                ..onTap = () => _open(_termsUrl),
-            ),
-            const TextSpan(
-              text:
-                  ' of Service. To learn more about how we handle your data, please review our ',
-            ),
-            TextSpan(
-              text: 'Privacy',
-              style: linkStyle,
-              recognizer: TapGestureRecognizer()
-                ..onTap = () => _open(_privacyUrl),
-            ),
-            const TextSpan(text: ' and '),
-            TextSpan(
-              text: 'Cookies',
-              style: linkStyle,
-              recognizer: TapGestureRecognizer()
-                ..onTap = () => _open(_cookiesUrl),
-            ),
-            const TextSpan(text: ' Policy. '),
-            TextSpan(
-              text: 'CSAE',
-              style: linkStyle,
-              recognizer: TapGestureRecognizer()..onTap = () => _open(_csaeUrl),
-            ),
-            const TextSpan(text: '.'),
-          ],
+          children: _buildInlineSpans(
+            template: template,
+            baseStyle: baseStyle,
+            linkStyle: linkStyle,
+            links: links,
+          ),
         ),
       ),
     );

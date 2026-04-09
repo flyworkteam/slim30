@@ -65,6 +65,28 @@ class AppLocalizationsRu extends AppLocalizations {
       'Регистрируясь в Slim30, вы соглашаетесь с нашими Условиями использования. Чтобы узнать, как мы обрабатываем ваши данные, ознакомьтесь с Политикой конфиденциальности и Политикой использования файлов cookie.';
 
   @override
+  String loginLegalRich(
+    Object cookies,
+    Object csae,
+    Object privacy,
+    Object terms,
+  ) {
+    return 'Регистрируясь в Slim30, вы соглашаетесь с нашими $terms. Чтобы узнать, как мы обрабатываем ваши данные, ознакомьтесь с $privacy и $cookies. $csae.';
+  }
+
+  @override
+  String get loginLegalTermsLabel => 'Условиями использования';
+
+  @override
+  String get loginLegalPrivacyLabel => 'Политикой конфиденциальности';
+
+  @override
+  String get loginLegalCookiesLabel => 'Политикой использования файлов cookie';
+
+  @override
+  String get loginLegalCsaeLabel => 'CSAE';
+
+  @override
   String get questionSkip => 'Пропустить';
 
   @override

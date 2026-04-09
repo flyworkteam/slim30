@@ -65,6 +65,28 @@ class AppLocalizationsTr extends AppLocalizations {
       'Slim30\'a kaydolmakla Hizmet Şartlarımızı kabul etmiş olursunuz. Verilerinizi nasıl işlediğimiz hakkında daha fazla bilgi edinmek için Gizlilik Politikamızı ve Çerez Politikamızı inceleyiniz.';
 
   @override
+  String loginLegalRich(
+    Object cookies,
+    Object csae,
+    Object privacy,
+    Object terms,
+  ) {
+    return 'Slim30\'a kaydolmakla $terms kabul etmiş olursunuz. Verilerinizi nasıl işlediğimiz hakkında daha fazla bilgi edinmek için $privacy ve $cookies inceleyiniz. $csae.';
+  }
+
+  @override
+  String get loginLegalTermsLabel => 'Hizmet Şartlarımızı';
+
+  @override
+  String get loginLegalPrivacyLabel => 'Gizlilik Politikamızı';
+
+  @override
+  String get loginLegalCookiesLabel => 'Çerez Politikamızı';
+
+  @override
+  String get loginLegalCsaeLabel => 'CSAE';
+
+  @override
   String get questionSkip => 'Atla';
 
   @override

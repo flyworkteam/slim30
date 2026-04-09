@@ -65,6 +65,28 @@ class AppLocalizationsHi extends AppLocalizations {
       'Slim30 के लिए साइन अप करके आप हमारी सेवा की शर्तों से सहमत होते हैं। हम आपके डेटा को कैसे संभालते हैं, यह जानने के लिए कृपया हमारी गोपनीयता नीति और कुकी नीति पढ़ें।';
 
   @override
+  String loginLegalRich(
+    Object cookies,
+    Object csae,
+    Object privacy,
+    Object terms,
+  ) {
+    return 'Slim30 के लिए साइन अप करके आप हमारी $terms से सहमत होते हैं। हम आपके डेटा को कैसे संभालते हैं, यह जानने के लिए कृपया हमारी $privacy और $cookies पढ़ें। $csae.';
+  }
+
+  @override
+  String get loginLegalTermsLabel => 'सेवा की शर्तों';
+
+  @override
+  String get loginLegalPrivacyLabel => 'गोपनीयता नीति';
+
+  @override
+  String get loginLegalCookiesLabel => 'कुकी नीति';
+
+  @override
+  String get loginLegalCsaeLabel => 'CSAE';
+
+  @override
   String get questionSkip => 'छोड़ें';
 
   @override

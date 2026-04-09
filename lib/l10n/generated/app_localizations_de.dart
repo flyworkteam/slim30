@@ -65,6 +65,28 @@ class AppLocalizationsDe extends AppLocalizations {
       'Mit der Anmeldung bei Slim30 stimmst du unseren Nutzungsbedingungen zu. Weitere Informationen zum Umgang mit deinen Daten findest du in unserer Datenschutzrichtlinie und Cookie-Richtlinie.';
 
   @override
+  String loginLegalRich(
+    Object cookies,
+    Object csae,
+    Object privacy,
+    Object terms,
+  ) {
+    return 'Mit der Anmeldung bei Slim30 stimmst du unseren $terms zu. Weitere Informationen zum Umgang mit deinen Daten findest du in unserer $privacy und $cookies. $csae.';
+  }
+
+  @override
+  String get loginLegalTermsLabel => 'Nutzungsbedingungen';
+
+  @override
+  String get loginLegalPrivacyLabel => 'Datenschutzrichtlinie';
+
+  @override
+  String get loginLegalCookiesLabel => 'Cookie-Richtlinie';
+
+  @override
+  String get loginLegalCsaeLabel => 'CSAE';
+
+  @override
   String get questionSkip => 'Überspringen';
 
   @override

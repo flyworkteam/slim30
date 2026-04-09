@@ -64,6 +64,28 @@ class AppLocalizationsKo extends AppLocalizations {
       'Slim30에 가입하면 서비스 약관에 동의하는 것으로 간주됩니다. 데이터 처리 방식에 대해 자세히 알아보려면 개인정보 처리방침 및 쿠키 정책을 확인해 주세요.';
 
   @override
+  String loginLegalRich(
+    Object cookies,
+    Object csae,
+    Object privacy,
+    Object terms,
+  ) {
+    return 'Slim30에 가입하면 $terms에 동의하는 것으로 간주됩니다. 데이터 처리 방식에 대해 자세히 알아보려면 $privacy 및 $cookies을(를) 확인해 주세요. $csae.';
+  }
+
+  @override
+  String get loginLegalTermsLabel => '서비스 약관';
+
+  @override
+  String get loginLegalPrivacyLabel => '개인정보 처리방침';
+
+  @override
+  String get loginLegalCookiesLabel => '쿠키 정책';
+
+  @override
+  String get loginLegalCsaeLabel => 'CSAE';
+
+  @override
   String get questionSkip => '건너뛰기';
 
   @override

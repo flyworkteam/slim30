@@ -64,6 +64,28 @@ class AppLocalizationsJa extends AppLocalizations {
       'Slim30に登録することで、利用規約に同意したものとみなされます。データの取り扱いについては、プライバシーポリシーおよびCookieポリシーをご覧ください。';
 
   @override
+  String loginLegalRich(
+    Object cookies,
+    Object csae,
+    Object privacy,
+    Object terms,
+  ) {
+    return 'Slim30に登録することで、$termsに同意したものとみなされます。データの取り扱いについては、$privacyおよび$cookiesをご覧ください。$csae。';
+  }
+
+  @override
+  String get loginLegalTermsLabel => '利用規約';
+
+  @override
+  String get loginLegalPrivacyLabel => 'プライバシーポリシー';
+
+  @override
+  String get loginLegalCookiesLabel => 'Cookieポリシー';
+
+  @override
+  String get loginLegalCsaeLabel => 'CSAE';
+
+  @override
   String get questionSkip => 'スキップ';
 
   @override
