@@ -2,6 +2,11 @@ import 'package:flutter/foundation.dart';
 
 class AppConfig {
   static const String appName = 'Slim30';
+  static const String revenueCatPremiumEntitlementId = 'Slim30 Premium';
+  static const String revenueCatIosApiKey = 'appl_shwHjXNgunbewOKRSjPEjcqyMlk';
+  static const String revenueCatAndroidApiKey =
+      'goog_uicBfCCbCfKeBTqjLkSrbmiAvTr';
+  static const String oneSignalAppId = '4d095e09-849c-4d1d-a06a-144f551dd805';
 
   static const String _configuredBaseUrl = String.fromEnvironment(
     'API_BASE_URL',

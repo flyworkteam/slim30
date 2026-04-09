@@ -43,3 +43,5 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+/Users/muratsag/Developer/Slim30/slim30-86df2-5c3882bfc8f9.json

@@ -77,7 +77,9 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
     return _settingsUpdateQueue;
   }
 
-  Future<void> _pickReminderHour(NotificationSettingsModel currentSettings) async {
+  Future<void> _pickReminderHour(
+    NotificationSettingsModel currentSettings,
+  ) async {
     final selected = await showModalBottomSheet<int>(
       context: context,
       backgroundColor: Colors.white,
@@ -117,12 +119,17 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                           label,
                           style: GoogleFonts.leagueSpartan(
                             fontSize: 18.sp,
-                            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                            fontWeight: isSelected
+                                ? FontWeight.w700
+                                : FontWeight.w500,
                             color: Colors.black,
                           ),
                         ),
                         trailing: isSelected
-                            ? Icon(Icons.check_rounded, color: const Color(0xFF32EA6E))
+                            ? Icon(
+                                Icons.check_rounded,
+                                color: const Color(0xFF32EA6E),
+                              )
                             : null,
                         onTap: () => Navigator.of(itemContext).pop(index),
                       );
@@ -263,12 +270,11 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                             });
                             await _enqueueSettingsPersist(nextSettings);
                           },
-                          onReminderHourTap: () => _pickReminderHour(effectiveSettings),
+                          onReminderHourTap: () =>
+                              _pickReminderHour(effectiveSettings),
                         ),
                         SizedBox(height: 30.h),
-                        _SupportSection(
-                          onLogout: _logout,
-                        ),
+                        _SupportSection(onLogout: _logout),
                       ],
                     ),
                   ),
@@ -673,8 +679,7 @@ class _SettingsSection extends StatelessWidget {
                 enabled: workoutRemindersEnabled,
                 onChanged: onWorkoutRemindersChanged,
               ),
-              onTap: () =>
-                  onWorkoutRemindersChanged(!workoutRemindersEnabled),
+              onTap: () => onWorkoutRemindersChanged(!workoutRemindersEnabled),
             ),
             _SettingRow(
               iconPath:
@@ -701,7 +706,7 @@ class _SettingsSection extends StatelessWidget {
                   ? '${l10n.profilePremium} (ON)'
                   : l10n.profilePremium,
               trailing: _Chevron(),
-              onTap: null,
+              onTap: () => Navigator.of(context).pushNamed(AppRoutes.premium),
             ),
           ],
         ),
