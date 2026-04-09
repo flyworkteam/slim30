@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 import 'package:slim30/Core/Config/app_config.dart';
+import 'package:slim30/Core/Routes/app_routes.dart';
 import 'package:slim30/Riverpod/Providers/backend_providers.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
 
@@ -28,8 +29,6 @@ class _PremiumViewState extends ConsumerState<PremiumView> {
     if (_opened) return;
     _opened = true;
 
-    final l10n = AppLocalizations.of(context);
-
     try {
       final firebaseUid = FirebaseAuth.instance.currentUser?.uid;
       if (firebaseUid != null && firebaseUid.isNotEmpty) {
@@ -51,7 +50,7 @@ class _PremiumViewState extends ConsumerState<PremiumView> {
           break;
         case PaywallResult.error:
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(l10n?.profilePremium ?? 'Premium')),
+            const SnackBar(content: Text('Could not load premium offers.')),
           );
           break;
         case PaywallResult.cancelled:
@@ -59,10 +58,15 @@ class _PremiumViewState extends ConsumerState<PremiumView> {
           break;
       }
     } catch (error) {
+      debugPrint('Paywall error: $error');
       if (mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Paywall error: $error')));
+        ).showSnackBar(
+          const SnackBar(
+            content: Text('Something went wrong. Please try again.'),
+          ),
+        );
       }
     }
 
@@ -71,7 +75,7 @@ class _PremiumViewState extends ConsumerState<PremiumView> {
       if (nav.canPop()) {
         nav.pop();
       } else {
-        nav.pushReplacementNamed('/home');
+        nav.pushReplacementNamed(AppRoutes.home);
       }
     }
   }

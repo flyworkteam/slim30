@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:slim30/Core/Auth/auth_service.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
 import 'package:slim30/Riverpod/Models/app_models.dart';
@@ -157,6 +158,11 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
 
   Future<void> _logout() async {
     try {
+      try {
+        await Purchases.logOut();
+      } catch (error) {
+        debugPrint('RevenueCat logout failed: $error');
+      }
       await AuthService.signOut();
       if (!mounted) {
         return;
