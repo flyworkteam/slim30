@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:slim30/Core/Config/app_config.dart';
 import 'package:slim30/Core/Network/api_client.dart';
+import 'package:slim30/Core/Network/api_exception.dart';
 import 'package:slim30/Core/Storage/app_locale_store.dart';
 import 'package:slim30/Core/Storage/auth_token_store.dart';
 import 'package:slim30/Riverpod/Models/progress_day_model.dart';
@@ -14,6 +15,7 @@ final apiClientProvider = Provider<ApiClient>((ref) {
     defaultHeaders: AppConfig.apiHeaders,
     authTokenProvider: AuthTokenStore.getToken,
     localeCodeProvider: AppLocaleStore.getLanguageCode,
+    onUnauthorized: AuthTokenStore.clear,
   );
 });
 
@@ -75,9 +77,26 @@ final progressSummaryProvider = FutureProvider<ProgressSummaryModel>((
   ref,
 ) async {
   final apiClient = ref.read(apiClientProvider);
-  final data = await apiClient.get('/progress/summary');
-  final summary = data['summary'];
-  if (summary is! Map<String, dynamic>) {
+  try {
+    final data = await apiClient.get('/progress/summary');
+    final summary = data['summary'];
+    if (summary is! Map<String, dynamic>) {
+      return const ProgressSummaryModel(
+        totalDays: 30,
+        completedDays: 0,
+        remainingDays: 30,
+        completionRate: 0,
+        successRate: 0,
+        totalCompletedExercises: 0,
+        movementCount: 0,
+        totalWorkoutSeconds: 0,
+        totalWorkoutMinutes: 0,
+        caloriesBurned: 0,
+      );
+    }
+
+    return ProgressSummaryModel.fromJson(summary);
+  } on ApiException {
     return const ProgressSummaryModel(
       totalDays: 30,
       completedDays: 0,
@@ -91,8 +110,6 @@ final progressSummaryProvider = FutureProvider<ProgressSummaryModel>((
       caloriesBurned: 0,
     );
   }
-
-  return ProgressSummaryModel.fromJson(summary);
 });
 
 @immutable

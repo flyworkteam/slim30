@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -161,7 +162,11 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
       try {
         await Purchases.logOut();
       } catch (error) {
-        debugPrint('RevenueCat logout failed: $error');
+        if (error is PlatformException && error.code == '22') {
+          // Expected when RevenueCat user is anonymous; safe to ignore.
+        } else {
+          debugPrint('RevenueCat logout failed: $error');
+        }
       }
       await AuthService.signOut();
       if (!mounted) {

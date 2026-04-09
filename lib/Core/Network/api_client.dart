@@ -11,6 +11,7 @@ class ApiClient {
     required this.defaultHeaders,
     this.authTokenProvider,
     this.localeCodeProvider,
+    this.onUnauthorized,
     http.Client? httpClient,
   }) : _httpClient = httpClient ?? http.Client();
 
@@ -18,6 +19,7 @@ class ApiClient {
   final Map<String, String> defaultHeaders;
   final Future<String?> Function()? authTokenProvider;
   final Future<String?> Function()? localeCodeProvider;
+  final Future<void> Function()? onUnauthorized;
   final http.Client _httpClient;
 
   Future<Map<String, dynamic>> get(String path) async {
@@ -63,6 +65,9 @@ class ApiClient {
         const Duration(seconds: 20),
       );
       final response = await http.Response.fromStream(streamedResponse);
+      if (response.statusCode == 401 && onUnauthorized != null) {
+        await onUnauthorized!();
+      }
       return _parseEnvelope(response);
     } on ApiException {
       rethrow;
@@ -120,6 +125,10 @@ class ApiClient {
             .timeout(const Duration(seconds: 12));
       } else {
         throw ApiException('Unsupported request method');
+      }
+
+      if (response.statusCode == 401 && onUnauthorized != null) {
+        await onUnauthorized!();
       }
 
       return _parseEnvelope(response);

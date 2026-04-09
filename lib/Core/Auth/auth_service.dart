@@ -11,9 +11,18 @@ import 'package:slim30/Core/Network/api_client.dart';
 import 'package:slim30/Core/Network/api_exception.dart';
 import 'package:slim30/Core/Storage/app_locale_store.dart';
 import 'package:slim30/Core/Storage/auth_token_store.dart';
+import 'package:slim30/Riverpod/Models/app_models.dart';
 
 class AuthService {
   AuthService._();
+
+  static UserProfileModel? _pendingProfile;
+
+  static UserProfileModel? consumePendingProfile() {
+    final profile = _pendingProfile;
+    _pendingProfile = null;
+    return profile;
+  }
 
   static final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   static final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -21,6 +30,13 @@ class AuthService {
     baseUrl: AppConfig.apiBaseUrl,
     defaultHeaders: AppConfig.apiHeaders,
     localeCodeProvider: AppLocaleStore.getLanguageCode,
+  );
+  static final ApiClient _authenticatedApiClient = ApiClient(
+    baseUrl: AppConfig.apiBaseUrl,
+    defaultHeaders: AppConfig.apiHeaders,
+    authTokenProvider: AuthTokenStore.getToken,
+    localeCodeProvider: AppLocaleStore.getLanguageCode,
+    onUnauthorized: AuthTokenStore.clear,
   );
 
   static Future<void> signInWithGoogleAndExchange() async {
@@ -41,11 +57,69 @@ class AuthService {
       throw const AuthFlowException('Google sign-in did not return a user.');
     }
 
+    // Prefer the Google display name; fall back to email prefix so the DB
+    // never keeps a stale "Guest" or "User" placeholder from a prior session.
+    final nameHint = (googleUser.displayName?.trim().isNotEmpty == true)
+        ? googleUser.displayName
+        : googleUser.email.split('@').first;
+
     try {
-      await _exchangeFirebaseToken(user);
+      await _exchangeFirebaseToken(
+        user,
+        displayNameHint: nameHint,
+        emailHint: googleUser.email,
+        photoUrlHint: googleUser.photoUrl,
+      );
     } catch (_) {
       await AuthTokenStore.clear();
       rethrow;
+    }
+  }
+
+  static Future<OnboardingStatus> getOnboardingStatus() async {
+    try {
+      final data = await _authenticatedApiClient.get('/users/profile');
+      final user = data['user'];
+      if (user is! Map<String, dynamic>) {
+        return OnboardingStatus.incomplete;
+      }
+
+      // Cache the profile so userProfileProvider can use it without a second API call.
+      _pendingProfile = UserProfileModel.fromJson(user);
+
+      final age = (user['age'] as num?)?.toInt();
+      final gender = (user['gender'] as String?)?.trim();
+      final heightCm = (user['height_cm'] as num?)?.toDouble();
+      final weightKg = (user['weight_kg'] as num?)?.toDouble();
+      final targetWeightKg = (user['target_weight_kg'] as num?)?.toDouble();
+
+      final validGender =
+          gender == 'female' || gender == 'male' || gender == 'unspecified';
+      final validAge = age != null && age >= 12 && age <= 100;
+      final validHeight = heightCm != null && heightCm >= 100 && heightCm <= 250;
+      final validWeight = weightKg != null && weightKg >= 20 && weightKg <= 350;
+      final validTargetWeight =
+          targetWeightKg != null && targetWeightKg >= 20 && targetWeightKg <= 350;
+
+      return validGender &&
+              validAge &&
+              validHeight &&
+              validWeight &&
+              validTargetWeight
+          ? OnboardingStatus.completed
+          : OnboardingStatus.incomplete;
+    } on ApiException catch (error) {
+      // Stale/invalid token: clear session and force fresh login flow.
+      if (error.statusCode == 401) {
+        await AuthTokenStore.clear();
+        return OnboardingStatus.unauthorized;
+      }
+
+      // Fail closed on other API issues.
+      return OnboardingStatus.incomplete;
+    } catch (_) {
+      // Fail closed: if profile cannot be fetched, keep user in question flow.
+      return OnboardingStatus.incomplete;
     }
   }
 
@@ -122,7 +196,12 @@ class AuthService {
     ]);
   }
 
-  static Future<void> _exchangeFirebaseToken(User user) async {
+  static Future<void> _exchangeFirebaseToken(
+    User user, {
+    String? displayNameHint,
+    String? emailHint,
+    String? photoUrlHint,
+  }) async {
     final idToken = await user.getIdToken(true);
     if (idToken == null || idToken.isEmpty) {
       throw const AuthFlowException(
@@ -132,7 +211,12 @@ class AuthService {
 
     final data = await _apiClient.post(
       '/auth/exchange',
-      body: {'firebase_token': idToken},
+      body: {
+        'firebase_token': idToken,
+        'display_name': displayNameHint ?? user.displayName,
+        'email': emailHint ?? user.email,
+        'photo_url': photoUrlHint ?? user.photoURL,
+      },
     );
 
     await _storeBackendToken(data);
@@ -170,6 +254,12 @@ class AuthFlowException implements Exception {
 
   @override
   String toString() => message;
+}
+
+enum OnboardingStatus {
+  completed,
+  incomplete,
+  unauthorized,
 }
 
 String mapAuthError(Object error) {

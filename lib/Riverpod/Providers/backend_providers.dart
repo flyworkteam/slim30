@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:slim30/Core/Auth/auth_service.dart';
 import 'package:slim30/Core/Network/api_client.dart';
 import 'package:slim30/Core/Network/api_exception.dart';
 import 'package:slim30/Core/Storage/auth_token_store.dart';
@@ -9,6 +10,11 @@ import 'package:slim30/Riverpod/Models/progress_summary_model.dart';
 import 'package:slim30/Riverpod/Providers/workout/workout_program_provider.dart';
 
 final userProfileProvider = FutureProvider<UserProfileModel>((ref) async {
+  // Use the profile already fetched by getOnboardingStatus() if available,
+  // so we avoid a redundant API call right after login/splash.
+  final pending = AuthService.consumePendingProfile();
+  if (pending != null) return pending;
+
   final apiClient = ref.read(apiClientProvider);
   final data = await apiClient.get('/users/profile');
   final user = data['user'];
@@ -62,17 +68,29 @@ final notificationsProvider = FutureProvider<List<NotificationModel>>((
 final homeDashboardProvider = FutureProvider<HomeDashboardModel>((ref) async {
   final profile = await ref.watch(userProfileProvider.future);
   final summary = await ref.watch(progressSummaryProvider.future);
-  final premium = await ref.watch(premiumStatusProvider.future);
-  final notifications = await ref.watch(notificationsProvider.future);
 
-  final unreadCount = notifications.where((item) => !item.isRead).length;
+  final premiumResult = await ref
+      .watch(premiumStatusProvider.future)
+      .then<PremiumStatusModel?>(
+        (v) => v,
+        onError: (_, _) => null,
+      );
+  final notificationsResult = await ref
+      .watch(notificationsProvider.future)
+      .then<List<NotificationModel>?>(
+        (v) => v,
+        onError: (_, _) => null,
+      );
+
+  final unreadCount =
+      notificationsResult?.where((item) => !item.isRead).length ?? 0;
 
   return HomeDashboardModel(
     profile: profile,
     completedDays: summary.completedDays,
     totalDays: summary.totalDays,
     completionRate: summary.completionRate,
-    isPremium: premium.isPremium,
+    isPremium: premiumResult?.isPremium ?? false,
     unreadNotifications: unreadCount,
   );
 });

@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
@@ -35,27 +37,73 @@ class _PremiumViewState extends ConsumerState<PremiumView> {
         await Purchases.logIn(firebaseUid);
       }
 
-      final result = await RevenueCatUI.presentPaywallIfNeeded(
-        AppConfig.revenueCatPremiumEntitlementId,
-        displayCloseButton: true,
-      );
+      final customerInfo = await Purchases.getCustomerInfo();
+      final configuredEntitlement =
+          customerInfo.entitlements.active[AppConfig
+              .revenueCatPremiumEntitlementId] ??
+          customerInfo.entitlements.all[AppConfig.revenueCatPremiumEntitlementId];
+      final hasPremiumEntitlement = configuredEntitlement?.isActive ?? false;
 
-      if (!mounted) return;
-
-      switch (result) {
-        case PaywallResult.purchased:
-        case PaywallResult.restored:
-          ref.invalidate(premiumStatusProvider);
-          ref.invalidate(homeDashboardProvider);
-          break;
-        case PaywallResult.error:
+      if (hasPremiumEntitlement) {
+        ref.invalidate(premiumStatusProvider);
+        ref.invalidate(homeDashboardProvider);
+        if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Could not load premium offers.')),
+            const SnackBar(content: Text('Your premium subscription is active.')),
           );
-          break;
-        case PaywallResult.cancelled:
-        case PaywallResult.notPresented:
-          break;
+        }
+      } else {
+        final offerings = await Purchases.getOfferings();
+        if (offerings.current == null) {
+          debugPrint(
+            'RevenueCat configuration error: no current offering for entitlement "${AppConfig.revenueCatPremiumEntitlementId}".',
+          );
+          if (!mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Premium products are not configured yet. Please try again shortly.',
+              ),
+            ),
+          );
+        } else {
+          final result = await RevenueCatUI.presentPaywall(
+            displayCloseButton: true,
+          );
+
+          if (!mounted) return;
+
+          switch (result) {
+            case PaywallResult.purchased:
+            case PaywallResult.restored:
+              ref.invalidate(premiumStatusProvider);
+              ref.invalidate(homeDashboardProvider);
+              break;
+            case PaywallResult.error:
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Could not load premium offers.')),
+              );
+              break;
+            case PaywallResult.cancelled:
+            case PaywallResult.notPresented:
+              break;
+          }
+        }
+      }
+    } on PlatformException catch (error) {
+      if (kDebugMode) {
+        debugPrint(
+          'Paywall error (code: ${error.code}, message: ${error.message}, details: ${error.details})',
+        );
+      }
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Premium could not be loaded right now. Please try again.',
+            ),
+          ),
+        );
       }
     } catch (error) {
       debugPrint('Paywall error: $error');

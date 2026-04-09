@@ -18,6 +18,8 @@ class HomeView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dashboardAsync = ref.watch(homeDashboardProvider);
+    final profile = ref.watch(userProfileProvider).valueOrNull;
+    final premium = ref.watch(premiumStatusProvider).valueOrNull;
     final completedDaysAsync = ref.watch(completedProgressDaysProvider);
     final workoutProgramUiAsync = ref.watch(workoutProgramUiProvider);
     final completedDays = completedDaysAsync.valueOrNull ?? <int>{};
@@ -38,6 +40,8 @@ class HomeView extends ConsumerWidget {
                       _Header(
                         iconBase: _iconBase,
                         dashboard: dashboardAsync.valueOrNull,
+                        profileOverride: profile,
+                        isPremiumOverride: premium?.isPremium,
                       ),
                       SizedBox(height: 34.h),
                       const _DayStrip(),
@@ -88,15 +92,22 @@ class HomeView extends ConsumerWidget {
 }
 
 class _Header extends StatelessWidget {
-  const _Header({required this.iconBase, required this.dashboard});
+  const _Header({
+    required this.iconBase,
+    required this.dashboard,
+    this.profileOverride,
+    this.isPremiumOverride,
+  });
 
   final String iconBase;
   final HomeDashboardModel? dashboard;
+  final UserProfileModel? profileOverride;
+  final bool? isPremiumOverride;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final profile = dashboard?.profile;
+    final profile = dashboard?.profile ?? profileOverride;
     final profileName = (profile?.name.trim().isNotEmpty ?? false)
         ? profile!.name.trim()
         : 'User';
@@ -136,7 +147,7 @@ class _Header extends StatelessWidget {
             ],
           ),
         ),
-        if (dashboard?.isPremium == true) ...[
+        if ((dashboard?.isPremium ?? isPremiumOverride) == true) ...[
           _PremiumBadge(
             iconBase: iconBase,
             isPremium: true,

@@ -25,6 +25,9 @@ Future<void> main() async {
 
 Future<void> _initRevenueCat() async {
   try {
+    await Purchases.setLogLevel(
+      kDebugMode ? LogLevel.debug : LogLevel.warn,
+    );
     final config = PurchasesConfiguration(
       defaultTargetPlatform == TargetPlatform.iOS
           ? AppConfig.revenueCatIosApiKey

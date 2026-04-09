@@ -1,21 +1,39 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:slim30/Core/Auth/auth_service.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
 import 'package:slim30/Core/Theme/my_colors.dart';
+import 'package:slim30/Riverpod/Providers/backend_providers.dart';
+import 'package:slim30/Riverpod/Providers/workout/workout_program_provider.dart';
 import 'package:slim30/l10n/generated/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class LoginView extends StatefulWidget {
+class LoginView extends ConsumerStatefulWidget {
   const LoginView({super.key});
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  ConsumerState<LoginView> createState() => _LoginViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _LoginViewState extends ConsumerState<LoginView> {
   bool _isLoading = false;
+
+  void _invalidateSessionBoundProviders() {
+    ref.invalidate(userProfileProvider);
+    ref.invalidate(premiumStatusProvider);
+    ref.invalidate(notificationSettingsProvider);
+    ref.invalidate(notificationsProvider);
+    ref.invalidate(progressSummaryProvider);
+    ref.invalidate(homeDashboardProvider);
+    ref.invalidate(workoutProgramProvider);
+    ref.invalidate(workoutProgramUiProvider);
+    ref.invalidate(completedProgressDaysProvider);
+    ref.invalidate(onboardingAnswersProvider);
+  }
 
   Future<void> _handleGoogleLogin() async {
     if (_isLoading) {
@@ -25,12 +43,19 @@ class _LoginViewState extends State<LoginView> {
     setState(() => _isLoading = true);
     try {
       await AuthService.signInWithGoogleAndExchange();
+      final onboardingStatus = await AuthService.getOnboardingStatus();
+      _invalidateSessionBoundProviders();
       if (!mounted) {
         return;
       }
       Navigator.of(
         context,
-      ).pushNamedAndRemoveUntil(AppRoutes.home, (_) => false);
+      ).pushNamedAndRemoveUntil(
+        onboardingStatus == OnboardingStatus.completed
+            ? AppRoutes.home
+            : AppRoutes.questionGender,
+        (_) => false,
+      );
     } catch (error) {
       if (!mounted) {
         return;
@@ -53,12 +78,19 @@ class _LoginViewState extends State<LoginView> {
     setState(() => _isLoading = true);
     try {
       await AuthService.signInWithAppleAndExchange();
+      final onboardingStatus = await AuthService.getOnboardingStatus();
+      _invalidateSessionBoundProviders();
       if (!mounted) {
         return;
       }
       Navigator.of(
         context,
-      ).pushNamedAndRemoveUntil(AppRoutes.home, (_) => false);
+      ).pushNamedAndRemoveUntil(
+        onboardingStatus == OnboardingStatus.completed
+            ? AppRoutes.home
+            : AppRoutes.questionGender,
+        (_) => false,
+      );
     } catch (error) {
       if (!mounted) {
         return;
@@ -81,6 +113,7 @@ class _LoginViewState extends State<LoginView> {
     setState(() => _isLoading = true);
     try {
       await AuthService.signInAsGuest();
+      _invalidateSessionBoundProviders();
       if (!mounted) {
         return;
       }
@@ -270,20 +303,8 @@ class _LoginViewState extends State<LoginView> {
                       ),
                     ),
                     SizedBox(height: 15.h),
-                    // Legal text
-                    SizedBox(
-                      width: 298.w,
-                      child: Text(
-                        l10n.loginLegal,
-                        style: GoogleFonts.leagueSpartan(
-                          fontSize: 10.sp,
-                          fontWeight: FontWeight.w500,
-                          height: 11 / 10,
-                          color: MyColors.loginSubtext,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
+                    // Legal text + links
+                    _LegalSection(),
                   ],
                 ),
               ),
@@ -311,6 +332,80 @@ class _LoginViewState extends State<LoginView> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+// ── Legal section ─────────────────────────────────────────────────────────────
+
+class _LegalSection extends StatelessWidget {
+  static const _termsUrl = 'https://fly-work.com/slim30/terms/';
+  static const _privacyUrl = 'https://fly-work.com/slim30/privacy-policy/';
+  static const _cookiesUrl = 'https://fly-work.com/slim30/cookies/';
+  static const _csaeUrl = 'https://fly-work.com/slim30/csae/';
+
+  static Future<void> _open(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final baseStyle = GoogleFonts.leagueSpartan(
+      fontSize: 10.sp,
+      fontWeight: FontWeight.w500,
+      height: 11 / 10,
+      color: MyColors.loginSubtext,
+    );
+    final linkStyle = baseStyle.copyWith(
+      decoration: TextDecoration.underline,
+      color: MyColors.loginText,
+    );
+
+    return SizedBox(
+      width: 298.w,
+      child: RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          style: baseStyle,
+          children: [
+            const TextSpan(text: 'By signing up for Slim30 you agree to our '),
+            TextSpan(
+              text: 'Terms',
+              style: linkStyle,
+              recognizer: TapGestureRecognizer()
+                ..onTap = () => _open(_termsUrl),
+            ),
+            const TextSpan(
+              text:
+                  ' of Service. To learn more about how we handle your data, please review our ',
+            ),
+            TextSpan(
+              text: 'Privacy',
+              style: linkStyle,
+              recognizer: TapGestureRecognizer()
+                ..onTap = () => _open(_privacyUrl),
+            ),
+            const TextSpan(text: ' and '),
+            TextSpan(
+              text: 'Cookies',
+              style: linkStyle,
+              recognizer: TapGestureRecognizer()
+                ..onTap = () => _open(_cookiesUrl),
+            ),
+            const TextSpan(text: ' Policy. '),
+            TextSpan(
+              text: 'CSAE',
+              style: linkStyle,
+              recognizer: TapGestureRecognizer()
+                ..onTap = () => _open(_csaeUrl),
+            ),
+            const TextSpan(text: '.'),
+          ],
         ),
       ),
     );

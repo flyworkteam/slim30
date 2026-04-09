@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:slim30/Core/Auth/auth_service.dart';
 import 'package:slim30/Core/Routes/app_routes.dart';
 import 'package:slim30/Core/Storage/auth_token_store.dart';
 import 'package:slim30/Core/Theme/my_colors.dart';
@@ -25,9 +26,21 @@ class _SplashViewState extends State<SplashView> {
         return;
       }
 
-      final initialRoute = (token != null && token.trim().isNotEmpty)
-          ? AppRoutes.home
-          : AppRoutes.onboardingIntro;
+      String initialRoute = AppRoutes.onboardingIntro;
+      if (token != null && token.trim().isNotEmpty) {
+        final onboardingStatus = await AuthService.getOnboardingStatus();
+        if (!mounted) {
+          return;
+        }
+        if (onboardingStatus == OnboardingStatus.completed) {
+          initialRoute = AppRoutes.home;
+        } else if (onboardingStatus == OnboardingStatus.incomplete) {
+          initialRoute = AppRoutes.questionGender;
+        } else {
+          initialRoute = AppRoutes.onboardingIntro;
+        }
+      }
+
       Navigator.pushReplacementNamed(context, initialRoute);
     });
   }

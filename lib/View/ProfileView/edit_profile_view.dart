@@ -324,16 +324,28 @@ class _EditProfileViewState extends ConsumerState<EditProfileView> {
     final l10n = AppLocalizations.of(context)!;
     final profile = ref.watch(userProfileProvider).valueOrNull;
 
-    if (!_initializedFromApi && profile != null) {
-      _initializedFromApi = true;
-      _nameController.text = profile.name;
-      _ageController.text = profile.age?.toString() ?? '';
-      _heightController.text = profile.heightCm != null
-          ? (profile.heightCm! / 100).toStringAsFixed(2)
-          : '';
-      _weightController.text = profile.weightKg?.toStringAsFixed(0) ?? '';
-      _avatarUrl = profile.avatarUrl;
-      _avatarBytes = null;
+    if (profile != null) {
+      final shouldHydrate =
+          !_initializedFromApi ||
+          (_nameController.text.trim().isEmpty && profile.name.trim().isNotEmpty) ||
+          (_ageController.text.trim().isEmpty && profile.age != null) ||
+          (_heightController.text.trim().isEmpty && profile.heightCm != null) ||
+          (_weightController.text.trim().isEmpty && profile.weightKg != null) ||
+          ((_avatarUrl == null || _avatarUrl!.trim().isEmpty) &&
+              profile.avatarUrl != null &&
+              profile.avatarUrl!.trim().isNotEmpty);
+
+      if (shouldHydrate) {
+        _initializedFromApi = true;
+        _nameController.text = profile.name;
+        _ageController.text = profile.age?.toString() ?? '';
+        _heightController.text = profile.heightCm != null
+            ? (profile.heightCm! / 100).toStringAsFixed(2)
+            : '';
+        _weightController.text = profile.weightKg?.toStringAsFixed(0) ?? '';
+        _avatarUrl = profile.avatarUrl;
+        _avatarBytes = null;
+      }
     }
 
     return Scaffold(
@@ -710,20 +722,20 @@ class _EditFields extends StatelessWidget {
           SizedBox(height: 20.h),
           _ProfileInputField(
             label: l10n.editProfileAgeLabel,
-            value: ageController.text,
-            readOnly: true,
+            controller: ageController,
+            keyboardType: TextInputType.number,
           ),
           SizedBox(height: 20.h),
           _ProfileInputField(
             label: l10n.editProfileHeightLabel,
-            value: heightController.text,
-            readOnly: true,
+            controller: heightController,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
           ),
           SizedBox(height: 20.h),
           _ProfileInputField(
             label: l10n.editProfileWeightLabel,
-            value: weightController.text,
-            readOnly: true,
+            controller: weightController,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
           ),
         ],
       ),
@@ -740,6 +752,7 @@ class _ProfileInputField extends StatelessWidget {
     this.readOnly = false,
     this.onTap,
     this.showTrailingArrow = false,
+    this.keyboardType,
   }) : assert(controller != null || value != null);
 
   final String label;
@@ -749,6 +762,7 @@ class _ProfileInputField extends StatelessWidget {
   final bool readOnly;
   final VoidCallback? onTap;
   final bool showTrailingArrow;
+  final TextInputType? keyboardType;
 
   @override
   Widget build(BuildContext context) {
@@ -779,6 +793,7 @@ class _ProfileInputField extends StatelessWidget {
               controller: controller,
               readOnly: readOnly,
               onTap: onTap,
+              keyboardType: keyboardType,
               style: GoogleFonts.leagueSpartan(
                 fontSize: 12.sp,
                 fontWeight: FontWeight.w500,
