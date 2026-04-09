@@ -421,10 +421,10 @@ class _LegalSection extends StatelessWidget {
     );
 
     final template = l10n.loginLegalRich(
-      _termsToken,
-      _privacyToken,
       _cookiesToken,
       _csaeToken,
+      _privacyToken,
+      _termsToken,
     );
 
     final links = <String, ({String label, String url})>{
