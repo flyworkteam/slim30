@@ -20,7 +20,7 @@ class AppConfig {
 
   static String get apiBaseUrl {
     if (_configuredBaseUrl.isNotEmpty) {
-      if (kReleaseMode && _configuredBaseUrl.startsWith('http://')) {
+      if (kReleaseMode && _configuredBaseUrl.startsWith('https://')) {
         throw StateError('API_BASE_URL must use HTTPS in release builds.');
       }
       return _configuredBaseUrl;
@@ -31,14 +31,14 @@ class AppConfig {
     }
 
     if (kIsWeb) {
-      return 'http://localhost:3000/api';
+      return 'https://slim30.fly-work.com/api';
     }
 
     if (defaultTargetPlatform == TargetPlatform.android) {
-      return 'http://10.0.2.2:3000/api';
+      return 'https://slim30.fly-work.com/api';
     }
 
-    return 'http://localhost:3000/api';
+    return 'https://slim30.fly-work.com/api';
   }
 
   static Map<String, String> get apiHeaders {
