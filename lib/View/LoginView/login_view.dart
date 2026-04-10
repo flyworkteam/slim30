@@ -340,11 +340,9 @@ class _LegalSection extends StatelessWidget {
   static const _termsUrl = 'https://fly-work.com/slim30/terms/';
   static const _privacyUrl = 'https://fly-work.com/slim30/privacy-policy/';
   static const _cookiesUrl = 'https://fly-work.com/slim30/cookies/';
-  static const _csaeUrl = 'https://fly-work.com/slim30/csae/';
   static const _termsToken = '__TERMS__';
   static const _privacyToken = '__PRIVACY__';
   static const _cookiesToken = '__COOKIES__';
-  static const _csaeToken = '__CSAE__';
 
   static Future<void> _open(String url) async {
     final uri = Uri.parse(url);
@@ -393,10 +391,17 @@ class _LegalSection extends StatelessWidget {
 
       final link = links[nearestToken]!;
       spans.add(
-        TextSpan(
-          text: link.label,
-          style: linkStyle,
-          recognizer: TapGestureRecognizer()..onTap = () => _open(link.url),
+        WidgetSpan(
+          alignment: PlaceholderAlignment.baseline,
+          baseline: TextBaseline.alphabetic,
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => _open(link.url),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 2.h),
+              child: Text(link.label, style: linkStyle),
+            ),
+          ),
         ),
       );
 
@@ -420,18 +425,15 @@ class _LegalSection extends StatelessWidget {
       color: MyColors.loginText,
     );
 
-    final template = l10n.loginLegalRich(
-      _cookiesToken,
-      _csaeToken,
-      _privacyToken,
-      _termsToken,
-    );
+    final template = l10n.loginLegal
+        .replaceFirst(l10n.loginLegalTermsLabel, _termsToken)
+        .replaceFirst(l10n.loginLegalPrivacyLabel, _privacyToken)
+        .replaceFirst(l10n.loginLegalCookiesLabel, _cookiesToken);
 
     final links = <String, ({String label, String url})>{
       _termsToken: (label: l10n.loginLegalTermsLabel, url: _termsUrl),
       _privacyToken: (label: l10n.loginLegalPrivacyLabel, url: _privacyUrl),
       _cookiesToken: (label: l10n.loginLegalCookiesLabel, url: _cookiesUrl),
-      _csaeToken: (label: l10n.loginLegalCsaeLabel, url: _csaeUrl),
     };
 
     return SizedBox(
