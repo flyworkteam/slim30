@@ -145,7 +145,7 @@ class OnboardingShell extends StatelessWidget {
                         _PageIndicator(activeIndex: activeIndex),
                       ],
                     ),
-                    SizedBox(height: activeIndex == 1 ? 99.h : 106.h),
+                    SizedBox(height: activeIndex == 1 ? 111.h : 118.h),
                     _ContinueButton(
                       label: continueLabel,
                       onPressed: onContinue,
