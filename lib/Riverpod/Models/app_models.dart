@@ -39,16 +39,52 @@ class UserProfileModel {
   }
 
   factory UserProfileModel.fromJson(Map<String, dynamic> json) {
+    double? parseDouble(dynamic value) {
+      if (value == null) {
+        return null;
+      }
+
+      if (value is num) {
+        return value.toDouble();
+      }
+
+      if (value is String) {
+        return double.tryParse(value.trim().replaceAll(',', '.'));
+      }
+
+      return null;
+    }
+
+    int? parseInt(dynamic value) {
+      if (value == null) {
+        return null;
+      }
+
+      if (value is int) {
+        return value;
+      }
+
+      if (value is num) {
+        return value.toInt();
+      }
+
+      if (value is String) {
+        return int.tryParse(value.trim());
+      }
+
+      return null;
+    }
+
     return UserProfileModel(
       id: (json['id'] as num?)?.toInt() ?? 0,
       name: (json['name'] as String?)?.trim().isNotEmpty == true
           ? (json['name'] as String)
           : 'User',
       email: json['email'] as String?,
-      age: (json['age'] as num?)?.toInt(),
-      heightCm: (json['height_cm'] as num?)?.toDouble(),
-      weightKg: (json['weight_kg'] as num?)?.toDouble(),
-      targetWeightKg: (json['target_weight_kg'] as num?)?.toDouble(),
+      age: parseInt(json['age']),
+      heightCm: parseDouble(json['height_cm']),
+      weightKg: parseDouble(json['weight_kg']),
+      targetWeightKg: parseDouble(json['target_weight_kg']),
       language: (json['language'] as String?) ?? 'en',
       avatarUrl: json['avatar_url'] as String?,
     );
@@ -95,8 +131,10 @@ class NotificationSettingsModel {
   }) {
     return NotificationSettingsModel(
       dailyReminderEnabled: dailyReminderEnabled ?? this.dailyReminderEnabled,
-      workoutReminderEnabled: workoutReminderEnabled ?? this.workoutReminderEnabled,
-      progressSummaryEnabled: progressSummaryEnabled ?? this.progressSummaryEnabled,
+      workoutReminderEnabled:
+          workoutReminderEnabled ?? this.workoutReminderEnabled,
+      progressSummaryEnabled:
+          progressSummaryEnabled ?? this.progressSummaryEnabled,
       reminderHour: reminderHour ?? this.reminderHour,
     );
   }
@@ -132,7 +170,8 @@ class NotificationModel {
   final DateTime createdAt;
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
-    final createdAt = DateTime.tryParse('${json['createdAt']}') ?? DateTime.now();
+    final createdAt =
+        DateTime.tryParse('${json['createdAt']}') ?? DateTime.now();
     return NotificationModel(
       id: (json['id'] as num?)?.toInt() ?? 0,
       title: (json['title'] as String?) ?? '',
@@ -147,10 +186,7 @@ class NotificationModel {
 
 @immutable
 class PremiumStatusModel {
-  const PremiumStatusModel({
-    required this.isPremium,
-    required this.trialUsed,
-  });
+  const PremiumStatusModel({required this.isPremium, required this.trialUsed});
 
   final bool isPremium;
   final bool trialUsed;
@@ -193,9 +229,6 @@ class OnboardingAnswerModel {
   final Object? answerValue;
 
   Map<String, dynamic> toJson() {
-    return {
-      'question_key': questionKey,
-      'answer_value': answerValue,
-    };
+    return {'question_key': questionKey, 'answer_value': answerValue};
   }
 }

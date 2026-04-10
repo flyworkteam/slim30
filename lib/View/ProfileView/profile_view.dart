@@ -379,7 +379,7 @@ class _ProfileIdentity extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          width: 72.w,
+          width: 220.w,
           child: Column(
             children: [
               SizedBox(
@@ -417,6 +417,9 @@ class _ProfileIdentity extends StatelessWidget {
               SizedBox(height: 8.h),
               Text(
                 name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
                 style: GoogleFonts.leagueSpartan(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w500,
@@ -430,6 +433,7 @@ class _ProfileIdentity extends StatelessWidget {
                   email!.trim(),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
                   style: GoogleFonts.leagueSpartan(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w400,

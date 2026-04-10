@@ -77,21 +77,55 @@ class AuthService {
   }
 
   static Future<OnboardingStatus> getOnboardingStatus() async {
+    double? parseDouble(dynamic value) {
+      if (value == null) {
+        return null;
+      }
+
+      if (value is num) {
+        return value.toDouble();
+      }
+
+      if (value is String) {
+        return double.tryParse(value.trim().replaceAll(',', '.'));
+      }
+
+      return null;
+    }
+
+    int? parseInt(dynamic value) {
+      if (value == null) {
+        return null;
+      }
+
+      if (value is int) {
+        return value;
+      }
+
+      if (value is num) {
+        return value.toInt();
+      }
+
+      if (value is String) {
+        return int.tryParse(value.trim());
+      }
+
+      return null;
+    }
+
     try {
       final data = await _authenticatedApiClient.get('/users/profile');
       final user = data['user'];
       if (user is! Map<String, dynamic>) {
+        _pendingProfile = null;
         return OnboardingStatus.incomplete;
       }
 
-      // Cache the profile so userProfileProvider can use it without a second API call.
-      _pendingProfile = UserProfileModel.fromJson(user);
-
-      final age = (user['age'] as num?)?.toInt();
+      final age = parseInt(user['age']);
       final gender = (user['gender'] as String?)?.trim();
-      final heightCm = (user['height_cm'] as num?)?.toDouble();
-      final weightKg = (user['weight_kg'] as num?)?.toDouble();
-      final targetWeightKg = (user['target_weight_kg'] as num?)?.toDouble();
+      final heightCm = parseDouble(user['height_cm']);
+      final weightKg = parseDouble(user['weight_kg']);
+      final targetWeightKg = parseDouble(user['target_weight_kg']);
 
       final validGender =
           gender == 'female' || gender == 'male' || gender == 'unspecified';
@@ -104,24 +138,33 @@ class AuthService {
           targetWeightKg >= 20 &&
           targetWeightKg <= 350;
 
-      return validGender &&
-              validAge &&
-              validHeight &&
-              validWeight &&
-              validTargetWeight
+      final isCompleted =
+          validGender &&
+          validAge &&
+          validHeight &&
+          validWeight &&
+          validTargetWeight;
+
+      // Cache only completed profiles to avoid showing stale onboarding data.
+      _pendingProfile = isCompleted ? UserProfileModel.fromJson(user) : null;
+
+      return isCompleted
           ? OnboardingStatus.completed
           : OnboardingStatus.incomplete;
     } on ApiException catch (error) {
       // Stale/invalid token: clear session and force fresh login flow.
       if (error.statusCode == 401) {
+        _pendingProfile = null;
         await AuthTokenStore.clear();
         return OnboardingStatus.unauthorized;
       }
 
       // Fail closed on other API issues.
+      _pendingProfile = null;
       return OnboardingStatus.incomplete;
     } catch (_) {
       // Fail closed: if profile cannot be fetched, keep user in question flow.
+      _pendingProfile = null;
       return OnboardingStatus.incomplete;
     }
   }
