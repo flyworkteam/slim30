@@ -32,12 +32,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAejl1lECs107RMySILL8Hx2rmPytHnqvs',
-    appId: '1:413983209838:ios:9425ae0e30ed72a314e97f',
+    appId: '1:413983209838:ios:e4141e815025fca914e97f',
     messagingSenderId: '413983209838',
     projectId: 'slim30-86df2',
     storageBucket: 'slim30-86df2.firebasestorage.app',
-    iosBundleId: 'com.flywork.slim30',
+    iosBundleId: 'com.flywork.slim30app',
     iosClientId:
-        '413983209838-f856mdegqin59mrc2dpd1sh3fnhli9i0.apps.googleusercontent.com',
+        '413983209838-02ie7j60vbs62sqn9i16dcnt2p03i3q0.apps.googleusercontent.com',
   );
 }

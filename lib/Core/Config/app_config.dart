@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 class AppConfig {
   static const String appName = 'Slim30';
   static const String revenueCatPremiumEntitlementId = 'Slim30 Pro';
+  static const String revenueCatLegacyEntitlementId = 'Slim30 Premium';
   static const String revenueCatIosApiKey = 'appl_shwHjXNgunbewOKRSjPEjcqyMlk';
   static const String revenueCatAndroidApiKey =
       'goog_uicBfCCbCfKeBTqjLkSrbmiAvTr';

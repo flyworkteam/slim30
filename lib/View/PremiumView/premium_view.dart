@@ -43,7 +43,14 @@ class _PremiumViewState extends ConsumerState<PremiumView> {
               .revenueCatPremiumEntitlementId] ??
           customerInfo.entitlements.all[AppConfig
               .revenueCatPremiumEntitlementId];
-      final hasPremiumEntitlement = configuredEntitlement?.isActive ?? false;
+      final legacyEntitlement =
+          customerInfo.entitlements.active[AppConfig
+              .revenueCatLegacyEntitlementId] ??
+          customerInfo.entitlements.all[AppConfig
+              .revenueCatLegacyEntitlementId];
+      final hasPremiumEntitlement =
+          (configuredEntitlement?.isActive ?? false) ||
+          (legacyEntitlement?.isActive ?? false);
 
       if (hasPremiumEntitlement) {
         ref.invalidate(premiumStatusProvider);
