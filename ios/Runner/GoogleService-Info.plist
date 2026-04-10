@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>413983209838-f856mdegqin59mrc2dpd1sh3fnhli9i0.apps.googleusercontent.com</string>
+	<string>413983209838-02ie7j60vbs62sqn9i16dcnt2p03i3q0.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.413983209838-f856mdegqin59mrc2dpd1sh3fnhli9i0</string>
+	<string>com.googleusercontent.apps.413983209838-02ie7j60vbs62sqn9i16dcnt2p03i3q0</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>413983209838-ooririumg5809itrgesqbivv535u332q.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.flywork.slim30</string>
+	<string>com.flywork.slim30app</string>
 	<key>PROJECT_ID</key>
 	<string>slim30-86df2</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:413983209838:ios:9425ae0e30ed72a314e97f</string>
+	<string>1:413983209838:ios:e4141e815025fca914e97f</string>
 </dict>
 </plist>

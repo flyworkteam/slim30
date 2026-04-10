@@ -39,10 +39,54 @@
               "client_type": 3
             },
             {
-              "client_id": "413983209838-f856mdegqin59mrc2dpd1sh3fnhli9i0.apps.googleusercontent.com",
+              "client_id": "413983209838-02ie7j60vbs62sqn9i16dcnt2p03i3q0.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.flywork.slim30"
+                "bundle_id": "com.flywork.slim30app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:413983209838:android:0f8bc01e862eaafd14e97f",
+        "android_client_info": {
+          "package_name": "com.flywork.slim30app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "413983209838-660c6lu18fjc08cdkmrbhg82td66ro3o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.flywork.slim30app",
+            "certificate_hash": "00d9ed04664fdc64fb34b4fa1a6697b8b531311f"
+          }
+        },
+        {
+          "client_id": "413983209838-iu4t7iu5vatgran9j4mp4rvvno85lpk6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0y8mhe_mTKQxQlPmdGZd4t2WNPrxh0xg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "413983209838-iu4t7iu5vatgran9j4mp4rvvno85lpk6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "413983209838-02ie7j60vbs62sqn9i16dcnt2p03i3q0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.flywork.slim30app"
               }
             }
           ]
