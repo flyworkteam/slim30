@@ -20,7 +20,7 @@ class AppConfig {
 
   static String get apiBaseUrl {
     if (_configuredBaseUrl.isNotEmpty) {
-      if (kReleaseMode && _configuredBaseUrl.startsWith('https://')) {
+      if (kReleaseMode && !_configuredBaseUrl.startsWith('https://')) {
         throw StateError('API_BASE_URL must use HTTPS in release builds.');
       }
       return _configuredBaseUrl;
